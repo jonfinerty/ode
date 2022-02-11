@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using WikiClientLibrary;
 using WikiClientLibrary.Client;
@@ -7,59 +7,22 @@ using WikiClientLibrary.Pages;
 using WikiClientLibrary.Sites;
 
 const int maxSyllableCount = 12;
-char[] bannedLetters = new char[]{' ', '-', '@', '.', '$'};
 
 Console.WriteLine("Hello, World!");
 
 MainAsync().Wait();
 
-static async Task GetPronounciation(WikiPage page) {
-    if (page.Content.Length == 0) {
-        await page.RefreshAsync(PageQueryOptions.FetchContent);
-    }
-    
+static string GetPronounciation(WikiPage page) {
     // extract pronounciation
-    // grabs the first pronounciation, could improve by preferring the UK once
-    var regex = new Regex("\\{\\{IPA\\|en\\|(.+)\\}\\}");
+    // grabs the first pronounciation, could improve by preferring the UK once, dealing with read and wind etc.
+    var regex = new Regex("\\{\\{IPA\\|en\\|/(.+?)/");
     var matches = regex.Matches(page.Content);
     var firstMatch = matches.FirstOrDefault();
     if (firstMatch != null) {
-        Console.WriteLine($"    pronounctiation: {firstMatch.Groups[1].Value}");
+        return firstMatch.Groups[1].Value;
     } else {
-        Console.WriteLine();
-    }
-}
-
-const char primaryStressSymbol = 'ˈ';
-const char secondaryStressSymbol = 'ˌ';
-
-// return list of stressed syllable indexes?
-static void GetStressedSyllablesEstimation(int syllableCount, string pronunciation) {
-    // if starts with ' then first
-    var primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation);
-    var secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(int syllableCount, string pronunciation);
-}
-
-static int? GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
-    var characterIndex = pronunciation.IndexOf(primaryStressSymbol);
-    if (characterIndex == -1) {
         return null;
     }
-
-    return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
-}
-
-static int EstimateSyllableIndex(int syllableCount, string pronunciation, int characterIndex) {
-    if (characterIndex == 0) {
-        return 0;
-    }
-
-    // count 4, 
-    // ɪnˈsænɪti
-    // 3
-    var result = Convert.ToInt32((((double) characterIndex / pronunciation.Length)*syllableCount);
-    // it can't be 0
-    return Math.Max(1, result);
 }
 
 static async Task MainAsync()
@@ -73,46 +36,20 @@ static async Task MainAsync()
     // You can create multiple WikiSite instances on the same WikiClient to share the state.
     var site = new WikiSite(client, "https://en.wiktionary.org/w/api.php");
 
+
+
     // Wait for initialization to complete.
     // Throws error if any.
     await site.Initialization;
-    // List the first 10 subcategories in Category:Cats
-    Console.WriteLine();
-    Console.WriteLine("3 Syllable Words");
-    var catmembers = new CategoryMembersGenerator(site, "Category:English_3-syllable_words")
-    {
-        MemberTypes = CategoryMemberTypes.Page,
-        PaginationSize = 50
-    };
 
-    // You can specify EnumPagesAsync(PageQueryOptions.FetchContent),
-    // if you are interested in the content of each page
-    await using (var enumerator = catmembers.EnumPagesAsync().GetAsyncEnumerator())
-    {
-        int index = 0;
-        // Before the advent of "async for" (might be introduced in C# 8),
-        // to handle the items in sequence one by one, we need to use
-        // the expanded for-each pattern.
-        while (await enumerator.MoveNextAsync(CancellationToken.None))
-        {
-            var page = enumerator.Current;
-            await page.RefreshAsync(PageQueryOptions.FetchContent);
-            Console.Write("{0,-6}: {1,-32}", index, page);
+    // var pageRead = new WikiPage(site, "acanthad");
+    // await pageRead.RefreshAsync(PageQueryOptions.FetchContent);
+    // Console.WriteLine();
+    // Console.WriteLine(pageRead.Content);
+    // Console.ReadLine();
 
-            //extract pronounciation
-            await GetPronounciation(page);
-            //extract hypenation
-            //Console.WriteLine(page.Content);
-
-            index++;
-            // Prompt user to continue listing, every 50 pages.
-            if (index % 50 == 0)
-            {
-                Console.WriteLine("Esc to exit, any other key for next page.");
-                if(Console.ReadKey().Key == ConsoleKey.Escape)
-                    break;
-            }
-        }
+    for (int i=1; i<=12; i++) {
+        await DownloadWords(site, i);
     }
 
     // try
@@ -137,19 +74,113 @@ static async Task MainAsync()
     client.Dispose();        // Or you may use `using` statement.
 }
 
+static async Task DownloadWords(WikiSite site, int syllableCount) {
 
+    using StreamWriter file = new($"{syllableCount}words.txt", append: true);
+    
+    var catmembers = new CategoryMembersGenerator(site, $"Category:English_{syllableCount}-syllable_words")
+    {
+        MemberTypes = CategoryMemberTypes.Page,
+        PaginationSize = 50
+    };
 
+    await using (var enumerator = catmembers.EnumPagesAsync(PageQueryOptions.FetchContent).GetAsyncEnumerator())
+    {
+        while (await enumerator.MoveNextAsync(CancellationToken.None))
+        {
+            var page = enumerator.Current;
+            var bannedLetters = new char[]{' ', '-', '@', '.', '$', 'ǀ', 'ǃ'};
 
-public class Word {
-    public List<Syllable> syllables;
+            if (page.ToString().IndexOfAny(bannedLetters) != -1) {
+                continue;
+            }
+
+            var pronunciation = GetPronounciation(page);
+            var word = new Word(page.ToString(), pronunciation, syllableCount);
+
+            Console.WriteLine(word);
+            await file.WriteLineAsync(word.ToString());
+        }
+    }
 }
 
-public class Syllable {
+public class Word {
     public string text;
-    public bool isStressed;
+    public string? IPA;
+    public int syllableCount;
+    public int? primaryStressSyllableIndex;
+    public int? secondaryStressSyllableIndex;
+
+    const char primaryStressSymbol = 'ˈ';
+    const char secondaryStressSymbol = 'ˌ';
+
+    public Word(string text, string IPA, int syllableCount) {
+        this.text = text;
+        this.IPA = IPA;
+        this.syllableCount = syllableCount;
+        primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
+        secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA);
+    }
 
     public override string ToString()
     {
-        return isStressed ? text.ToUpper() : text;
+        // var stressedSyllable = '-';//'●';
+        // var unstressedSyllable = '/';//'○';
+        // var sb = new StringBuilder();
+        // for (int i=0; i<syllableCount; i++) {
+        //     if (i!= 0) {
+        //         sb.Append(' ');
+        //     }
+        //     if (i == primaryStressSyllableIndex || i == secondaryStressSyllableIndex) {
+        //         sb.Append(stressedSyllable);
+        //     } else {
+        //         sb.Append(unstressedSyllable);
+        //     }
+        // }
+
+        // var padding = Math.Max(0, ((text.Length - sb.Length) / 2));
+
+        // return new String(' ', padding) + sb.ToString() + '\n' + text;
+        return $"{text},{IPA},{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex}";
     }
+
+    public string Serialise() {
+        return $"{text},{IPA},{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex}";
+    }
+
+    static int? GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
+        if (pronunciation == null) {
+            return null;
+        }
+        var characterIndex = pronunciation.IndexOf(primaryStressSymbol);
+        if (characterIndex == -1) {
+            return null;
+        }
+
+        return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
+    }
+
+    static int? GetSecondaryStressSyllableIndex(int syllableCount, string pronunciation) {
+        if (pronunciation == null) {
+            return null;
+        }
+
+        var characterIndex = pronunciation.IndexOf(secondaryStressSymbol);
+        if (characterIndex == -1) {
+            return null;
+        }
+
+        return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
+    }
+
+    static int EstimateSyllableIndex(int syllableCount, string pronunciation, int characterIndex) {
+        if (characterIndex == 0) {
+            return 0;
+        }
+
+        var result = Convert.ToInt32(((double) characterIndex / pronunciation.Length)*syllableCount);
+        // it can't be 0
+        return Math.Max(1, result);
+    }
+
 }
