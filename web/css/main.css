@@ -1,0 +1,66 @@
+html {
+  font-family: 'Libre Baskerville', serif;
+}
+
+h1 {
+  text-align: center;
+  font-size: 32pt;
+  color: #111;
+}
+
+/* Please see the article */
+
+#editing, #highlighting {
+  /* Both elements need the same text and space styling so they are directly on top of each other */
+  margin: 10px;
+  padding: 10px;
+  border: 0;
+  width: calc(100% - 32px);
+  height: 150px;
+}
+
+#editing, #highlighting, #highlighting * {
+  /* Also add text styles to highlighing tokens */
+  font-size: 32px;
+  font-family: 'Libre Baskerville', serif;
+  line-height: 20pt;
+  tab-size: 2;
+  border: none;
+  outline: none;
+}
+
+#editing, #highlighting {
+  /* In the same place */
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+
+/* Move the textarea in front of the result */
+#editing {
+  z-index: 1;
+}
+#highlighting {
+  z-index: 0;
+}
+
+
+/* Make textarea almost completely transparent */
+#editing {
+  color: transparent;
+  background: transparent;
+  caret-color: black; /* Or choose your favourite color */
+}
+
+/* Can be scrolled */
+#editing, #highlighting {
+  overflow: auto;
+  white-space: nowrap; /* Allows textarea to scroll horizontally */
+}
+
+/* No resize on textarea */
+#editing {
+  resize: none;
+}

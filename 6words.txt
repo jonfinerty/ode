@@ -1551,6 +1551,7 @@ unequivocably,ʌnɨˈkwɪvəkəblɪ,6,1,
 unequivocally,ʌnɨˈkwɪvək(ə)lɪ,6,1,
 unethicality,,6,,
 unexecutable,,6,,
+unidirectional,ˌjuː.nɪ.dɪˈɹɛk.ʃə.nəl,6,3,0
 uninitiated,ʌnɪnˈɪʃi.eɪtɪd,6,2,
 unintelligible,ˌʌnɪnˈtɛlɨdʒɨbəl,6,2,0
 universalism,ˌjuːnəˈvɝsəlˌɪzəm,6,2,0
