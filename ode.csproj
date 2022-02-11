@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CXuesong.MW.WikiClientLibrary" Version="0.7.5" />
+  </ItemGroup>
+
 </Project>
