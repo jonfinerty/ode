@@ -6,6 +6,9 @@ using WikiClientLibrary.Generators;
 using WikiClientLibrary.Pages;
 using WikiClientLibrary.Sites;
 
+const int maxSyllableCount = 12;
+char[] bannedLetters = new char[]{' ', '-', '@', '.', '$'};
+
 Console.WriteLine("Hello, World!");
 
 MainAsync().Wait();
@@ -25,6 +28,38 @@ static async Task GetPronounciation(WikiPage page) {
     } else {
         Console.WriteLine();
     }
+}
+
+const char primaryStressSymbol = 'ˈ';
+const char secondaryStressSymbol = 'ˌ';
+
+// return list of stressed syllable indexes?
+static void GetStressedSyllablesEstimation(int syllableCount, string pronunciation) {
+    // if starts with ' then first
+    var primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation);
+    var secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(int syllableCount, string pronunciation);
+}
+
+static int? GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
+    var characterIndex = pronunciation.IndexOf(primaryStressSymbol);
+    if (characterIndex == -1) {
+        return null;
+    }
+
+    return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
+}
+
+static int EstimateSyllableIndex(int syllableCount, string pronunciation, int characterIndex) {
+    if (characterIndex == 0) {
+        return 0;
+    }
+
+    // count 4, 
+    // ɪnˈsænɪti
+    // 3
+    var result = Convert.ToInt32((((double) characterIndex / pronunciation.Length)*syllableCount);
+    // it can't be 0
+    return Math.Max(1, result);
 }
 
 static async Task MainAsync()
