@@ -19,3 +19,5 @@ based on the book
 
 words broken up into syllables, with accented syllables
 
+## Todo
+- meter dots overlay
