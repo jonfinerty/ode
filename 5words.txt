@@ -3366,7 +3366,6 @@ unforgettable,ˌʌnfə(ɹ)ˈɡɛtəbəl,5,2,0
 unfortunately,ʌnˈfɔːtjʊnətli,5,1,
 ungoogleable,ʌnˈɡuːɡl̩əbl̩,5,1,
 unicameral,juːniːˈkaməɹəl,5,2,
-unidirectional,ˌjuː.nɪ.dɪˈɹɛk.ʃə.nəl, -daɪ-, -ˈɹɛkʃ.nəl,5,1,0
 uniformity,ˌjunɪˈfɔɹmɪti,5,2,0
 unigeniture,ˌjuːnɪˈdʒɛnɪtjʊə,5,2,0
 unilateral,ˌjuːnɪˈlætərəl,5,2,0

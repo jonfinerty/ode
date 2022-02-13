@@ -8,59 +8,52 @@ h1 {
   color: #111;
 }
 
-/* Please see the article */
-
-#editing, #highlighting {
-  /* Both elements need the same text and space styling so they are directly on top of each other */
-  margin: 10px;
-  padding: 10px;
-  border: 0;
-  width: calc(100% - 32px);
-  height: 150px;
+#container {
+  display: grid;
 }
 
-#editing, #highlighting, #highlighting * {
-  /* Also add text styles to highlighing tokens */
-  font-size: 32px;
-  font-family: 'Libre Baskerville', serif;
-  line-height: 20pt;
-  tab-size: 2;
+.overlaid {
   border: none;
   outline: none;
-}
-
-#editing, #highlighting {
-  /* In the same place */
+  padding: 0;
+  width: calc(100% - 32px);
   grid-column: 1;
   grid-row: 1;
   margin: 0 auto;
   max-width: 800px;
+  background: transparent;
+  white-space: nowrap; 
+  overflow-x: auto;
+  resize: none;
 }
 
+#editing, #highlighting {
+  font-size: 32px;
+  font-family: 'Libre Baskerville', serif;
+  line-height: 60px;
+  tab-size: 2;
+}
 
 /* Move the textarea in front of the result */
 #editing {
-  z-index: 1;
+  z-index: 2;
 }
 #highlighting {
+  z-index: 1;
+}
+
+#metre {
+  margin-top: -26px;
   z-index: 0;
 }
 
-
-/* Make textarea almost completely transparent */
 #editing {
   color: transparent;
-  background: transparent;
-  caret-color: black; /* Or choose your favourite color */
+  caret-color: black; 
 }
 
-/* Can be scrolled */
-#editing, #highlighting {
-  overflow: auto;
-  white-space: nowrap; /* Allows textarea to scroll horizontally */
-}
-
-/* No resize on textarea */
-#editing {
-  resize: none;
+#metre {
+  color: #444;
+  font-size: 16px;
+  line-height: 60px;
 }

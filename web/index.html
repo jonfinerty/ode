@@ -16,10 +16,7 @@
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
-  <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
-
-  <meta name="theme-color" content="#fafafa">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,20 +26,18 @@
 <body>
 
   <h1>Ode</h1>
-  <div style="height: 200px; display: grid;">
-    <textarea autofocus id="editing" spellcheck="false" oninput="update(this.value); sync_scroll(this);" onscroll="sync_scroll(this);" onkeydown="check_tab(this, event);">
-    </textarea>
-    <pre id="highlighting" aria-hidden="true">
-      <code class="language-html" id="highlighting-content">
-      </code>
+  <div id="container">
+    <textarea autofocus id="editing" class="overlaid" spellcheck="false" oninput="update(this); sync_scroll(this);" onscroll="sync_scroll(this);"></textarea>
+    <pre id="highlighting" class="overlaid" aria-hidden="true">
     </pre>
+    <pre id="metre" class="overlaid" aria-hidden="true"></pre>
   </div>
 
 
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
+  <script src="js/words.js"></script>
   <script src="js/main.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>

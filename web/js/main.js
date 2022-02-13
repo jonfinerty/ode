@@ -1,32 +1,64 @@
-function update(text) {
-    let result_element = document.querySelector("#highlighting-content");
-    // Handle final newlines (see article)
-    if(text[text.length-1] == "\n") {
-      text += " ";
-    }
-    result_element.innerText = text;
-  }
-  
-  function sync_scroll(element) {
-    /* Scroll result to scroll coords of event - sync with textarea */
+// var keys = Object.keys(wordDict);
+
+// console.log("dupes");
+// for(var i=0; i<keys.length; i++){
+//   console.log(keys[i]);
+//    if(keys[i] === keys[i+1]){
+//      console.log("DUPE: " + keys[i]);
+//    }
+// }
+// console.log("end dupes");
+
+function update(textarea) {
+    let text = textarea.value;
     let result_element = document.querySelector("#highlighting");
-    // Get and set x and y
-    result_element.scrollTop = element.scrollTop;
-    result_element.scrollLeft = element.scrollLeft;
+    let metre_element = document.querySelector("#metre");
+    result_element.innerText = text;
+
+    textarea.style.height = "";
+    let newHeight = textarea.scrollHeight + 20 + "px";
+    textarea.style.height = newHeight;
+    result_element.height = newHeight;
+    metre_element.height = newHeight;
+
+    updateMetre(text);
   }
-  
-  function check_tab(element, event) {
-    let code = element.value;
-    if(event.key == "Tab") {
-      /* Tab key pressed */
-      event.preventDefault(); // stop normal
-      let before_tab = code.slice(0, element.selectionStart); // text before tab
-      let after_tab = code.slice(element.selectionEnd, element.value.length); // text after tab
-      let cursor_pos = element.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-      element.value = before_tab + "\t" + after_tab; // add tab char
-      // move cursor
-      element.selectionStart = cursor_pos;
-      element.selectionEnd = cursor_pos;
-      update(element.value); // Update text to include indent
+
+function updateMetre(text) {
+  let words = text.split(" ");
+  let metre = "";
+  words.forEach(word => {
+    if (word in wordDict) {
+      let wordProps = wordDict[word];
+      let syllableCount = wordProps[0];
+      let firstStressedSyllable = wordProps[1];
+      let secondStressedSyllable = wordProps[2];
+      let wordMetre = "";
+      for (var i = 0; i < syllableCount; i++) {
+        if (i === firstStressedSyllable || i === secondStressedSyllable) {
+          wordMetre += "● "
+        } else {
+          wordMetre += "○ "
+        }
+      }
+      wordMetre += "&nbsp;&nbsp;";
+      metre += wordMetre;
+    } else {
+      //metre += "missing "
     }
-  }
+    //wordDict[wordDict]
+  });
+  let metre_element = document.querySelector("#metre");
+  metre_element.innerHTML = metre;
+}
+
+function sync_scroll(element) {
+  /* Scroll result to scroll coords of event - sync with textarea */
+  let result_element = document.querySelector("#highlighting");
+  let metre_element = document.querySelector("#metre");
+  // Get and set x and y
+  result_element.scrollTop = element.scrollTop;
+  result_element.scrollLeft = element.scrollLeft;
+  metre_element.scrollTop = element.scrollTop;
+  metre_element.scrollLeft = element.scrollLeft;
+}
