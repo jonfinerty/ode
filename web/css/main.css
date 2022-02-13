@@ -30,7 +30,7 @@ h1 {
 #editing, #highlighting {
   font-size: 32px;
   font-family: 'Libre Baskerville', serif;
-  line-height: 60px;
+  line-height: 64px;
   tab-size: 2;
 }
 
@@ -43,6 +43,7 @@ h1 {
 }
 
 #metre {
+  max-width: 840px;
   margin-top: -26px;
   z-index: 0;
 }
@@ -53,7 +54,7 @@ h1 {
 }
 
 #metre {
-  color: #444;
+  color: #D3D3D3;
   font-size: 16px;
-  line-height: 60px;
+  line-height: 64px;
 }
