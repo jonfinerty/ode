@@ -21,11 +21,25 @@ static void processRhymes() {
     {  
         var group = line.Split(", ").Select(w => w.ToLower()).Distinct().ToList();
         if (group.Count() > 1) {
+            group.Sort();
             rhymeGroups.Add(group);
             Console.WriteLine(String.Join(", ",group));
         }
     }  
+
+    var distinct = rhymeGroups.Select(g => String.Join(",",g)).Distinct().ToList();
+    distinct.Sort();
+    // todo: remove ones which are proper suffixes of others
+
+
     
+    rhymeGroups = distinct.Select(g => g.Split(",").ToList()).ToList();
+
+    foreach (var group in rhymeGroups)
+    {  
+        Console.WriteLine(String.Join(", ",group));
+    }  
+
     // remove solo words
     // lowercase and dedup again
     // dedup groups
