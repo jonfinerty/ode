@@ -27778,6 +27778,7 @@ let wordDict = {
 "napron":[2,-1,-1],
 "naprapathy":[4,1,-1],
 "nappy":[2,0,-1],
+"napping":[2,0,-1],
 "nappe":[1,0,-1],
 "Napoli":[3,0,-1],
 "Napoleonic":[5,3,1],
