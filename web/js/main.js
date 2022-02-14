@@ -1,3 +1,23 @@
+let rhymeIndex = {};
+
+buildRhymeIndex();
+
+function buildRhymeIndex() {
+  for (var word in wordDict) {
+    var wordProps = wordDict[word];
+    if (wordProps[3]) {
+      wordProps[3].forEach(rhymeGroup => {
+        var rhyme = rhymeIndex[rhymeGroup];
+        if (rhyme) {
+          rhymeIndex[rhymeGroup].push(word);
+        } else {
+          rhymeIndex[rhymeGroup] = [word];
+        }
+      });
+    }
+  }
+}
+
 
 function update(textarea) {
     let text = textarea.value;
@@ -60,10 +80,25 @@ function updateMetre(text) {
     if (lineSyllableCount == 0) {
       metre = metre + '<br>';
     } else {
+    
+      let lastWord = words[words.length-1];
+      console.log(lastWord);
+      let wordProps = wordDict[lastWord];
+      if (wordProps) {
+        console.log("word props found")
+        let rhymeGroup = wordProps[3];
+        if (rhymeGroup) {
+          console.log("Rhyme found");
+          lineMetre = lineMetre + " " + rhymeGroup;
+        }
+      }
+
       metre = metre + lineSyllableCount + ' ' + lineMetre + '<br>';
     }
   })
-  
+
+
+
   let metre_element = document.querySelector("#metre");
   metre_element.innerHTML = metre;
 }
