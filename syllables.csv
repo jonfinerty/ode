@@ -2930,7 +2930,7 @@ alyawarra,4,1,-1
 alytarch,3,0,-1
 alytus,3,1,-1
 alzheimer,3,-1,-1
-am,1,0,-1
+am,1,-1,-1
 ama,2,0,-1
 amacrine,3,0,-1
 amadou,3,0,-1
@@ -9483,6 +9483,7 @@ broach,1,0,-1
 broacher,2,0,-1
 broad,1,0,-1
 broadcast,2,0,-1
+broadcasted,3,0,-1
 broaden,2,0,-1
 broadsword,2,0,-1
 broadtail,2,0,-1
@@ -14837,6 +14838,7 @@ contrarian,4,1,-1
 contrariety,5,2,-1
 contrary,3,0,-1
 contrast,2,0,-1
+contrasted,3,0,-1
 contrastive,3,1,-1
 contravene,3,2,0
 contretemps,3,0,-1
@@ -24479,6 +24481,7 @@ fashionista,4,2,-1
 fashions,2,-1,-1
 fasoracetam,5,2,0
 fast,1,0,-1
+fasted,2,0,-1
 fasten,2,0,-1
 fastened,2,0,-1
 fastener,3,0,-1
@@ -25944,6 +25947,7 @@ forearm,2,0,1
 forebelief,3,-1,-1
 forebode,2,1,-1
 forecast,2,0,-1
+forecasted,3,0,-1
 forecastle,2,0,-1
 foreclose,2,1,0
 foreconceive,3,-1,-1
@@ -54236,6 +54240,7 @@ sandalwood,3,0,-1
 sandarac,3,0,-1
 sandbach,2,0,-1
 sandblast,2,0,-1
+sandblasted,3,0,-1
 sandbox,2,0,-1
 sander,2,0,-1
 sanders,2,0,-1
@@ -54245,6 +54250,7 @@ sandhi,2,0,-1
 sandhog,2,0,-1
 sandman,2,0,-1
 sandpaper,3,0,1
+sandpapered,4,0,1
 sandpiper,3,0,-1
 sandpit,2,0,-1
 sandra,2,0,-1

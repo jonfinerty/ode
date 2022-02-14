@@ -1,8 +1,0 @@
-abetalipoproteinemia,eɪˌbeɪ.təˌlɪp.oʊˌpɹoʊ.tiˈni.mi.ə,10,8,1
-diastereoselectivity,ˌdaɪəstɛəɹioʊsəlɛkˈtɪvɪti,10,7,0
-diiodohydroxyquinoline,daɪˌaɪ.ə.doʊ.haɪˌdɹɑk.sɪˈkwɪn.əˌlin,10,7,1
-dimethoxyphenylethylamine,,10,,
-heterophenomenological,ˌhɛtəɹəʊfəˌnɒmɪnəˈlɒd͡ʒɪkəl,10,6,0
-lobuloalveologenesis,,10,,
-ovolactovegetarianism,ˌoʊvoʊˌlæktoʊˌvɛd͡ʒɪˈtɛəɹiənˌɪzəm,10,6,0
-triacetyloleandomycin,ˌtɹaɪəsiːt(a)ɪlˌəʊliːændəʊˈmaɪsɪn,10,8,0

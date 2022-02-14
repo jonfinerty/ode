@@ -6,12 +6,12 @@ using WikiClientLibrary.Generators;
 using WikiClientLibrary.Pages;
 using WikiClientLibrary.Sites;
 
-//csvToJs();
+csvToJs();
 //SyllableCsvPurify();
 //DownloadWord().Wait();
 // var words = loadWords();
 // GetRhymes(words).Wait();
-processRhymes();
+//processRhymes();
 // assignRhymeGroups();
 return;
 //DownloadAllWords().Wait();
@@ -34,7 +34,7 @@ static void csvToJs() {
         rhymeIndex++;
     }
 
-    using StreamWriter output = new($"words.js", append: false);
+    using StreamWriter output = new($"web/js/words.js", append: false);
     output.WriteLine("\"use strict\";");
     output.WriteLine();
     output.WriteLine("let wordDict = {");
@@ -74,7 +74,7 @@ static string GetPronounciation(WikiPage page) {
 
 static void processRhymes() {
     List<List<string>> rhymeGroups = new List<List<string>>();
-    foreach (string line in File.ReadLines("rhymes2.csv"))
+    foreach (string line in File.ReadLines("rhymes.csv"))
     {  
         var group = line.Split(",").ToList();
         if (group.Count() > 1) {
@@ -91,7 +91,7 @@ static void processRhymes() {
     distinct = distinct.Where(d => !distinct.Any(superset => superset.Contains(d) && superset != d)).ToList();
 
     rhymeGroups = distinct.Select(g => g.Split(",").ToList()).ToList();
-    using StreamWriter output = new($"rhymes_processed2.csv", append: false);
+    using StreamWriter output = new($"rhymes.csv", append: false);
 
     foreach (var group in rhymeGroups)
     {  
