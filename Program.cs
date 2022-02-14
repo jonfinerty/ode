@@ -8,13 +8,131 @@ using WikiClientLibrary.Sites;
 
 const int maxSyllableCount = 12;
 
+//csvToJs();
+SyllableCsvPurify();
 //DownloadWord().Wait();
 //var words = loadWords();
 //GetRhymes(words).Wait();
-processRhymes();
-assignRhymeGroups();
+// processRhymes();
+// assignRhymeGroups();
 return;
 //DownloadAllWords().Wait();
+
+static void SyllableCsvPurify() {
+    var exit = false;
+    // at this point, lets get rid of dupes
+    List<Word> words = new List<Word>();
+    List<string> dedupedLines = new List<string>();
+    var processedLines = File.ReadAllLines("syllables2.csv");
+    var previousLine = processedLines.Last();
+    Word previousWord = new Word(previousLine);
+    
+    var caughtUp = false;
+    foreach (string line in File.ReadLines("syllables.csv"))
+    { 
+        if (!caughtUp) {
+            if (line == previousLine) {
+                caughtUp = true;
+            }
+            continue;
+        } 
+        
+        var components = line.Split(',');
+        var word = new Word(line);
+        Console.WriteLine(line);
+    
+        if (previousWord.text == word.text &&
+            previousWord.syllableCount == word.syllableCount && 
+            previousWord.primaryStressSyllableIndex == word.primaryStressSyllableIndex && 
+            previousWord.secondaryStressSyllableIndex == word.secondaryStressSyllableIndex) {
+            Console.WriteLine("Pure dupe, skipping");
+            dedupedLines.RemoveAt(dedupedLines.Count-1);
+            dedupedLines.Add(line);
+        } else if (previousWord.text == word.text) {
+            Console.WriteLine($"Duplicate found - {word.text}");
+            Console.WriteLine($"{previousWord.syllableCount}, {previousWord.primaryStressSyllableIndex}, {previousWord.secondaryStressSyllableIndex}        vs      {word.syllableCount}, {word.primaryStressSyllableIndex},{word.secondaryStressSyllableIndex}");
+            var resultChosen = false; 
+            var previousChosen = false;
+            while(!resultChosen) {
+                ConsoleKeyInfo _Key = Console.ReadKey();
+                switch (_Key.Key)
+                {
+                    case ConsoleKey.RightArrow:
+                        Console.WriteLine("Right Arrow");
+                        resultChosen = true;
+                        previousChosen = false;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        Console.WriteLine("Left Arrow");
+                        resultChosen = true;
+                        previousChosen = true;
+                        break;
+                    case ConsoleKey.Escape:
+                        Console.WriteLine("Exiting, writing to file");
+                        resultChosen = true;
+                        exit = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (exit) {
+                using StreamWriter output = new($"syllables2.csv", append: true);
+                dedupedLines.RemoveAt(dedupedLines.Count-1);
+                foreach(var outputLine in dedupedLines) {
+                    output.WriteLine(outputLine);
+                }
+                break;
+            }
+
+            if (!previousChosen) {
+                dedupedLines.RemoveAt(dedupedLines.Count-1);
+                dedupedLines.Add(line);
+            }
+        } else {
+            dedupedLines.Add(line);
+        }
+
+        previousLine = line;
+        previousWord = word;
+    }
+
+    using StreamWriter output2 = new($"syllables2.csv", append: true);
+    dedupedLines.RemoveAt(dedupedLines.Count-1);
+    foreach(var outputLine in dedupedLines) {
+        output2.WriteLine(outputLine);
+    }
+}
+
+static void csvToJs() {
+    // read syllables.csv
+    var words = new Dictionary<string, Word>();
+    foreach (string line in File.ReadLines("syllables.csv"))
+    { 
+        var word = new Word(line);
+        words.Add(word.text, word);
+    }
+    // read rhymes.csv
+    int rhymeIndex = 0;
+    foreach(string line in File.ReadLines("rhymes.csv")) {
+        var rhymingGroup = line.Split(',');
+        foreach(string word in rhymingGroup) {
+            words[word].rhymeGroups.Add(rhymeIndex);
+        }
+        rhymeIndex++;
+    }
+
+    using StreamWriter output = new($"words.js", append: false);
+    output.WriteLine("\"use strict\";");
+    output.WriteLine();
+    output.WriteLine("let wordDict = {");
+    foreach (var word in words) {
+        var props = $"[{word.Value.syllableCount},{word.Value.primaryStressSyllableIndex},{word.Value.secondaryStressSyllableIndex},[{String.Join(',',word.Value.rhymeGroups)}],";
+        output.WriteLine($"\"{word.Value.text}\":" + props);
+    }
+    output.WriteLine("}");
+}
 
 static void processRhymes() {
     List<List<string>> rhymeGroups = new List<List<string>>();
@@ -297,7 +415,7 @@ static async Task DownloadWords(WikiSite site, int syllableCount) {
 }
 
 public class Word {
-    public string text;
+    public string? text;
     public string? IPA;
     public int syllableCount;
     public int? primaryStressSyllableIndex;
@@ -305,6 +423,8 @@ public class Word {
     public List<int> rhymeGroups = new List<int>();
     const char primaryStressSymbol = 'ˈ';
     const char secondaryStressSymbol = 'ˌ';
+
+    public Word(){}
 
     public Word(string text, string IPA, int syllableCount) {
         this.text = text;
@@ -317,13 +437,12 @@ public class Word {
     public Word(string fileLine) {
         var sections = fileLine.Split(',');
         text = sections[0];
-        IPA = sections[1];
-        syllableCount = int.Parse(sections[2]);
-        if (sections[3].Length > 0) {
-            primaryStressSyllableIndex = int.Parse(sections[3]);
+        syllableCount = int.Parse(sections[1]);
+        if (sections[2].Length > 0) {
+            primaryStressSyllableIndex = int.Parse(sections[2]);
         }
-        if (sections[4].Length > 0) {
-            secondaryStressSyllableIndex = int.Parse(sections[4]);
+        if (sections[3].Length > 0) {
+            secondaryStressSyllableIndex = int.Parse(sections[3]);
         }
     }
 
