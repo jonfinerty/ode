@@ -20,4 +20,16 @@ based on the book
 words broken up into syllables, with accented syllables
 
 ## Todo
-- meter dots overlay
+#### make better word pipeline
+
+pipeline 
+wiktionary -> csv's
+csvs -> js object
+
+Ideal file artifacts -
+syllables.csv - word, syllablesCount, firstStressed, secondStressed
+rhymes.csv - word,word,word
+
+read via c#. generate js object
+warn if in rhymes but not in syllables
+words.js

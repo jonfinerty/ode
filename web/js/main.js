@@ -19,22 +19,72 @@ function buildRhymeIndex() {
 }
 
 
-function update(textarea) {
-    let text = textarea.value;
-    let result_element = document.querySelector("#highlighting");
-    let metre_element = document.querySelector("#metre");
-    result_element.innerText = text;
+function update() {
+  updateHeights();
+  updateDisplayText();
+  updateMetre();
+}
 
-    textarea.style.height = "";
-    let newHeight = textarea.scrollHeight + 20 + "px";
-    textarea.style.height = newHeight;
-    result_element.height = newHeight;
-    metre_element.height = newHeight;
+function updateHeights() {
+  let input_element = document.querySelector("#input")
+  let display_element = document.querySelector("#display");
+  let metre_element = document.querySelector("#metre");
 
-    updateMetre(text);
-  }
+  input_element.style.height = "";
+  let newHeight = input_element.scrollHeight + 20 + "px";
+  input_element.style.height = newHeight;
+  display_element.height = newHeight;
+  metre_element.height = newHeight;
+}
 
-function updateMetre(text) {
+function updateDisplayText(){
+  let input_element = document.querySelector("#input")
+  let display_element = document.querySelector("#display");
+  let text = input_element.value;
+  display_element.innerText = text;
+  updateHighlighting()
+}
+
+function updateHighlighting(){
+  let display_element = document.querySelector("#display")
+  let text = display_element.innerText;
+  let lastWords = [];
+  let lines = text.split("\n");
+  lines.forEach((line, i) => {
+    let words = line.trim().split(/\s+/);
+    //todo, if blank line, reset last words
+
+    let lastWord = words[words.length-1];
+    let rhymeClass = i;
+    lastWords.forEach((previousLastWord, lineIndex) => {
+      if (!wordDict[previousLastWord]) {
+        return;
+      }
+
+      let rhymeGroups = wordDict[previousLastWord][3];
+      rhymeGroups.forEach(rhymeId => {
+        // todo remove punctuation from lastword
+        if (rhymeIndex[rhymeId].includes(lastWord)) {
+          rhymeClass = lineIndex;
+        }
+      });
+    })
+    
+    lastWords.push(lastWord);
+    //if last word in any of the previous words rhyme lists, then same class
+    
+    //words[words.length-1] = "<span>" + words[words.length-1] + "</span>";
+    var pos = line.lastIndexOf(lastWord);
+    let markedUpLine = line.substring(0,pos) + "<span class=\"last-word-"+rhymeClass+"\">" + lastWord + "</span>" + line.substring(pos+lastWord.length)
+    lines[i] = markedUpLine;
+    display_element.innerHTML = lines.join("\n");
+  });
+  
+}
+
+function updateMetre() {
+  let input_element = document.querySelector("#input")
+  let text = input_element.value;
   let metre = "";
 
   let lines = text.split("\n");
@@ -80,24 +130,9 @@ function updateMetre(text) {
     if (lineSyllableCount == 0) {
       metre = metre + '<br>';
     } else {
-    
-      let lastWord = words[words.length-1];
-      console.log(lastWord);
-      let wordProps = wordDict[lastWord];
-      if (wordProps) {
-        console.log("word props found")
-        let rhymeGroup = wordProps[3];
-        if (rhymeGroup) {
-          console.log("Rhyme found");
-          lineMetre = lineMetre + " " + rhymeGroup;
-        }
-      }
-
       metre = metre + lineSyllableCount + ' ' + lineMetre + '<br>';
     }
   })
-
-
 
   let metre_element = document.querySelector("#metre");
   metre_element.innerHTML = metre;
@@ -142,7 +177,7 @@ function get_word_props(text) {
 
 function sync_scroll(element) {
   /* Scroll result to scroll coords of event - sync with textarea */
-  let result_element = document.querySelector("#highlighting");
+  let result_element = document.querySelector("#display");
   let metre_element = document.querySelector("#metre");
   // Get and set x and y
   result_element.scrollTop = element.scrollTop;
