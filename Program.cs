@@ -12,6 +12,7 @@ const int maxSyllableCount = 12;
 //var words = loadWords();
 //GetRhymes(words).Wait();
 processRhymes();
+assignRhymeGroups();
 return;
 //DownloadAllWords().Wait();
 
@@ -23,26 +24,59 @@ static void processRhymes() {
         if (group.Count() > 1) {
             group.Sort();
             rhymeGroups.Add(group);
-            Console.WriteLine(String.Join(", ",group));
+            //Console.WriteLine(String.Join(", ",group));
         }
     }  
 
     var distinct = rhymeGroups.Select(g => String.Join(",",g)).Distinct().ToList();
     distinct.Sort();
     // todo: remove ones which are proper suffixes of others
+    distinct = distinct.Where(d => !distinct.Any(superset => superset.Contains(d) && superset != d)).ToList();
 
-
-    
     rhymeGroups = distinct.Select(g => g.Split(",").ToList()).ToList();
+    using StreamWriter output = new($"rhymes_processed2.txt", append: true);
 
     foreach (var group in rhymeGroups)
     {  
-        Console.WriteLine(String.Join(", ",group));
+        var line = String.Join(", ",group);
+        output.WriteLine(line);
+    }  
+}
+
+static void assignRhymeGroups() {
+    var rhymeIndex = 0;
+    var words = loadWords();
+    foreach (string rhyme in File.ReadLines("rhymes_processed2.txt"))
+    {  
+        var rhymeWords = rhyme.Split(", ").ToList();
+        foreach(string rhymingWord in rhymeWords) {
+            var word = words.FirstOrDefault(w => w.text.ToLower() == rhymingWord);
+            if (word != null){
+                word.rhymeGroups.Add(rhymeIndex);
+            }
+        }
+
+        rhymeIndex++;
     }  
 
-    // remove solo words
-    // lowercase and dedup again
-    // dedup groups
+    foreach(var word in words) {
+        Console.WriteLine(word.text + " " + String.Join(",", word.rhymeGroups));
+    }
+
+    using StreamWriter output2 = new($"rhymes_processed3.txt", append: true);
+    foreach (string line in File.ReadLines("web/js/words.js"))
+    {
+        var parts = line.Split(":");
+        var word = parts[0].Replace("\"","");
+        var props = parts[1].Substring(0,parts[1].Length-2);
+        var wordData = words.FirstOrDefault(w => w.text.ToLower() == word);
+        if (wordData != null && wordData.rhymeGroups.Count() > 0) {
+            props = props + ",[" + String.Join(",", wordData.rhymeGroups) + "]],"; 
+        } else {
+            props = props + "],";
+        }
+        output2.WriteLine("\"" + word + "\":" + props);
+    }
 }
 
 static List<Word> loadWords() {
@@ -268,7 +302,7 @@ public class Word {
     public int syllableCount;
     public int? primaryStressSyllableIndex;
     public int? secondaryStressSyllableIndex;
-
+    public List<int> rhymeGroups = new List<int>();
     const char primaryStressSymbol = 'ˈ';
     const char secondaryStressSymbol = 'ˌ';
 
