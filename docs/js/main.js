@@ -1,4 +1,5 @@
 let rhymeIndex = {};
+let metreCharacterSize = getTextWidth("●",getCanvasFontSize(document.querySelector("#metre")));
 
 setupTabCapture();
 buildRhymeIndex();
@@ -129,17 +130,22 @@ function updateWidth() {
   metreElement.style.width = displayElement.clientWidth + 40 + "px"; // extra 40 to offset the syllable counts to the left
 }
 
-function updateDisplayText(){
-  let input_element = document.querySelector("#input")
-  let display_element = document.querySelector("#display");
-  let text = input_element.value;
-  display_element.innerText = text;
-  updateHighlighting()
+function escapeHtml(text) {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return text.replace(/[&<>"']/g, function(char) { return map[char]; });
 }
 
-function updateHighlighting(){
-  let display_element = document.querySelector("#display")
-  let text = display_element.innerText;
+function updateDisplayText() {
+  let inputElement = document.querySelector("#input");
+  let displayElement = document.querySelector("#display")
+  let text = inputElement.value;
   
   let paragraphCounter = 0;
   let rhymeSchemeCounter = 0;
@@ -170,8 +176,6 @@ function updateHighlighting(){
       }
 
       let rhymeGroups = previousWordProps[3];
-      console.log(previousLastWord);
-      console.log(previousWordProps);
       rhymeGroups.forEach(rhymeId => { 
         if (rhymeIndex[rhymeId].includes(lastWordWithoutPunctuation)) {
           rhymeFound = true;
@@ -190,10 +194,10 @@ function updateHighlighting(){
     }
     
     var pos = line.lastIndexOf(lastWord);
-    let markedUpLine = line.substring(0,pos) + "<span class=\"last-word-"+rhymeScheme+"\">" + lastWord + "</span>" + line.substring(pos+lastWord.length)
+    let markedUpLine = escapeHtml(line.substring(0,pos)) + "<span class=\"last-word-"+rhymeScheme+"\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos+lastWord.length));
     lines[i] = markedUpLine;
-    display_element.innerHTML = lines.join("\n");
-  }); 
+  });
+  displayElement.innerHTML = lines.join("\n"); 
 }
 
 function splitTextToLines(text) {
@@ -202,13 +206,13 @@ function splitTextToLines(text) {
 
 function splitLineToWords(line) {
   // todo looping through the strip function seems excessive, to deal with > visitor," < case
-  return line.trim().split(/(?:,|\.|\?| |:|;|-|—)+/).filter(w => stripPunctuationFromWord(w) !== '');
+  return line.trim().split(/(?:,|\.|\?| |:|;|-|—|\t)+/).filter(w => stripPunctuationFromWord(w) !== '');
 }
 
 function stripPunctuationFromWord(word) {
   // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
   word = word.toLowerCase();
-  word = word.replace("’", "'");
+  word = word.replace(/’/g, "'");
   //todo: improve this regex
   //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
   return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g,"");
@@ -240,7 +244,7 @@ function updateMetre() {
       }
      
       let syllableCount = wordProps[0];
-      lineSyllableCount += syllableCount; // guess its one?
+      lineSyllableCount += syllableCount; 
 
       let firstStressedSyllable = wordProps[1];
       let secondStressedSyllable = wordProps[2];
@@ -310,13 +314,27 @@ function getWordProps(text) {
   return null;
 }
 
-function sync_scroll(element) {
-  /* Scroll result to scroll coords of event - sync with textarea */
-  let result_element = document.querySelector("#display");
-  let metre_element = document.querySelector("#metre");
-  // Get and set x and y
-  result_element.scrollTop = element.scrollTop;
-  result_element.scrollLeft = element.scrollLeft;
-  metre_element.scrollTop = element.scrollTop;
-  metre_element.scrollLeft = element.scrollLeft;
+
+function getTextWidth(text, font) {
+  // re-use for better performance
+  if (!font) {
+    font = getTextWidth.font || (getTextWidth.font = getCanvasFontSize(document.querySelector("#display")))
+  } 
+  const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+  const context = canvas.getContext("2d");
+  context.font = font;
+  const metrics = context.measureText(text);
+  return metrics.width;
+}
+
+function getCssStyle(element, prop) {
+    return window.getComputedStyle(element, null).getPropertyValue(prop);
+}
+
+function getCanvasFontSize(el = document.body) {
+  const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
+  const fontSize = getCssStyle(el, 'font-size') || '16px';
+  const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
+  
+  return `${fontWeight} ${fontSize} ${fontFamily}`;
 }
