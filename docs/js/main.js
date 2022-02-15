@@ -127,7 +127,7 @@ function updateWidth() {
   let metreElement = document.querySelector("#metre");
   inputElement.style.width = displayElement.clientWidth + 20 + "px"; // extra 20 so not to have a scrollbar sneak in
   inputElement.style.paddingLeft = "20px"
-  metreElement.style.width = displayElement.clientWidth + 40 + "px"; // extra 40 to offset the syllable counts to the left
+  metreElement.style.width = displayElement.clientWidth + "px"; 
 }
 
 function escapeHtml(text) {
@@ -225,6 +225,35 @@ function stripPunctuationFromWord(word) {
   return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g,"");
 }
 
+function distributeEvenly(syllables, characterCount) { // syllables = ['●','○'] or ['?']
+  let syllableIndex = 0;
+  let output = "";
+  if (syllables.length >= characterCount) {
+    return syllables.join('');
+  } else if (syllables.length <= Math.floor(characterCount / 2)) {
+    let leap = Math.floor(characterCount / syllables.length);
+    for (let i=0; i<characterCount; i++) {
+      if (i%leap == Math.floor(leap/2) && syllableIndex < syllables.length) {
+        output+=syllables[syllableIndex];
+        syllableIndex++;
+      } else {
+        output += "&nbsp;";
+      }
+    }
+  } else {
+    let leap = Math.floor(characterCount / (characterCount-syllables.length))
+    for (let i=0; i<characterCount; i++) {
+      if (i%leap == Math.floor(leap/2) || syllableIndex >= syllables.length) {
+        output += "&nbsp;";
+      } else {
+        output+=syllables[syllableIndex];
+        syllableIndex++;
+      }
+    }
+  }
+  return output;
+}
+
 function updateMetre() {
   let input_element = document.querySelector("#input")
   let text = input_element.value;
@@ -240,50 +269,58 @@ function updateMetre() {
     // calculate display for trimmed word -> easy
     // work through line, removing bits at the start?
     // get first index of sanitised word
-
+    let runningTextLength = 0;
+    let runningMetreLength = 0;
     words.forEach(word => {
-      word = word.trim();
-      if (word.length === 0) {
-        return;
-      }
-      let wordProps = getWordProps(word)
-
-      if (wordProps == null)
-      {
-        lineSyllableCount += 1; // guess its one?
-        lineMetre += "&nbsp;".repeat(word.length) + "?" + "&nbsp;".repeat(word.length)
-        return;
-      }
-     
-      let syllableCount = wordProps[0];
-      lineSyllableCount += syllableCount; 
-
-      let firstStressedSyllable = wordProps[1];
-      let secondStressedSyllable = wordProps[2];
-      let wordMetre = "";
-      let extraSpaces = word.length - syllableCount
-      if (extraSpaces > 0) {
-        wordMetre += "&nbsp;".repeat(extraSpaces);
-      }
-      for (var i = 0; i < syllableCount; i++) {
-        if (i === firstStressedSyllable || i === secondStressedSyllable) {
-          wordMetre += "&nbsp;●&nbsp;"
-        } else {
-          wordMetre += "&nbsp;○&nbsp;"
-        }
-      }
-      if (extraSpaces > 0) {
-        wordMetre += "&nbsp;".repeat(extraSpaces);
-      }
-      lineMetre += wordMetre;
+      let wordProps = getWordProps(word);
+      let wordIndex = line.indexOf(word);
+      let precedingWhitespaceAndPunctuation = line.substring(0, wordIndex);
+      let precedingSize = getTextWidth(precedingWhitespaceAndPunctuation);
+      runningTextLength += precedingSize;
       
+      //how many spaces to get up to runningTextLength from runningMetreLength
+      let spacesNeeded = Math.floor(Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize);
+      //let spacesNeeded = Math.floor(precedingSize / metreCharacterSize);
+      lineMetre += "&nbsp;".repeat(spacesNeeded);
+      runningMetreLength += spacesNeeded * metreCharacterSize;
+
+      let wordSize = getTextWidth(word);
+      runningTextLength += wordSize;
+      let metreCharactersNeeded = Math.floor(wordSize / metreCharacterSize);
+      let syllableArray = [];
+      if (wordProps) {
+        let syllableCount = wordProps[0];
+        lineSyllableCount += syllableCount;
+        for (var i=0; i<syllableCount; i++) {
+          if (i == wordProps[1] || i == wordProps[2]) {
+            syllableArray.push('●');
+          } else {
+            syllableArray.push('○');
+          }
+        }
+      } else {
+        // todo: improve syllable guess based on word length
+        syllableArray = ['?'];
+        lineSyllableCount++;
+      }
+      let wordMetre = distributeEvenly(syllableArray, metreCharactersNeeded);
+      lineMetre += wordMetre
+      runningMetreLength += (metreCharactersNeeded * metreCharacterSize);
+
+      while((runningTextLength - runningMetreLength) > 0) {
+        lineMetre += "&nbsp;"
+        runningMetreLength += metreCharacterSize;
+      }
+
+      line = line.substring(wordIndex+word.length);
     });
 
-    if (lineSyllableCount == 0) {
-      metre = metre + '<br>';
-    } else {
-      metre = metre + lineSyllableCount + ' ' + lineMetre + '<br>';
-    }
+    //if (lineSyllableCount == 0) {
+    //  metre = metre + '<br>';
+    //} else {
+    //  metre = metre + lineSyllableCount + ' ' + lineMetre + '<br>';
+    //}
+    metre = metre + lineMetre + '<br>';
   })
 
   let metre_element = document.querySelector("#metre");
@@ -348,6 +385,5 @@ function getCanvasFontSize(el = document.body) {
   const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
   const fontSize = getCssStyle(el, 'font-size') || '16px';
   const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
-  
   return `${fontWeight} ${fontSize} ${fontFamily}`;
 }
