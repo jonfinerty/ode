@@ -40,6 +40,7 @@ function setupTabCapture() {
       var tabEndPos = element.selectionEnd;
       element.value = element.value.substring(0,tabStartPos) + "\t" + element.value.substring(tabEndPos);
       element.selectionEnd = tabStartPos+1; 
+      onInputUpdated();
     }
   }
 }
@@ -147,7 +148,6 @@ function updateHighlighting(){
   let lines = splitTextToLines(text);
   lines.forEach((line, i) => {
     let words = splitLineToWords(line);
-    console.log(words);
     if (words.length == 0) {
       paragraphCounter++;
       rhymeSchemeCounter = 0;
@@ -164,12 +164,14 @@ function updateHighlighting(){
     lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
       previousLastWord = previousLastWordAndRhymeScheme[0];
       previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
-      let previousWordProps = get_word_props(previousLastWord);
+      let previousWordProps = getWordProps(previousLastWord);
       if (!previousWordProps) {
         return;
       }
 
       let rhymeGroups = previousWordProps[3];
+      console.log(previousLastWord);
+      console.log(previousWordProps);
       rhymeGroups.forEach(rhymeId => { 
         if (rhymeIndex[rhymeId].includes(lastWordWithoutPunctuation)) {
           rhymeFound = true;
@@ -199,7 +201,8 @@ function splitTextToLines(text) {
 }
 
 function splitLineToWords(line) {
-  return line.trim().split(/(?:,|\.|\?| |:|;|-|—)+/).filter(w => w !== '');
+  // todo looping through the strip function seems excessive, to deal with > visitor," < case
+  return line.trim().split(/(?:,|\.|\?| |:|;|-|—)+/).filter(w => stripPunctuationFromWord(w) !== '');
 }
 
 function stripPunctuationFromWord(word) {
@@ -208,7 +211,7 @@ function stripPunctuationFromWord(word) {
   word = word.replace("’", "'");
   //todo: improve this regex
   //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
-  return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"]/g,"");
+  return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g,"");
 }
 
 function updateMetre() {
@@ -227,7 +230,7 @@ function updateMetre() {
       if (word.length === 0) {
         return;
       }
-      let wordProps = get_word_props(word)
+      let wordProps = getWordProps(word)
 
       if (wordProps == null)
       {
@@ -271,7 +274,7 @@ function updateMetre() {
   metre_element.innerHTML = metre;
 }
 
-function get_word_props(text) {
+function getWordProps(text) {
   let word = stripPunctuationFromWord(text);
   if (word in wordDict) {
     return wordDict[word];
@@ -282,27 +285,27 @@ function get_word_props(text) {
     return wordDict[word];
   }
 
-  sLessWord = word.replace(/s$/g,"");
-  if (sLessWord in wordDict) {
-    return wordDict[sLessWord];
-  }
+  // sLessWord = word.replace(/s$/g,"");
+  // if (sLessWord in wordDict) {
+  //   return wordDict[sLessWord];
+  // }
   
-  esLessWord = word.replace(/es$/g,"");
-  if (esLessWord in wordDict) {
-    return wordDict[esLessWord];
-  }
+  // esLessWord = word.replace(/es$/g,"");
+  // if (esLessWord in wordDict) {
+  //   return wordDict[esLessWord];
+  // }
   
-  ingLessWord = word.replace(/ing$/g,"");
-  if (ingLessWord in wordDict) {
-    let ingWordProps = wordDict[ingLessWord];
-    return [ingWordProps[0]+1, ingWordProps[1], ingWordProps[2]];
-  }
+  // ingLessWord = word.replace(/ing$/g,"");
+  // if (ingLessWord in wordDict) {
+  //   let ingWordProps = wordDict[ingLessWord];
+  //   return [ingWordProps[0]+1, ingWordProps[1], ingWordProps[2]];
+  // }
   
-  edLessWord = word.replace(/ed$/g,"");
-  if (edLessWord in wordDict) {
-    let edWordProps = wordDict[edLessWord];
-    return [edWordProps[0]+1, edWordProps[1], edWordProps[2]];
-  }
+  // edLessWord = word.replace(/ed$/g,"");
+  // if (edLessWord in wordDict) {
+  //   let edWordProps = wordDict[edLessWord];
+  //   return [edWordProps[0]+1, edWordProps[1], edWordProps[2]];
+  // }
 
   return null;
 }

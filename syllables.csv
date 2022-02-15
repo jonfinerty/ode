@@ -7146,6 +7146,7 @@ begrudge,2,1,-1
 begry,2,-1,-1
 begs,1,0,-1
 beguile,2,1,-1
+beguiling,3,1,-1
 béguin,2,-1,-1
 beguine,2,1,-1
 begum,2,1,-1
@@ -7478,6 +7479,7 @@ beskids,2,0,-1
 beslinged,2,1,-1
 besmear,2,-1,-1
 besmirch,2,1,-1
+besmirched,2,1,-1
 besmirchment,3,1,-1
 besom,2,0,-1
 besort,2,1,-1
@@ -7934,6 +7936,7 @@ bipoc,2,0,-1
 bipod,2,0,-1
 bippy,2,0,-1
 birch,1,0,-1
+birched,1,0,-1
 birchy,2,0,-1
 bird,1,0,-1
 birdbrain,2,0,-1
@@ -8135,6 +8138,7 @@ blamable,3,0,-1
 blame,1,0,-1
 blamed,1,0,-1
 blameful,2,0,-1
+blameless,2,0,-1
 blamelessly,4,0,-1
 blamer,2,0,-1
 blames,1,0,-1
@@ -9644,6 +9648,7 @@ brushy,2,0,-1
 brusque,1,0,-1
 brussels,2,0,-1
 brustle,2,0,-1
+brustling,2,0,-1
 brutal,2,0,-1
 brutalise,3,0,-1
 brutality,4,1,-1
@@ -10076,6 +10081,7 @@ bustier,3,0,-1
 busting,2,0,-1
 bustitution,4,0,-1
 bustle,2,0,-1
+bustling,2,0,-1
 busto,2,0,-1
 busts,1,0,-1
 busty,2,0,-1
@@ -12728,6 +12734,7 @@ chuppah,2,0,-1
 chur,1,0,-1
 church,1,0,-1
 churchdown,2,1,-1
+churched,1,0,-1
 churches,2,0,-1
 churchical,3,0,-1
 churchill,2,0,-1
@@ -13021,6 +13028,7 @@ claik,1,0,-1
 claim,1,0,-1
 claimed,1,0,-1
 claiming,2,0,-1
+claimless,2,0,-1
 claims,1,0,-1
 claire,1,0,-1
 clairvoyance,3,1,-1
@@ -14151,6 +14159,7 @@ compilation,4,2,-1
 compile,2,-1,-1
 compilement,3,1,-1
 compiler,3,1,-1
+compiling,3,1,-1
 compinge,2,1,-1
 complacence,3,1,-1
 complacent,3,1,-1
@@ -15977,6 +15986,7 @@ crockery,3,0,-1
 crocks,1,0,-1
 crocodile,3,0,-1
 crocodilian,4,2,0
+crocodiling,4,0,2
 crocus,2,0,-1
 croesus,2,0,-1
 croft,1,0,-1
@@ -17721,6 +17731,7 @@ decompilable,5,2,-1
 decompilation,5,3,1
 decompile,3,2,-1
 decompiler,4,2,-1
+decompiling,4,0,2
 decomplemented,5,1,-1
 decomplexation,5,3,1
 decomposability,7,4,2
@@ -19208,6 +19219,7 @@ dialectometry,6,3,-1
 dialects,3,0,2
 dialer,3,0,-1
 dialetheism,6,2,0
+dialing,2,0,-1
 diallage,4,1,-1
 diallel,3,-1,-1
 dialog,3,0,-1
@@ -20569,6 +20581,7 @@ domesticate,4,1,-1
 domhnall,2,0,-1
 domicile,3,0,-1
 domiciliary,6,2,0
+domiciling,4,0,2
 domify,3,-1,-1
 domina,3,0,-1
 dominable,4,-1,-1
@@ -22806,6 +22819,7 @@ entrancingly,4,1,-1
 entrant,2,0,-1
 entrap,2,-1,-1
 entreat,2,1,-1
+entreating,3,1,0
 entreaty,3,1,-1
 entrecôte,3,0,-1
 entrée,2,0,-1
@@ -23826,6 +23840,7 @@ exiguate,4,1,-1
 exiguity,5,2,-1
 exiguous,4,1,-1
 exile,2,0,1
+exiling,3,0,-1
 exility,4,1,-1
 eximious,3,1,-1
 eximiously,4,1,-1
@@ -24320,6 +24335,7 @@ famble,2,0,-1
 famciclovir,4,1,3
 fame,1,0,-1
 famed,1,0,-1
+fameless,2,0,-1
 familect,3,0,2
 familial,3,1,-1
 familiar,4,1,-1
@@ -24610,6 +24626,7 @@ fear,1,0,-1
 feared,1,0,-1
 fearful,2,0,-1
 fearfully,3,0,-1
+fearing,2,0,-1
 fearless,2,0,-1
 fearlessness,3,0,-1
 fears,1,0,-1
@@ -25363,6 +25380,7 @@ flambeau,2,0,-1
 flamboyant,3,1,-1
 flame,1,0,-1
 flamed,1,0,-1
+flameless,2,0,-1
 flamelet,2,0,-1
 flamen,2,0,-1
 flamenco,3,1,-1
@@ -26268,6 +26286,7 @@ fraked,1,0,-1
 fraktur,2,0,-1
 frame,1,0,-1
 framed,1,0,-1
+frameless,2,0,-1
 frames,1,0,-1
 framework,2,0,-1
 framing,2,0,-1
@@ -26378,6 +26397,7 @@ freesia,2,0,-1
 freester,2,-1,-1
 freestone,2,0,-1
 freestyle,2,0,1
+freestyling,3,0,-1
 freet,1,0,-1
 freeway,2,0,-1
 freewheeling,3,0,1
@@ -27101,6 +27121,7 @@ gamed,1,0,-1
 gamefish,2,-1,-1
 gameful,2,0,-1
 gamelan,3,0,2
+gameless,2,0,-1
 gamepad,2,0,-1
 gameplay,2,0,1
 gamer,2,0,-1
@@ -29606,6 +29627,7 @@ hairpin,2,0,-1
 hairs,1,0,-1
 hairsbreadth,2,0,-1
 hairshirt,2,0,-1
+hairstyling,3,0,-1
 hairy,2,0,-1
 haitch,1,0,-1
 haiti,2,0,-1
@@ -31777,6 +31799,7 @@ hussy,2,0,-1
 hustings,2,0,-1
 hustle,2,0,-1
 hustler,2,0,-1
+hustling,2,0,-1
 hut,1,0,-1
 hutch,1,0,-1
 hutchins,2,0,-1
@@ -34985,7 +35008,8 @@ justificatory,6,0,3
 justified,3,0,-1
 justify,3,0,-1
 justin,2,0,-1
-justle,2,-1,-1
+justle,2,0,-1
+justling,2,0,-1
 justly,2,0,-1
 jut,1,0,-1
 jute,1,0,-1
@@ -38154,6 +38178,7 @@ lupulin,3,0,-1
 lupuline,3,-1,-1
 lupus,2,0,-1
 lurch,1,0,-1
+lurched,1,0,-1
 lurchy,2,-1,-1
 lurdane,2,-1,-1
 lure,1,0,-1
@@ -40757,6 +40782,7 @@ misdeed,2,1,-1
 misdeeming,3,1,-1
 misdemeanor,4,2,0
 misdial,3,-1,-1
+misdialing,3,1,-1
 misdiet,3,1,-1
 misdirection,4,-1,-1
 misdispense,3,2,-1
@@ -40788,6 +40814,7 @@ misfeed,2,1,-1
 misfetch,2,1,-1
 misfield,2,1,-1
 misfigure,3,1,-1
+misfiling,3,1,-1
 misfill,2,1,-1
 misfilm,2,1,-1
 misfire,2,0,-1
@@ -42008,6 +42035,7 @@ muscimol,3,0,-1
 muscle,2,0,-1
 muscledom,3,0,-1
 muscles,2,0,-1
+muscling,2,0,-1
 muscovite,3,0,2
 muscovy,3,0,-1
 muscular,3,0,-1
@@ -42308,6 +42336,7 @@ namaskar,3,1,-1
 namaste,3,0,-1
 name,1,0,-1
 named,1,0,-1
+nameless,2,0,-1
 namely,2,0,-1
 namer,2,0,-1
 names,1,0,-1
@@ -45677,6 +45706,7 @@ palk,1,0,-1
 pall,1,0,-1
 palladian,4,1,-1
 palladium,3,1,-1
+pallas,2,0,-1
 palled,1,0,-1
 pallet,2,0,-1
 palletise,3,0,-1
@@ -46628,6 +46658,7 @@ peer,1,0,-1
 peerage,2,-1,-1
 peerdom,2,-1,-1
 peeress,2,-1,-1
+peering,2,0,-1
 peers,1,0,-1
 peeve,1,0,-1
 peeved,1,0,-1
@@ -46862,6 +46893,7 @@ perception,3,1,-1
 perceptive,3,1,-1
 perch,1,0,-1
 perchance,2,1,-1
+perched,1,0,-1
 percipiency,4,1,-1
 percival,3,0,-1
 perclose,2,-1,-1
@@ -49807,6 +49839,7 @@ proffer,2,0,-1
 proficiency,4,1,-1
 proficient,3,1,-1
 profile,2,0,-1
+profiling,3,1,-1
 profit,2,0,-1
 profitable,4,0,-1
 profits,2,0,-1
@@ -51775,6 +51808,7 @@ reckon,2,0,-1
 reckoned,2,0,-1
 reckoning,3,0,-1
 reclaim,2,1,-1
+reclaimless,3,1,-1
 reclamation,4,2,1
 recline,2,1,-1
 reclude,2,1,-1
@@ -51808,6 +51842,7 @@ reconcile,3,0,-1
 reconciled,3,0,-1
 reconcilement,4,0,-1
 reconciliation,6,4,0
+reconciling,4,0,2
 recond,2,0,-1
 recondite,3,0,2
 reconduct,3,2,0
@@ -52590,6 +52625,7 @@ rescue,2,0,-1
 rescued,2,0,-1
 rese,1,0,-1
 research,2,1,-1
+researched,2,1,-1
 reseat,2,1,-1
 resect,2,-1,-1
 resection,3,-1,-1
@@ -52728,6 +52764,7 @@ restriction,3,1,-1
 restrictions,3,1,-1
 restrictive,3,1,-1
 rests,1,0,-1
+restyling,3,1,-1
 resubject,3,2,0
 result,2,1,-1
 resulted,3,1,-1
@@ -52911,6 +52948,7 @@ revictual,3,1,-1
 revie,2,1,-1
 review,2,1,-1
 revile,2,1,-1
+reviling,3,1,-1
 revince,2,1,-1
 revirescence,4,2,-1
 revise,2,1,-1
@@ -53878,6 +53916,7 @@ rustable,3,-1,-1
 rustacean,3,1,-1
 rustic,2,0,-1
 rustle,2,0,-1
+rustling,2,0,-1
 rusto,2,0,-1
 rusts,1,0,-1
 rusty,2,0,-1
@@ -54062,6 +54101,7 @@ sain,1,0,-1
 sainfoin,2,0,-1
 saint,1,0,-1
 saintishly,3,0,-1
+saintly,2,0,-1
 saints,1,0,-1
 saipan,2,1,-1
 sais,1,0,-1
@@ -55831,6 +55871,7 @@ shamed,1,0,-1
 shamefast,2,0,-1
 shameful,2,0,-1
 shamefully,3,0,-1
+shameless,2,0,-1
 shamen,2,0,-1
 shames,1,0,-1
 shaming,2,0,-1
@@ -57315,6 +57356,7 @@ smiles,1,0,-1
 smiley,2,0,-1
 smiling,2,0,-1
 smilt,1,0,-1
+smirched,1,0,-1
 smirk,1,0,-1
 smirky,2,0,-1
 smirt,1,0,-1
@@ -59119,6 +59161,7 @@ stockholm,2,0,-1
 stocking,2,0,-1
 stockjobbing,3,0,-1
 stockpile,2,0,-1
+stockpiling,3,0,-1
 stockport,2,0,-1
 stocks,1,0,-1
 stød,1,0,-1
@@ -59512,6 +59555,7 @@ stylar,2,-1,-1
 style,1,0,-1
 stylesheet,2,0,-1
 styli,2,0,-1
+styling,2,0,-1
 stylish,2,0,-1
 stylist,2,0,-1
 stylistic,3,1,-1
@@ -60816,6 +60860,7 @@ tamboo,2,1,-1
 tambourine,3,2,0
 tambura,3,1,-1
 tame,1,0,-1
+tameless,2,0,-1
 tamer,2,0,-1
 tamerlane,3,0,-1
 tames,1,0,-1
@@ -60913,6 +60958,7 @@ tapist,2,0,-1
 tapless,2,0,-1
 tapotement,3,1,-1
 tapped,1,0,-1
+tapping,2,0,-1
 tappish,2,0,-1
 taproot,2,0,1
 tapu,2,0,-1
@@ -63903,6 +63949,7 @@ tussar,2,0,-1
 tussic,2,-1,-1
 tussiculation,5,3,1
 tussle,2,0,-1
+tussling,2,0,-1
 tussock,2,0,-1
 tussore,2,0,-1
 tut,1,0,-1
@@ -64316,6 +64363,7 @@ unbecoming,4,2,0
 unbecomingness,5,2,-1
 unbefuckinglievable,6,3,0
 unbeget,3,-1,-1
+unbeguiling,4,0,2
 unbeing,3,1,-1
 unbeknown,3,1,-1
 unbeknownst,3,1,0
@@ -64375,6 +64423,7 @@ unchecked,2,1,-1
 uncheerful,3,1,-1
 uncheesable,4,1,-1
 unchristian,3,1,-1
+unchurched,2,1,-1
 uncia,3,0,-1
 uncial,3,0,-1
 unciform,3,0,-1
@@ -64857,12 +64906,14 @@ unrulier,4,-1,-1
 unruliest,4,-1,-1
 unruly,3,1,-1
 unsafe,2,1,-1
+unsaintly,3,1,-1
 unsatiate,3,1,-1
 unsatisfactory,6,3,0
 unsavory,4,1,-1
 unscrupulous,4,1,0
 unseam,2,-1,-1
 unsearchable,4,1,-1
+unsearched,2,1,-1
 unseason,3,1,-1
 unseat,2,1,-1
 unseconded,4,1,-1
@@ -64882,6 +64933,7 @@ unsin,2,1,-1
 unsisting,3,1,-1
 unsleek,2,0,-1
 unsly,2,1,-1
+unsmiling,3,1,-1
 unsoft,2,1,-1
 unsolicited,5,2,0
 unsound,2,1,0
@@ -67116,6 +67168,7 @@ whigling,2,-1,-1
 while,1,0,-1
 whilere,2,1,-1
 whiles,1,0,-1
+whiling,2,0,-1
 whilom,2,0,-1
 whilst,1,0,-1
 whim,1,0,-1

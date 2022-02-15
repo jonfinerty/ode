@@ -396,6 +396,7 @@ aikido,albedo,comedo,credo,ejido,escondido,guido,ido,libido,lido,paedo,toledo,to
 ail,ale,asail,assail,aumail,avail,baal,bail,bale,bewail,brail,braille,camail,canaille,countervail,curtail,dale,derail,detail,drail,dwale,email,embale,empale,engrail,entail,exhale,fail,flail,frail,gael,gail,gale,gaol,gayle,grail,hail,hale,impale,inhale,jail,jezail,kale,mail,male,marseille,nail,nonpareil,pail,pale,percale,prevail,quail,rail,regale,retail,sail,sale,scale,shale,snail,stale,surveil,swale,tael,tail,tale,they'll,trail,travail,unveil,vail,vale,veil,wail,wale,whale,yale
 ailing,bailing,countervailing,failing,flailing,hailing,jailing,mailing,paling,prevailing,quailing,railing,sailing,trailing,wailing,whaling
 ails,ales,bails,bales,dales,details,fails,flails,gaols,hails,hales,impales,jails,kales,mails,males,marseilles,nails,pails,pales,quails,rails,sails,sales,scales,stales,tails,tales,trails,vails,vales,veils,wales,whales
+aimless,blameless,claimless,fameless,flameless,frameless,gameless,shameless,tameless
 airless,careless
 aisle,argyle,argyll,awhile,beguile,bewile,bile,carlisle,chyle,compile,decrial,defile,denial,dial,enisle,espial,file,futile,guile,gyle,i'll,isle,kabyle,kile,kyle,lisle,lyle,mile,misdial,myall,myell,niall,nile,phial,pile,redial,revile,rile,senile,sile,smile,spial,stile,style,supplial,tile,trial,vial,vile,while,wile
 aisles,defiles,files,giles,guiles,gyles,miles,piles,smiles,trials,whiles,wiles
@@ -433,7 +434,7 @@ algerian,assyrian,criterion,hyperion,illyrian,nigerian,presbyterian,shakespearea
 algorithmic,linearithmic,logarithmic,rhythmic
 ali,alley,ally,bally,cali,challis,dally,doolally,galley,halley,hally,kali,mali,mallee,pally,rally,reveille,sallee,sally,scally,tally,valley
 ali,bali,dali,diwali,finale,mali,mallee,pali,svengali
-alice,chalice,cialis,digitalis,lingualis,malice,occipitofrontalis,palace
+alice,chalice,cialis,digitalis,lingualis,malice,occipitofrontalis,palace,pallas
 alien,antithalian,australian,daedalian,episcopalian,mammalian,pharsalian,pygmalion,salian,sesquipedalian,tatterdemalion,westphalian
 aligned,amind,assigned,behind,bind,blind,brined,chined,combined,confined,crined,declined,defined,designed,dined,disinclined,find,fined,grind,hind,inclined,kind,lined,mankind,mind,mined,pined,refined,remind,resigned,rewind,rind,rined,shined,signed,unbind,unkind,unwind,vined,whined,wind,wined
 aligner,definer,designer,diner,diviner,finer,liner,mainer,miner,minor,niner,shiner
@@ -633,7 +634,7 @@ appalling,calling,caterwauling,crawling,falling,palling,recalling
 apparel,barrel,carol,carrel,carroll,farrell,parol
 appealed,concealed,field,healed,heeled,keeled,kneeled,pealed,peeled,revealed,sealed,shield,weald,wealed,wheeled,wield,yield
 appealing,ceiling,concealing,darjeeling,dealing,ealing,feeling,healing,heeling,kneeling,pealing,peeling,reeling,revealing,sealing,stealing
-appearing,bering,cheering,clearing,covering,drearing,earing,earring,electioneering,endearing,engineering,entering,hearing,tearing
+appearing,bering,cheering,clearing,covering,drearing,earing,earring,electioneering,endearing,engineering,entering,fearing,hearing,peering,tearing
 appears,arrears,beers,carders,ceres,cheers,covers,ears,engineers,enters,fears,gears,hears,here's,leers,mirrors,nears,peers,shears,sheers,sneers,steers,tears,tiers,vers,volunteers,years
 appellate,flabellate,helot,stellate
 apperception,conception,correption,deception,exception,inception,interception,intussusception,misconception,misperception,obreption,perception,preception,proprioception,reception,subreption
@@ -966,7 +967,7 @@ beaten,besweeten,eaten,eaton,eton,sweeten
 beater,cheater,defeater,eater,heater,liter,masseter,meter,peter,seater,teeter,tweeter
 beath,bequeath,breathe,ensheathe,meath,pontypridd,quethe,seethe,sheathe,teethe,underneath,wreathe
 beatific,coelanaglyphic,conspecific,frigorific,glyphic,hieroglyphic,honorific,horrific,interspecific,lucific,lucrific,mellific,motific,mucific,munific,omnific,overspecific,pacific,petrific,prolific,rubific,scientific,sebific,soporific,specific,spumific,sudorific,terrific,torporific,unific
-beating,cheating,eating,fleeting,greeting,heating,meeting,repeating,seating,treating
+beating,cheating,eating,entreating,fleeting,greeting,heating,meeting,repeating,seating,treating
 beauteous,duteous,gluteus,luteous
 beauts,boots,brutes,computes,coots,flutes,fruits,glutes,hoots,loots,lutes,root,roots,routes,schütz,shoots,suits,toots,vaduz
 beauty,beiruti,booty,cootie,cutie,djibouti,duty,fruity,snooty
@@ -1006,6 +1007,7 @@ begorra,camorra,gomorrah,lorra
 begotten,cotton,forgotten,gotten,hotten,rotten,shotten
 begrime,betime,chime,chyme,climb,clime,crime,dime,enzyme,grime,i'm,lime,mime,prime,rhyme,rime,slime,sublime,thyme,time
 begs,dregs,eggs,legs,pegs
+beguiling,compiling,crocodiling,decompiling,dialing,domiciling,exiling,filing,freestyling,guiling,hairstyling,misdialing,misfiling,piling,profiling,reconciling,restyling,reviling,smiling,stockpiling,styling,tiling,unbeguiling,unsmiling,whiling
 behalf,calf,draff,giraffe,graff,graph,half,haugh,laugh,paragraph,polygraph,quaff,staff,telegraph
 behavior,savior,xavier
 beheadal,intermeddle,medal,meddle,pedal,peddle,treadle,treddle
@@ -1049,6 +1051,7 @@ beryl,cameral,cheryl,ephemeral,errol,feral,peril,sterile
 berytus,clitus,detritus,heraclitus,situs,tinnitus,titus
 berytus,emeritus
 besiege,liege,prestige,siege
+besmirched,birched,churched,lurched,researched,searched,smirched,unchurched,unsearched
 besotted,carotid,dotted,parotid,spotted
 bessie,dressy,messy,mosey,nessie,pressie,tressy,usie,ussie
 bestie,breasty,chesty,testy,westie,westy,zesty
@@ -1364,6 +1367,7 @@ bruno,juno
 brupper,scupper,super,supper,tupper,upper
 bruschetta,mantelletta,meta,vendetta
 brusque,busk,dusk,husk,lusk,musk,rusk,tusk
+brustling,bustling,hustling,justling,muscling,tussling
 bruvver,cover,discover,glover,lover,plover,recover,uncover
 bryony,hermione
 bubble,double,rubble,stubble,trouble
@@ -1509,7 +1513,7 @@ caper,clapper,crapper,dapper,flapper,paper,plapper,raper,rapper,sapper,schnapper
 caper,draper,paper,raper,scraper,shaper,taper,tapir,vapor
 caperer,cashierer,clearer,mirror,nearer,steerer
 capes,caps,chaps,claps,collapse,craps,flaps,gapes,gaps,illapse,knaps,laps,lapse,maps,napes,naps,perhaps,relapse,schnapps,scraps,synapse,traps
-caping,capping,chapping,clapping,flapping,gaping,lapping,mapping,napping,rapping,slapping,trapping,wrapping,zapping
+caping,capping,chapping,clapping,flapping,gaping,lapping,mapping,napping,rapping,slapping,tapping,trapping,wrapping,zapping
 capitalist,crapitalist
 cappa,grappa,kappa,tapa
 capsulopalpebral,cerebral,palpebral,vertebral
@@ -2107,6 +2111,7 @@ faddish,kaddish,laddish,radish
 fader,solder
 fainaigue,fatigue,intrigue,league
 fainting,painting
+faintly,quaintly,saintly,unsaintly
 fairway,stairway
 faiths,wraiths
 famine,gamin
@@ -2136,7 +2141,6 @@ fife,knife,life,rife,strife,wife
 figgy,jiggy,ziggy
 fiji,squeegee
 filch,milch,pilch,snilch,zilch
-filing,guiling,piling,smiling,tiling
 film,pilm
 filter,kilter,philter,spilter
 filth,spilth,tilth
