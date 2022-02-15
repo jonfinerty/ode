@@ -115,7 +115,7 @@ function updateHeights() {
   let metre_element = document.querySelector("#metre");
 
   input_element.style.height = "";
-  let newHeight = input_element.scrollHeight + 20 + "px";
+  let newHeight = input_element.scrollHeight + "px";
   input_element.style.height = newHeight;
   display_element.height = newHeight;
   metre_element.height = newHeight;
@@ -125,8 +125,7 @@ function updateWidth() {
   let inputElement = document.querySelector("#input")
   let displayElement = document.querySelector("#display");
   let metreElement = document.querySelector("#metre");
-  inputElement.style.width = displayElement.clientWidth + 20 + "px"; // extra 20 so not to have a scrollbar sneak in
-  inputElement.style.paddingLeft = "20px"
+  inputElement.style.width = displayElement.clientWidth + "px"; 
   metreElement.style.width = displayElement.clientWidth + "px"; 
 }
 
@@ -258,6 +257,7 @@ function updateMetre() {
   let input_element = document.querySelector("#input")
   let text = input_element.value;
   let metre = "";
+  let syllablesOutput = "";
 
   let lines = splitTextToLines(text);
   lines.forEach(line => {
@@ -276,11 +276,11 @@ function updateMetre() {
       let wordIndex = line.indexOf(word);
       let precedingWhitespaceAndPunctuation = line.substring(0, wordIndex);
       let precedingSize = getTextWidth(precedingWhitespaceAndPunctuation);
+
       runningTextLength += precedingSize;
       
       //how many spaces to get up to runningTextLength from runningMetreLength
       let spacesNeeded = Math.floor((Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize) + 0.4); //favour an extra space
-      //let spacesNeeded = Math.floor(precedingSize / metreCharacterSize);
       lineMetre += "&nbsp;".repeat(spacesNeeded);
       runningMetreLength += spacesNeeded * metreCharacterSize;
 
@@ -315,16 +315,18 @@ function updateMetre() {
       line = line.substring(wordIndex+word.length);
     });
 
-    //if (lineSyllableCount == 0) {
-    //  metre = metre + '<br>';
-    //} else {
-    //  metre = metre + lineSyllableCount + ' ' + lineMetre + '<br>';
-    //}
+    if (lineSyllableCount == 0) {
+      syllablesOutput += '<br>';
+    } else {
+      syllablesOutput += lineSyllableCount + '<br>';
+    }
     metre = metre + lineMetre + '<br>';
   })
 
-  let metre_element = document.querySelector("#metre");
-  metre_element.innerHTML = metre;
+  let metreElement = document.querySelector("#metre");
+  metreElement.innerHTML = metre;
+  let syllablesElement = document.querySelector("#syllables");
+  syllablesElement.innerHTML = syllablesOutput;
 }
 
 function getWordProps(text) {

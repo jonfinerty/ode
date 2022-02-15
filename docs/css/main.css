@@ -2,6 +2,10 @@ html {
   font-family: 'Libre Baskerville', serif;
 }
 
+body {
+  padding-left: calc(100vw - 100%);
+}
+
 h1 {
   text-align: center;
   font-size: 32pt;
@@ -40,11 +44,22 @@ h1 {
   margin-right: 56px;
 }
 
+#syllables {
+  grid-column: 1;
+  width: 20px;
+  text-align: right;
+  justify-self: end;
+  color: #D3D3D3;
+  font-size: 12px;
+  line-height: 64px;
+  margin: 0;
+}
+
 .overlaid {
   border: none;
   outline: none;
   padding: 0;
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   margin: 0 auto;
   min-width: 800px;
@@ -64,6 +79,7 @@ h1 {
 #input {
   z-index: 2;
 }
+
 #display {
   z-index: 1;
   white-space: pre;
@@ -77,6 +93,7 @@ h1 {
 #input {
   color: transparent;
   caret-color: black; 
+  overflow:hidden; /* prevent occasional scrollbars popping in */
 }
 
 #metre {
