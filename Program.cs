@@ -1,17 +1,18 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-using WikiClientLibrary;
+﻿using System.Text.RegularExpressions;
 using WikiClientLibrary.Client;
 using WikiClientLibrary.Generators;
 using WikiClientLibrary.Pages;
 using WikiClientLibrary.Sites;
 
-csvToJs();
+
+//csvToJs();
 //SyllableCsvPurify();
 //DownloadWord().Wait();
 // var words = loadWords();
 // GetRhymes(words).Wait();
-//processRhymes();
+processRhymes();
+processSyllables();
+csvToJs();
 // assignRhymeGroups();
 return;
 //DownloadAllWords().Wait();
@@ -97,6 +98,19 @@ static void processRhymes() {
     {  
         var line = String.Join(",",group);
         output.WriteLine(line);
+    }  
+}
+
+static void processSyllables() {
+    var words = loadWords();
+
+    words = words.OrderBy(w => w.text).ToList();
+
+    using StreamWriter output = new($"syllables.csv", append: false);
+
+    foreach (var word in words)
+    {  
+        output.WriteLine(word.ToString());
     }  
 }
 
@@ -325,13 +339,21 @@ public class Word {
 
     public Word(string fileLine) {
         var sections = fileLine.Split(',');
-        text = sections[0];
+        text = sections[0].ToLower();
         syllableCount = int.Parse(sections[1]);
         if (sections[2].Length > 0) {
             primaryStressSyllableIndex = int.Parse(sections[2]);
+            if (primaryStressSyllableIndex >= syllableCount) {
+                Console.WriteLine("Updating primary syllable stress within bounds");
+                primaryStressSyllableIndex = syllableCount-1;
+            }
         }
         if (sections[3].Length > 0) {
             secondaryStressSyllableIndex = int.Parse(sections[3]);
+            if (primaryStressSyllableIndex >= syllableCount) {
+                Console.WriteLine("Updating primary syllable stress within bounds");
+                primaryStressSyllableIndex = syllableCount-1;
+            }
         }
     }
 

@@ -644,7 +644,7 @@ approval,disapproval,removal
 approve,behoove,disprove,groove,improve,move,prove,remove,reprove,you've
 approver,groover,hoover,manoeuvre,remover,vancouver
 approves,moves,proves
-appy,cappie,crappy,happy,nappy,pappy,rapey,sappy,scrapie,scrappy,slappy,snappy,strappy,unhappy,clappy
+appy,cappie,clappy,crappy,happy,nappy,pappy,rapey,sappy,scrapie,scrappy,slappy,snappy,strappy,unhappy
 aptness,fitness,genus,intravenous,saphenous,scalenus,threeness,treeness,venous,venus
 aqabamycin,gentamicin,lysin,neomycin,rapamycin,ricin,streptomycin,tibicen
 aquabib,bib,bibb,chib,crib,drib,fib,flibbergib,gib,glib,hib,jib,jibe,lib,nib,rib,sib,snib,squib,tib
@@ -971,7 +971,7 @@ beauteous,duteous,gluteus,luteous
 beauts,boots,brutes,computes,coots,flutes,fruits,glutes,hoots,loots,lutes,root,roots,routes,schütz,shoots,suits,toots,vaduz
 beauty,beiruti,booty,cootie,cutie,djibouti,duty,fruity,snooty
 beaver,believer,cleaver,deceiver,fever,lever,receiver,retriever,weaver,weever
-because,cos,loz,oz,poz,was,twas
+because,cos,loz,oz,poz,twas,was
 becker,checker,ekker,lecher,pecker,trekker,wrecker
 becki,becky,brekkie,brekky,chequy,drecky,flecky,jekkie,lecky,recce,specie,specky,techy,trekkie
 beckon,decan,reckon
@@ -1098,7 +1098,7 @@ billed,build,chilled,distilled,drilled,filled,frilled,gild,gilled,grilled,guild,
 billet,fillet,millet,skillet
 billing,chilling,drilling,filling,grilling,killing,milling,shilling,thrilling,twilling,unwilling,willing
 billion,centillion,decillion,duodecillion,gazillion,gillian,gillion,kabylian,lilian,mandilion,mandylion,million,novemdecillion,octillion,octodecillion,perihelion,pillion,quadrillion,quattuordecillion,quindecillion,quintillion,septendecillion,sexdecillion,sextillion,squillion,trillion,undecillion,vermilion,vigintillion,zillion
-bills,chills,dills,drills,fills,frill,frills,gills,grills,hills,daffodils,ills,kills,miles,mills,pills,skills,spills,thrills,wills
+bills,chills,daffodils,dills,drills,fills,frill,frills,gills,grills,hills,ills,kills,miles,mills,pills,skills,spills,thrills,wills
 billy,chilly,dilly,filly,frilly,ghillie,hilly,lily,piccadilly,quilly,silly,skilly,tilly,willy
 bimble,cymbal,fimble,gimbal,gimble,nimble,symbol,thimble
 bind,binned,blind,chined,chinned,dined,dinned,find,fined,finned,grind,grinned,hind,ind,kind,lind,lined,mind,mined,pined,pinned,shined,skinned,swind,tind,tinned,wind,wined
@@ -1711,7 +1711,7 @@ comma,momma
 command,countermand,demand,hand,manned,remand,reprimand
 commando,mando,orlando
 commeasure,countermeasure,displeasure,leisure,measure,pleasure,treasure
-commence,condense,defence,dense,dispense,expense,fence,flense,hence,immense,difference,incense,intelligence,intense,nonsense,pence,pretence,sense,spence,subtense,suspense,tense,thence,violence,whence
+commence,condense,defence,dense,difference,dispense,expense,fence,flense,hence,immense,incense,intelligence,intense,nonsense,pence,pretence,sense,spence,subtense,suspense,tense,thence,violence,whence
 commodious,melodious,odious
 common,uncommon
 commotional,devotional,emotional,hyperemotional,indevotional,lotional,motional,nonemotional,notional,overemotional,promotional
@@ -1739,6 +1739,7 @@ consul,proconsul,tonsil
 contemper,distemper,kemper,temper
 contemporaneous,cutaneous,extraneous,membraneous,miscellaneous,percutaneous,simultaneous,spontaneous,subcutaneous
 contradistinction,distinction,extinction,indistinction,intinction
+converged,demerged,deterged,diverged,emerged,immerged,merged,purged,reemerged,resurged,scourged,splurged,submerged,surged,unpurged,unurged,upsurged,urged,verged
 converter,deserter,hurter,perverter
 convertible,repertible,revertible
 convince,evince,mince,prince,quince,rinse,since,vince,wince
@@ -2646,4 +2647,3 @@ unworthy,worthy
 unyielding,yielding
 vintry,wintry
 vworp,warp
-diverged,merged,purged,scourged,splurged,surged,urged,verged,converged,demerged,deterged,emerged,immerged,resurged,submerged,unpurged,unurged,upsurged,reemerged
