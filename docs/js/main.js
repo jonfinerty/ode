@@ -162,7 +162,6 @@ function updateDisplayText() {
     }
 
     let lastWord = words[words.length-1];
-    let lastWordWithoutPunctuation = stripPunctuationFromWord(lastWord);
     let rhymeScheme = null;
     let rhymeFound = false;
     let rhymeFoundScheme = null;
@@ -177,7 +176,7 @@ function updateDisplayText() {
 
       let rhymeGroups = previousWordProps[3];
       rhymeGroups.forEach(rhymeId => { 
-        if (rhymeIndex[rhymeId].includes(lastWordWithoutPunctuation)) {
+        if (rhymeIndex[rhymeId].includes(lastWord.toLowerCase())) {
           rhymeFound = true;
           rhymeFoundScheme = previousLastWordRhymeScheme;
         }
@@ -185,10 +184,10 @@ function updateDisplayText() {
     })
     
     if (rhymeFound) {
-      lastWords[paragraphCounter].push([lastWordWithoutPunctuation,rhymeFoundScheme]);
+      lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
       rhymeScheme = rhymeFoundScheme;
     } else {
-      lastWords[paragraphCounter].push([lastWordWithoutPunctuation,rhymeSchemeCounter]);
+      lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
       rhymeScheme = rhymeSchemeCounter;
       rhymeSchemeCounter++;
     }
@@ -205,13 +204,21 @@ function splitTextToLines(text) {
 }
 
 function splitLineToWords(line) {
-  // todo looping through the strip function seems excessive, to deal with > visitor," < case
-  return line.trim().split(/(?:,|\.|\?| |:|;|-|—|\t)+/).filter(w => stripPunctuationFromWord(w) !== '');
+  words = line.match(/'?’?\w[\w'’]*/g);
+  if (!words) {
+    words = [];
+  }
+
+  words.forEach((word, index) => {
+    //blackmagic to remove >pairs< of apostrophes
+    words[index] = word.replace(/^['’](.+(?=['’]$))['’]$/, '$1');
+  });
+
+  return words;
 }
 
 function stripPunctuationFromWord(word) {
   // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
-  word = word.toLowerCase();
   word = word.replace(/’/g, "'");
   //todo: improve this regex
   //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
@@ -228,6 +235,11 @@ function updateMetre() {
     var lineSyllableCount = 0;
     var lineMetre = "";
     let words = splitLineToWords(line);
+
+    // tricky bit is the gap between words could be long and full of punctuation
+    // calculate display for trimmed word -> easy
+    // work through line, removing bits at the start?
+    // get first index of sanitised word
 
     words.forEach(word => {
       word = word.trim();
@@ -280,6 +292,7 @@ function updateMetre() {
 
 function getWordProps(text) {
   let word = stripPunctuationFromWord(text);
+  word = word.toLowerCase();
   if (word in wordDict) {
     return wordDict[word];
   }
