@@ -9,6 +9,23 @@ h1 {
   outline: none;
 }
 
+#flash-preventer {
+  z-index: 3;
+  background-color: white;
+  opacity: 1;
+  transition: opacity 0.4s;
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  pointer-events: none;
+}
+
+#flash-preventer.fade {
+  opacity: 0;
+}
+
 #container {
   display: grid;
 }

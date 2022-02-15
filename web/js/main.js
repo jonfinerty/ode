@@ -1,6 +1,23 @@
 let rhymeIndex = {};
 
+setupTabCapture();
 buildRhymeIndex();
+loadState();
+revealContent();
+
+function setupTabCapture() {
+  var inputElement = document.querySelector("#input");
+  inputElement.onkeydown = function(e){
+    if(e.keyCode === 9 || e.which === 9){
+      e.preventDefault();
+      var element = this;
+      var tabStartPos = element.selectionStart;
+      var tabEndPos = element.selectionEnd;
+      element.value = element.value.substring(0,tabStartPos) + "\t" + element.value.substring(tabEndPos);
+      element.selectionEnd = tabStartPos+1; 
+    }
+  }
+}
 
 function buildRhymeIndex() {
   for (var word in wordDict) {
@@ -18,11 +35,49 @@ function buildRhymeIndex() {
   }
 }
 
+function loadState() {
+  let storage = window.localStorage;
+  let title = storage.getItem('title');
+  if (title) {
+    let titleElement = document.querySelector("#title");
+    titleElement.innerText = title;
+  }
 
-function update() {
+  let content = storage.getItem('content');
+  if (content) {
+    let inputElement = document.querySelector("#input");
+    inputElement.value = content
+    onInputUpdated();
+  }
+}
+
+function saveState() {
+  let storage = window.localStorage;
+
+  let titleElement = document.querySelector("#title");
+  let text = titleElement.innerText;
+  storage.setItem('title',text);
+
+  let inputElement = document.querySelector("#input");
+  let content = inputElement.value;
+
+  storage.setItem('content',content);
+}
+
+function revealContent() {
+  var flashPreventerElement = document.getElementById('flash-preventer');
+  flashPreventerElement.classList.add('fade');
+}
+
+function onInputUpdated() {
   updateHeights();
   updateDisplayText();
   updateMetre();
+  saveState();
+}
+
+function onTitleUpdated() {
+  saveState();
 }
 
 function updateHeights() {
@@ -48,15 +103,30 @@ function updateDisplayText(){
 function updateHighlighting(){
   let display_element = document.querySelector("#display")
   let text = display_element.innerText;
-  let lastWords = [];
+  
+  // each is [word, rhymeIndex]
+  let paragraphCounter = 0;
+  let rhymeSchemeCounter = 0;
+  let lastWords = [[]];
   let lines = text.split("\n");
   lines.forEach((line, i) => {
     let words = line.trim().split(/\s+/);
-    //todo, if blank line, reset last words
+    console.log(words);
+    if (words[0] == '') {
+      paragraphCounter++;
+      rhymeSchemeCounter = 0;
+      lastWords[paragraphCounter] = [];
+      return;
+    }
 
     let lastWord = words[words.length-1];
-    let rhymeClass = i;
-    lastWords.forEach((previousLastWord, lineIndex) => {
+    let rhymeScheme = null;
+    let rhymeFound = false;
+    let rhymeFoundScheme = null;
+
+    lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
+      previousLastWord = previousLastWordAndRhymeScheme[0];
+      previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
       if (!wordDict[previousLastWord]) {
         return;
       }
@@ -65,17 +135,23 @@ function updateHighlighting(){
       rhymeGroups.forEach(rhymeId => {
         // todo remove punctuation from lastword
         if (rhymeIndex[rhymeId].includes(lastWord)) {
-          rhymeClass = lineIndex;
+          rhymeFound = true;
+          rhymeFoundScheme = previousLastWordRhymeScheme;
         }
       });
     })
     
-    lastWords.push(lastWord);
-    //if last word in any of the previous words rhyme lists, then same class
+    if (rhymeFound) {
+      lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
+      rhymeScheme = rhymeFoundScheme;
+    } else {
+      lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
+      rhymeScheme = rhymeSchemeCounter;
+      rhymeSchemeCounter++;
+    }
     
-    //words[words.length-1] = "<span>" + words[words.length-1] + "</span>";
     var pos = line.lastIndexOf(lastWord);
-    let markedUpLine = line.substring(0,pos) + "<span class=\"last-word-"+rhymeClass+"\">" + lastWord + "</span>" + line.substring(pos+lastWord.length)
+    let markedUpLine = line.substring(0,pos) + "<span class=\"last-word-"+rhymeScheme+"\">" + lastWord + "</span>" + line.substring(pos+lastWord.length)
     lines[i] = markedUpLine;
     display_element.innerHTML = lines.join("\n");
   });
@@ -114,7 +190,9 @@ function updateMetre() {
       let secondStressedSyllable = wordProps[2];
       let wordMetre = "";
       let extraSpaces = word.length - syllableCount
-      wordMetre += "&nbsp;".repeat(extraSpaces);
+      if (extraSpaces > 0) {
+        wordMetre += "&nbsp;".repeat(extraSpaces);
+      }
       for (var i = 0; i < syllableCount; i++) {
         if (i === firstStressedSyllable || i === secondStressedSyllable) {
           wordMetre += "&nbsp;●&nbsp;"
@@ -122,7 +200,9 @@ function updateMetre() {
           wordMetre += "&nbsp;○&nbsp;"
         }
       }
-      wordMetre += "&nbsp;".repeat(extraSpaces);
+      if (extraSpaces > 0) {
+        wordMetre += "&nbsp;".repeat(extraSpaces);
+      }
       lineMetre += wordMetre;
       
     });
