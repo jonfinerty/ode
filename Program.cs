@@ -34,7 +34,7 @@ static void csvToJs() {
         rhymeIndex++;
     }
 
-    using StreamWriter output = new($"web/js/words.js", append: false);
+    using StreamWriter output = new($"docs/js/words.js", append: false);
     output.WriteLine("\"use strict\";");
     output.WriteLine();
     output.WriteLine("let wordDict = {");
