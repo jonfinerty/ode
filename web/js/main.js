@@ -104,15 +104,15 @@ function updateHighlighting(){
   let display_element = document.querySelector("#display")
   let text = display_element.innerText;
   
-  // each is [word, rhymeIndex]
   let paragraphCounter = 0;
   let rhymeSchemeCounter = 0;
+  // each is [word, rhymeIndex]
   let lastWords = [[]];
-  let lines = text.split("\n");
+  let lines = splitTextToLines(text);
   lines.forEach((line, i) => {
-    let words = line.trim().split(/\s+/);
+    let words = splitLineToWords(line);
     console.log(words);
-    if (words[0] == '') {
+    if (words.length == 0) {
       paragraphCounter++;
       rhymeSchemeCounter = 0;
       lastWords[paragraphCounter] = [];
@@ -120,6 +120,7 @@ function updateHighlighting(){
     }
 
     let lastWord = words[words.length-1];
+    let lastWordWithoutPunctuation = stripPunctuationFromWord(lastWord);
     let rhymeScheme = null;
     let rhymeFound = false;
     let rhymeFoundScheme = null;
@@ -127,14 +128,14 @@ function updateHighlighting(){
     lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
       previousLastWord = previousLastWordAndRhymeScheme[0];
       previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
-      if (!wordDict[previousLastWord]) {
+      let previousWordProps = get_word_props(previousLastWord);
+      if (!previousWordProps) {
         return;
       }
 
-      let rhymeGroups = wordDict[previousLastWord][3];
-      rhymeGroups.forEach(rhymeId => {
-        // todo remove punctuation from lastword
-        if (rhymeIndex[rhymeId].includes(lastWord)) {
+      let rhymeGroups = previousWordProps[3];
+      rhymeGroups.forEach(rhymeId => { 
+        if (rhymeIndex[rhymeId].includes(lastWordWithoutPunctuation)) {
           rhymeFound = true;
           rhymeFoundScheme = previousLastWordRhymeScheme;
         }
@@ -142,10 +143,10 @@ function updateHighlighting(){
     })
     
     if (rhymeFound) {
-      lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
+      lastWords[paragraphCounter].push([lastWordWithoutPunctuation,rhymeFoundScheme]);
       rhymeScheme = rhymeFoundScheme;
     } else {
-      lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
+      lastWords[paragraphCounter].push([lastWordWithoutPunctuation,rhymeSchemeCounter]);
       rhymeScheme = rhymeSchemeCounter;
       rhymeSchemeCounter++;
     }
@@ -154,8 +155,24 @@ function updateHighlighting(){
     let markedUpLine = line.substring(0,pos) + "<span class=\"last-word-"+rhymeScheme+"\">" + lastWord + "</span>" + line.substring(pos+lastWord.length)
     lines[i] = markedUpLine;
     display_element.innerHTML = lines.join("\n");
-  });
-  
+  }); 
+}
+
+function splitTextToLines(text) {
+  return text.split("\n");
+}
+
+function splitLineToWords(line) {
+  return line.trim().split(/(?:,|\.|\?| |:|;|-|—)+/).filter(w => w !== '');
+}
+
+function stripPunctuationFromWord(word) {
+  // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
+  word = word.toLowerCase();
+  word = word.replace("’", "'");
+  //todo: improve this regex
+  //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
+  return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"]/g,"");
 }
 
 function updateMetre() {
@@ -163,11 +180,11 @@ function updateMetre() {
   let text = input_element.value;
   let metre = "";
 
-  let lines = text.split("\n");
+  let lines = splitTextToLines(text);
   lines.forEach(line => {
     var lineSyllableCount = 0;
     var lineMetre = "";
-    let words = line.split(/(?:,|\.|\?| |:|;|-|—)+/);
+    let words = splitLineToWords(line);
 
     words.forEach(word => {
       word = word.trim();
@@ -219,37 +236,35 @@ function updateMetre() {
 }
 
 function get_word_props(text) {
-  text = text.toLowerCase();
-  text = text.replace("’", "'");
-  text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
-  if (text in wordDict) {
-    return wordDict[text];
+  let word = stripPunctuationFromWord(text);
+  if (word in wordDict) {
+    return wordDict[word];
   }
 
-  text = text.replace(/(\')/g,"");
-  if (text in wordDict) {
-    return wordDict[text];
+  word = word.replace(/(\')/g,"");
+  if (word in wordDict) {
+    return wordDict[word];
   }
 
-  sLessText = text.replace(/s$/g,"");
-  if (sLessText in wordDict) {
-    return wordDict[sLessText];
+  sLessWord = word.replace(/s$/g,"");
+  if (sLessWord in wordDict) {
+    return wordDict[sLessWord];
   }
   
-  esLessText = text.replace(/es$/g,"");
-  if (esLessText in wordDict) {
-    return wordDict[esLessText];
+  esLessWord = word.replace(/es$/g,"");
+  if (esLessWord in wordDict) {
+    return wordDict[esLessWord];
   }
   
-  ingLessText = text.replace(/ing$/g,"");
-  if (ingLessText in wordDict) {
-    let ingWordProps = wordDict[ingLessText];
+  ingLessWord = word.replace(/ing$/g,"");
+  if (ingLessWord in wordDict) {
+    let ingWordProps = wordDict[ingLessWord];
     return [ingWordProps[0]+1, ingWordProps[1], ingWordProps[2]];
   }
   
-  edLessText = text.replace(/ed$/g,"");
-  if (edLessText in wordDict) {
-    return wordDict[edLessText];
+  edLessWord = word.replace(/ed$/g,"");
+  if (edLessWord in wordDict) {
+    return wordDict[edLessWord];
   }
 
   return null;
