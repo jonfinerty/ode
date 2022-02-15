@@ -299,9 +299,16 @@ function updateMetre() {
           }
         }
       } else {
-        // todo: improve syllable guess based on word length
         syllableArray = ['?'];
         lineSyllableCount++;
+        if (word.length > 4) {
+          syllableArray.push('?');
+          lineSyllableCount++;
+        }
+        if (word.length > 8) {
+          syllableArray.push('?');
+          lineSyllableCount++;
+        }
       }
       let wordMetre = distributeEvenly(syllableArray, metreCharactersNeeded);
       lineMetre += wordMetre
