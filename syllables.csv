@@ -20337,6 +20337,7 @@ dived,1,0,-1
 divel,2,1,-1
 diver,2,0,-1
 diverge,2,1,-1
+diverged,2,1,-1
 divergence,3,1,-1
 divergent,3,1,-1
 divers,2,0,-1
@@ -63924,6 +63925,7 @@ twain,1,0,-1
 twaite,1,0,-1
 twang,1,0,-1
 twangle,2,0,-1
+twas,1,-1,-1
 twat,1,0,-1
 twattle,2,0,-1
 tway,1,0,-1
@@ -64002,7 +64004,7 @@ twittersphere,3,-1,-1
 twitterstorm,3,-1,-1
 twitterverse,3,-1,-1
 twixt,1,0,-1
-two,1,0,-1
+two,1,-1,-1
 twoccer,2,0,-1
 twoccing,2,0,-1
 twofer,2,0,-1
@@ -64454,7 +64456,8 @@ undergraduacy,6,2,0
 undergrip,3,-1,-1
 underground,3,1,0
 undergrounder,4,2,0
-undergrow,3,-1,-1
+undergrow,3,0,2
+undergrowth,3,0,2
 underhand,3,0,2
 underhead,3,0,-1
 underjoin,3,-1,-1

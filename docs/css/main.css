@@ -26,6 +26,10 @@ h1 {
   opacity: 0;
 }
 
+.placeholder {
+  opacity: 0.4;
+}
+
 #container {
   display: grid;
 }

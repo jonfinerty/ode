@@ -3,7 +3,32 @@ let rhymeIndex = {};
 setupTabCapture();
 buildRhymeIndex();
 loadState();
+setupPlaceholderText();
 revealContent();
+
+function setupPlaceholderText() {
+  var inputElement = document.querySelector("#input");
+  if (inputElement.value.trim().length == 0) {
+    let randomPoem = poems[Math.floor(Math.random() * poems.length)];
+    inputElement.value = randomPoem;
+    onInputUpdated();
+    inputElement.value = "";
+    saveState(); // todo: this is a bit janky because onInputUpdated is re-saving the placeholder
+    var displayElement = document.querySelector('#display');
+    displayElement.classList.add('placeholder');
+    
+    var metreElement = document.querySelector('#metre');
+    metreElement.classList.add('placeholder');
+  }
+}
+
+function removePlaceholderText() {
+  var displayElement = document.querySelector('#display');
+  displayElement.classList.remove('placeholder');
+  
+  var metreElement = document.querySelector('#metre');
+  metreElement.classList.remove('placeholder');
+}
 
 function setupTabCapture() {
   var inputElement = document.querySelector("#input");
@@ -60,7 +85,6 @@ function saveState() {
 
   let inputElement = document.querySelector("#input");
   let content = inputElement.value;
-
   storage.setItem('content',content);
 }
 
@@ -70,6 +94,7 @@ function revealContent() {
 }
 
 function onInputUpdated() {
+  removePlaceholderText();
   updateHeights();
   updateDisplayText();
   updateMetre();
