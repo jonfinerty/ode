@@ -26,7 +26,11 @@ h1 {
   opacity: 0;
 }
 
-.placeholder {
+
+#metre.placeholder {
+  opacity: 0.6;
+}
+#display.placeholder {
   opacity: 0.4;
 }
 

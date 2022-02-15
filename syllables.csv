@@ -44177,7 +44177,7 @@ ogress,2,0,-1
 ogry,2,0,-1
 ogun,2,0,-1
 ogygia,3,1,-1
-oh,1,0,-1
+oh,1,-1,-1
 ohana,3,1,-1
 ohelo,3,1,-1
 ohia,3,1,-1
@@ -66532,6 +66532,7 @@ wans,1,0,-1
 wanstead,2,-1,-1
 want,1,0,-1
 wantcha,2,0,-1
+wanted,2,0,-1
 wanting,2,0,-1
 wantok,2,0,-1
 wantokism,4,0,-1

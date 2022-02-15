@@ -89,6 +89,7 @@ function saveState() {
 }
 
 function revealContent() {
+  // todo: maybe slow down, maybe wait for font?
   var flashPreventerElement = document.getElementById('flash-preventer');
   flashPreventerElement.classList.add('fade');
 }
@@ -289,7 +290,8 @@ function get_word_props(text) {
   
   edLessWord = word.replace(/ed$/g,"");
   if (edLessWord in wordDict) {
-    return wordDict[edLessWord];
+    let edWordProps = wordDict[edLessWord];
+    return [edWordProps[0]+1, edWordProps[1], edWordProps[2]];
   }
 
   return null;
