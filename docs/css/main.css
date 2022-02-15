@@ -36,20 +36,20 @@ h1 {
 
 #container {
   display: grid;
+  margin-left: 56px;
+  margin-right: 56px;
 }
 
 .overlaid {
   border: none;
   outline: none;
   padding: 0;
-  width: calc(100% - 32px);
   grid-column: 1;
   grid-row: 1;
   margin: 0 auto;
-  max-width: 800px;
+  min-width: 800px;
   background: transparent;
   white-space: nowrap; 
-  overflow-x: auto;
   resize: none;
 }
 
@@ -70,7 +70,6 @@ h1 {
 }
 
 #metre {
-  max-width: 840px;
   margin-top: -26px;
   z-index: 0;
 }

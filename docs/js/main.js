@@ -98,6 +98,7 @@ function onInputUpdated() {
   removePlaceholderText();
   updateHeights();
   updateDisplayText();
+  updateWidth();
   updateMetre();
   saveState();
 }
@@ -116,6 +117,15 @@ function updateHeights() {
   input_element.style.height = newHeight;
   display_element.height = newHeight;
   metre_element.height = newHeight;
+}
+
+function updateWidth() {
+  let inputElement = document.querySelector("#input")
+  let displayElement = document.querySelector("#display");
+  let metreElement = document.querySelector("#metre");
+  inputElement.style.width = displayElement.clientWidth + 20 + "px"; // extra 20 so not to have a scrollbar sneak in
+  inputElement.style.paddingLeft = "20px"
+  metreElement.style.width = displayElement.clientWidth + 40 + "px"; // extra 40 to offset the syllable counts to the left
 }
 
 function updateDisplayText(){
