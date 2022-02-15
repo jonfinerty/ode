@@ -279,7 +279,7 @@ function updateMetre() {
       runningTextLength += precedingSize;
       
       //how many spaces to get up to runningTextLength from runningMetreLength
-      let spacesNeeded = Math.floor(Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize);
+      let spacesNeeded = Math.floor((Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize) + 0.4); //favour an extra space
       //let spacesNeeded = Math.floor(precedingSize / metreCharacterSize);
       lineMetre += "&nbsp;".repeat(spacesNeeded);
       runningMetreLength += spacesNeeded * metreCharacterSize;
