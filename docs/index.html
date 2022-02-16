@@ -20,18 +20,19 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400&display=swap">
   
 </head>
 
 <body>
-
   <h1 contenteditable="true" id="title" oninput="onTitleUpdated()">Ode</h1>
-  <div id="container">
-    <pre id="syllables"></pre>
-    <textarea autofocus id="input" class="overlaid" spellcheck="false" oninput="onInputUpdated();"></textarea>
-    <pre id="display" class="overlaid" aria-hidden="true"></pre>
-    <pre id="metre" class="overlaid" aria-hidden="true"></pre>
+  <div id="content">
+    <div id="grid-container">
+      <pre id="syllables"></pre>
+      <textarea autofocus id="input" class="overlaid" spellcheck="false" oninput="onInputUpdated();"></textarea>
+      <pre id="display" class="overlaid" aria-hidden="true"></pre>
+      <pre id="metre" class="overlaid" aria-hidden="true"></pre>
+    </div>
   </div>
   <div id="flash-preventer"></div>
 

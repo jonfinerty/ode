@@ -4,8 +4,10 @@ let metreCharacterSize = getTextWidth("●",getCanvasFontSize(document.querySele
 setupTabCapture();
 buildRhymeIndex();
 loadState();
-setupPlaceholderText();
-revealContent();
+waitForFontToLoad(() => {
+  setupPlaceholderText();
+  revealContent();
+});
 
 function setupPlaceholderText() {
   var inputElement = document.querySelector("#input");
@@ -90,10 +92,25 @@ function saveState() {
   storage.setItem('content',content);
 }
 
+
 function revealContent() {
-  // todo: maybe slow down, maybe wait for font?
   var flashPreventerElement = document.getElementById('flash-preventer');
   flashPreventerElement.classList.add('fade');
+}
+
+
+function waitForFontToLoad(then) {
+  var flashPreventerElement = document.getElementById('flash-preventer');
+  
+  if (document.fonts) {
+    document.fonts.load('64px "Libre Baskerville"').then(() => {
+      console.log("loaded");
+      then();
+    })
+  } else {
+    console.log("font wait api not available");
+    then();
+  }
 }
 
 function onInputUpdated() {
