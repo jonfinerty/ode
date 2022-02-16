@@ -34998,7 +34998,7 @@ juror,2,0,-1
 jury,2,0,-1
 jus,1,0,-1
 jussie,2,0,-1
-just,1,0,-1
+just,1,-1,-1
 justice,2,0,-1
 justicement,3,-1,-1
 justifiability,7,4,0
@@ -59706,7 +59706,7 @@ substantive,3,0,-1
 substantivisation,6,-1,-1
 substituend,4,1,0
 substituendum,5,3,0
-substitute,3,0,-1
+substitute,3,0,2
 substituted,4,0,-1
 substitution,4,2,0
 substrate,2,0,-1
@@ -61999,8 +61999,8 @@ thirties,2,-1,-1
 thirtieth,3,0,-1
 thirty,2,0,-1
 thirtyfold,3,-1,-1
-this,1,0,-1
-this'll,2,0,-1
+this,1,-1,-1
+this'll,2,-1,-1
 this'n,2,1,-1
 this's,2,0,-1
 this've,2,0,-1
@@ -67075,6 +67075,7 @@ whatev,2,1,-1
 whatever,3,1,-1
 whatever's,3,1,-1
 whath,1,0,-1
+whats,1,-1,-1
 whatnot,2,0,-1
 whatsoever,4,2,0
 whatten,2,-1,-1
