@@ -18,7 +18,13 @@ loadState();
 waitForFontToLoad(() => {
   setupPlaceholderText();
   revealContent();
+  focusInput();
 });
+
+function focusInput() {
+  var inputElement = document.querySelector('#input');
+  inputElement.focus();
+}
 
 function setupPlaceholderText() {
   var inputElement = document.querySelector("#input");
