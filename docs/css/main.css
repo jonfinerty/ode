@@ -76,6 +76,7 @@ h1 {
   grid-template-columns: 20px auto;
   grid-column-gap: 16px;
   text-align: left;
+  margin-right: 32px;
 }
 
 #syllables {
