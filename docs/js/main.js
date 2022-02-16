@@ -99,9 +99,7 @@ function revealContent() {
 }
 
 
-function waitForFontToLoad(then) {
-  var flashPreventerElement = document.getElementById('flash-preventer');
-  
+function waitForFontToLoad(then) {  
   if (document.fonts) {
     document.fonts.load('64px "Libre Baskerville"').then(() => {
       console.log("loaded");
@@ -114,12 +112,29 @@ function waitForFontToLoad(then) {
 }
 
 function onInputUpdated() {
-  removePlaceholderText();
-  updateHeights();
-  updateDisplayText();
-  updateWidth();
-  updateMetre();
-  saveState();
+  time(() => {
+    removePlaceholderText();
+    updateHeights();
+    updateDisplayText();
+    updateWidth();
+    updateMetre();
+    saveState();
+  });
+
+  // html2canvas(document.querySelector("#grid-container"))
+  // .then(canvas => {
+  //   console.log("HERE")
+  //   var img = canvas.toDataURL("image/png");
+  //   window.open(img);
+  //   console.log(img);
+  // }); 
+}
+
+function time(func) {
+  var startTime = performance.now();
+  func();
+  var endTime = performance.now();
+  console.log(`Took ${endTime - startTime}ms to render`);
 }
 
 function onTitleUpdated() {

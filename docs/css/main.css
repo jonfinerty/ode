@@ -14,7 +14,7 @@ h1 {
 }
 
 #flash-preventer {
-  z-index: 3;
+  z-index: 4;
   background-color: white;
   opacity: 1;
   transition: opacity 0.4s;
@@ -30,7 +30,6 @@ h1 {
   opacity: 0;
 }
 
-
 #metre.placeholder {
   opacity: 0.6;
 }
@@ -40,6 +39,26 @@ h1 {
 
 #content {
   text-align: center;
+}
+
+#menu {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
+  z-index: 3; /* needs to be ontop of the content */
+}
+
+.menu-item {
+  transition: opacity 0.4s;
+  opacity: 0.4;
+  color: inherit; 
+  text-decoration: inherit;
+  margin-left: 12px;
+}
+
+.menu-item:hover {
+  opacity: 1;
 }
 
 #grid-container {
