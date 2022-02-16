@@ -64521,7 +64521,7 @@ let wordDict = {
 "underground":[3,1,0,[125]],
 "undergrounder":[4,2,0,[126]],
 "undergrow":[3,0,2,[]],
-"undergrowth":[3,0,2,[]],
+"undergrowth":[3,0,2,[661]],
 "underhand":[3,0,2,[]],
 "underhead":[3,0,-1,[]],
 "underjoin":[3,-1,-1,[]],

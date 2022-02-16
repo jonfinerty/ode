@@ -1,5 +1,16 @@
 let rhymeIndex = {};
-let metreCharacterSize = getTextWidth("●",getCanvasFontSize(document.querySelector("#metre")));
+let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
+
+window.addEventListener('resize', function(event) {
+  // resizing the window causes the text to resize
+  // and so the metre needs to be rerenders for correct spacing
+  let isShowingPlaceholder = this.document.querySelector('#display').classList.contains('placeholder');
+  if (isShowingPlaceholder) {
+    setupPlaceholderText();
+  } else {
+    onInputUpdated();
+  }
+}, true);
 
 setupTabCapture();
 buildRhymeIndex();
@@ -12,8 +23,7 @@ waitForFontToLoad(() => {
 function setupPlaceholderText() {
   var inputElement = document.querySelector("#input");
   if (inputElement.value.trim().length == 0) {
-    let randomPoem = poems[Math.floor(Math.random() * poems.length)];
-    inputElement.value = randomPoem;
+    inputElement.value = placeholderPoem;
     onInputUpdated();
     inputElement.value = "";
     saveState(); // todo: this is a bit janky because onInputUpdated is re-saving the placeholder
@@ -92,12 +102,10 @@ function saveState() {
   storage.setItem('content',content);
 }
 
-
 function revealContent() {
   var flashPreventerElement = document.getElementById('flash-preventer');
   flashPreventerElement.classList.add('fade');
 }
-
 
 function waitForFontToLoad(then) {  
   if (document.fonts) {
@@ -286,6 +294,9 @@ function distributeEvenly(syllables, characterCount) { // syllables = ['●','�
 }
 
 function updateMetre() {
+  let metreFontSize = getCanvasFont(document.querySelector("#metre"));
+  let displayFontSize = getCanvasFont(document.querySelector("#display"));
+  let metreCharacterSize = getTextWidth("●", metreFontSize);
   let input_element = document.querySelector("#input")
   let text = input_element.value;
   let metre = "";
@@ -297,17 +308,13 @@ function updateMetre() {
     var lineMetre = "";
     let words = splitLineToWords(line);
 
-    // tricky bit is the gap between words could be long and full of punctuation
-    // calculate display for trimmed word -> easy
-    // work through line, removing bits at the start?
-    // get first index of sanitised word
     let runningTextLength = 0;
     let runningMetreLength = 0;
     words.forEach(word => {
       let wordProps = getWordProps(word);
       let wordIndex = line.indexOf(word);
       let precedingWhitespaceAndPunctuation = line.substring(0, wordIndex);
-      let precedingSize = getTextWidth(precedingWhitespaceAndPunctuation);
+      let precedingSize = getTextWidth(precedingWhitespaceAndPunctuation, displayFontSize);
 
       runningTextLength += precedingSize;
       
@@ -316,7 +323,7 @@ function updateMetre() {
       lineMetre += "&nbsp;".repeat(spacesNeeded);
       runningMetreLength += spacesNeeded * metreCharacterSize;
 
-      let wordSize = getTextWidth(word);
+      let wordSize = getTextWidth(word, displayFontSize);
       runningTextLength += wordSize;
       let metreCharactersNeeded = Math.floor(wordSize / metreCharacterSize);
       let syllableArray = [];
@@ -408,9 +415,6 @@ function getWordProps(text) {
 
 function getTextWidth(text, font) {
   // re-use for better performance
-  if (!font) {
-    font = getTextWidth.font || (getTextWidth.font = getCanvasFontSize(document.querySelector("#display")))
-  } 
   const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
   const context = canvas.getContext("2d");
   context.font = font;
@@ -422,7 +426,7 @@ function getCssStyle(element, prop) {
     return window.getComputedStyle(element, null).getPropertyValue(prop);
 }
 
-function getCanvasFontSize(el = document.body) {
+function getCanvasFont(el = document.body) {
   const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
   const fontSize = getCssStyle(el, 'font-size') || '16px';
   const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';

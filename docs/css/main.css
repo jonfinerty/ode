@@ -8,7 +8,7 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 32pt;
+  font-size: min(32pt, 5vw);
   color: #111;
   outline: none;
 }
@@ -72,8 +72,8 @@ h1 {
   grid-column: 1;
   text-align: right;
   color: #D3D3D3;
-  font-size: 12px;
-  line-height: 64px;
+  font-size: clamp(10px,1.5vw,12px);
+  line-height: clamp(24px,5vw,64px);
   margin: 0;
 }
 
@@ -91,9 +91,9 @@ h1 {
 }
 
 #input, #display {
-  font-size: 32px;
+  font-size: clamp(12px,2.5vw,32px);
   font-family: 'Libre Baskerville', serif;
-  line-height: 64px;
+  line-height: clamp(24px,5vw,64px);
   tab-size: 2;
 }
 
@@ -108,7 +108,7 @@ h1 {
 }
 
 #metre {
-  margin-top: -26px;
+  margin-top: max(-26px, -2.5vw);
   z-index: 0;
 }
 
@@ -120,8 +120,8 @@ h1 {
 
 #metre {
   color: #D3D3D3;
-  font-size: 16px;
-  line-height: 64px;
+  font-size: clamp(6px, 1.5vw, 16px);
+  line-height: clamp(24px,5vw,64px);
 }
 
 #display .last-word-0 {
