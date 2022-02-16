@@ -84,7 +84,7 @@ h1 {
   grid-column: 2;
   grid-row: 1;
   margin: 0 auto;
-  min-width: 800px;
+  min-width: 50vw;
   background: transparent;
   white-space: nowrap; 
   resize: none;
