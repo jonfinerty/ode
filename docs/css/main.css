@@ -73,7 +73,7 @@ h1 {
   text-align: right;
   color: #D3D3D3;
   font-size: clamp(10px,1.5vw,12px);
-  line-height: clamp(24px,5vw,64px);
+  line-height: clamp(32px,5vw,64px);
   margin: 0;
 }
 
@@ -108,7 +108,7 @@ h1 {
 }
 
 #metre {
-  margin-top: max(-26px, -2.5vw);
+  margin-top: clamp(-26px, -2.5vw, -10px);
   z-index: 0;
 }
 
