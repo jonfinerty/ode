@@ -1,5 +1,6 @@
 let rhymeIndex = {};
 let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
+let mode = "input"; // |"about";
 
 window.addEventListener('resize', function(event) {
   // resizing the window causes the text to resize
@@ -132,7 +133,9 @@ function onInputUpdated() {
     updateDisplayText();
     updateWidth();
     updateMetre();
-    saveState();
+    if (mode == "input") {
+      saveState();
+    }
   });
 
   // html2canvas(document.querySelector("#grid-container"))
@@ -437,4 +440,56 @@ function getCanvasFont(el = document.body) {
   const fontSize = getCssStyle(el, 'font-size') || '16px';
   const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
   return `${fontWeight} ${fontSize} ${fontFamily}`;
+}
+
+function aboutClicked() {
+  mode = "about";
+  saveState();
+  let inputElement = document.querySelector("#input");
+  let titleElement = document.querySelector("#title");
+  let gridElement = document.querySelector("#grid-container");
+  let shareMenuItem = document.querySelector("#menu-item-share");
+  let aboutMenuItem = document.querySelector("#menu-item-about");
+  let backMenuItem = document.querySelector("#menu-item-back");
+
+  shareMenuItem.classList.add("hidden");
+  aboutMenuItem.classList.add("hidden");
+  backMenuItem.classList.remove("hidden");
+  gridElement.classList.add("fade-out");
+  titleElement.classList.add("fade-out");
+
+  setTimeout(() => {
+    inputElement.value = aboutPoem;
+    titleElement.value = 'Ode';
+    onInputUpdated();
+    gridElement.classList.remove("fade-out");
+    titleElement.classList.remove("fade-out");
+  }, 500);
+}
+
+function backClicked() {
+  mode = "input";
+  let inputElement = document.querySelector("#input");
+  let titleElement = document.querySelector("#title");
+  let gridElement = document.querySelector("#grid-container");
+  let shareMenuItem = document.querySelector("#menu-item-share");
+  let aboutMenuItem = document.querySelector("#menu-item-about");
+  let backMenuItem = document.querySelector("#menu-item-back");
+
+  shareMenuItem.classList.remove("hidden");
+  aboutMenuItem.classList.remove("hidden");
+  backMenuItem.classList.add("hidden");
+  gridElement.classList.add("fade-out");
+  titleElement.classList.add("fade-out");
+
+  setTimeout(() => {
+    loadState();
+    onInputUpdated();
+    gridElement.classList.remove("fade-out");
+    titleElement.classList.remove("fade-out");
+  }, 500);
+}
+
+function shareClicked() {
+  console.log("SHARE!");
 }

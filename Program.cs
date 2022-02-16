@@ -1,21 +1,181 @@
 ﻿using System.Text.RegularExpressions;
-using WikiClientLibrary.Client;
-using WikiClientLibrary.Generators;
-using WikiClientLibrary.Pages;
-using WikiClientLibrary.Sites;
+using System.Text.Json;
+using System.Collections.Concurrent;
 
+HttpClient client = new HttpClient();
 
 //csvToJs();
 //SyllableCsvPurify();
 //DownloadWord().Wait();
 // var words = loadWords();
 // GetRhymes(words).Wait();
-processRhymes();
-processSyllables();
-csvToJs();
+// processRhymes();
+// processSyllables();
+// csvToJs();
 // assignRhymeGroups();
+//processWordList();
+//var rhymes = await getRhymesFromDatamuse(client, "fiddle");
+// foreach (var rhyme in rhymes) {
+//     Console.WriteLine(rhyme);
+// }
+downloadFromDatamuse(client).Wait();
 return;
 //DownloadAllWords().Wait();
+
+static async Task<Word> getWordFromDatamuse(HttpClient client, string text) {
+    var path = "https://api.datamuse.com/words?sp="+text+"&md=sfr&max=1&ipa=1";
+    HttpResponseMessage response = await client.GetAsync(path);
+    if (response.IsSuccessStatusCode)
+    {
+        var streamTask = client.GetStreamAsync(path);
+        var words = await JsonSerializer.DeserializeAsync<List<DatamuseWord>>(await streamTask);
+        if (words == null  || words.Count == 0) {
+            Console.WriteLine("Throwing out 1: " + text);
+            return null;
+        } else {
+            var word = words[0];
+            if (word.word != text) {
+                Console.WriteLine("Throwing out 2: " + text);
+                return null;
+            }
+            return words[0].ToWord();
+        }
+    } else {
+        throw new Exception("AH");
+    }
+}
+
+static async Task<List<Word>> getRhymesFromDatamuse(HttpClient client, string word) {
+    var path = "https://api.datamuse.com/words?rel_rhy="+word+"&md=srf&ipa=1&max=1000";
+    HttpResponseMessage response = await client.GetAsync(path);
+    if (response.IsSuccessStatusCode)
+    {
+        var streamTask = client.GetStreamAsync(path);
+        var words = await JsonSerializer.DeserializeAsync<List<DatamuseWord>>(await streamTask);
+        if (words == null  || words.Count == 0) {
+            return new List<Word>();
+        } else {
+            // filter out spaces from rhymes
+            var processedWords = words.Where(w => !w.word.Contains(" ")).Select(w => w.ToWord()).ToList();
+            if (processedWords.Count >= 1000) {
+                Console.WriteLine("Max limit hit with word: " + word);
+            }
+            return processedWords;
+        }
+    } else {
+        throw new Exception("AH");
+    }
+}
+
+static async Task downloadFromDatamuse(HttpClient client) {
+
+    Object throwLock = new Object();
+    Object rhymeLock = new Object();
+    Object wordsLock = new Object();
+
+    var words = new ConcurrentDictionary<string, Word>();
+    foreach (string line in File.ReadLines("syllables2.csv"))
+    { 
+        var word = new Word(line);
+        words.TryAdd(word.text, word);
+    }
+
+    var thrownOutWords = new ConcurrentDictionary<string, bool>();
+    foreach (string line in File.ReadLines("thrown_out_words.csv"))
+    { 
+        thrownOutWords.TryAdd(line, true);
+    }
+
+    int wordsProcessed = 0;
+    int apiCalls = 0;
+
+    var inputWords = File.ReadLines("words_raw.txt");
+
+    await Parallel.ForEachAsync(inputWords, async (wordText, token) => {
+    //foreach(var wordText in File.ReadLines("words_raw.txt")) {
+        wordsProcessed++;
+        Console.WriteLine("Words processed: " + wordsProcessed);
+        if (words.ContainsKey(wordText)) {
+            return;
+        }
+
+        if (thrownOutWords.ContainsKey(wordText)){
+            return;
+        }
+
+        var word = await getWordFromDatamuse(client, wordText);
+        apiCalls++;
+        if (word == null) {
+            thrownOutWords.TryAdd(wordText,true);
+            lock(throwLock){
+                using (StreamWriter output = new($"thrown_out_words.csv", append: true))
+                {
+                    output.WriteLine(wordText);
+                }
+            }
+            return;
+        }
+        
+        words.TryAdd(wordText, word);
+        var wordRhymes = await getRhymesFromDatamuse(client, wordText);
+       
+        foreach(var rhymingWord in wordRhymes) {
+            if (words.ContainsKey(rhymingWord.text)) {
+                continue;
+            } else {
+                words.TryAdd(rhymingWord.text, rhymingWord);
+                lock(wordsLock) {
+                    using (StreamWriter wordOutput = new($"syllables2.csv", append: true))
+                    {
+                        wordOutput.WriteLine(rhymingWord);
+                    }
+                }
+            }
+        }
+
+        lock(rhymeLock)
+        {
+            using (StreamWriter rhymeOutput = new($"rhymes2.csv", append: true))
+            {
+                if (wordRhymes.Count > 0) {
+                    var line = String.Join(",",wordRhymes.Select(r => r.text));
+                    rhymeOutput.WriteLine(line);
+                }
+            }
+        }
+        lock(wordsLock)
+        {
+            using (StreamWriter wordOutput = new($"syllables2.csv", append: true))
+            {
+                wordOutput.WriteLine(word);
+            }
+        }
+
+        apiCalls++;
+        Console.WriteLine("API calls: " + apiCalls);
+        Console.WriteLine("Words discovered: " + words.Count);
+    //}
+    });
+}
+
+static void processWordList() {
+    var words = new HashSet<string>();
+    var bannedLetters = new char[]{' ', '-', '@', '.', '$', 'ǀ', 'ǃ', '/', '&'};
+    foreach (var word in File.ReadLines("words_all.txt"))
+    {
+        var lowercase = word.Trim().ToLower();
+        if (lowercase.IndexOfAny(bannedLetters) != -1) {
+                continue;
+        }
+        words.Add(lowercase);
+    }
+    var ordered = words.OrderBy(w => w);
+
+    using StreamWriter output = new("words_raw.txt", append: false);
+    foreach (var word in ordered) {
+        output.WriteLine(word);
+    }
+}
 
 static void csvToJs() {
     // read syllables.csv
@@ -54,23 +214,6 @@ static List<Word> loadWords() {
         words.Add(word);
     }  
     return words;
-}
-
-static string GetPronounciation(WikiPage page) {
-    // extract pronounciation
-    // grabs the first pronounciation, could improve by preferring the UK once, dealing with read and wind etc.
-    var regex = new Regex("\\{\\{IPA\\|en\\|/(.+?)/");
-    var matches = regex.Matches(page.Content);
-    var firstMatch = matches.FirstOrDefault();
-    if (firstMatch != null) { 
-        var match = firstMatch.Groups[1].Value;
-        if (match.Contains(',')) {
-            return match.Split(',')[0];
-        }
-        return match;
-    } else {
-        return null;
-    }
 }
 
 static void processRhymes() {
@@ -114,213 +257,11 @@ static void processSyllables() {
     }  
 }
 
-static List<string> GetRhymeSuffixes(string content) {
-    var suffixes = new List<string>();
-    
-    var regex = new Regex("\\'\\'\\s?([a-zA-Z]+)\\'\\'");
-    MatchCollection matches = regex.Matches(content);
-    foreach (Match match in matches) {
-        suffixes.Add(match.Groups[1].Value);
-    }
-
-    if (content.Contains("'' 's''")) {
-        suffixes.Add("'s");
-    }
-
-    if (content.Contains("'' 'll''")) {
-        suffixes.Add("'ll");
-    }
-
-    return suffixes;
-}
-
-static async Task<List<string>> GetRhyme(WikiSite site, string rhyme, string? previousRhymePage, string? content) {
-    var rhymingWords = new List<string>();
-    if (content == null) {
-        var pageRead = new WikiPage(site, "Rhymes:English/"+rhyme);
-        await pageRead.RefreshAsync(PageQueryOptions.FetchContent);
-
-        content = pageRead.Content;
-    }
-    if (content == null) {
-        return rhymingWords;
-    }
-
-    var redirect = new Regex("\\#REDIRECT \\[\\[Rhymes:English/(.+?)\\]\\]");
-    var redirectMatches = redirect.Matches(content);
-    var firstMatch = redirectMatches.FirstOrDefault();
-    if (firstMatch != null) { 
-        return await GetRhyme(site, firstMatch.Groups[1].Value, rhyme, null);
-    }
-
-    var seeAlso = new Regex("\\# See also \\[\\[Rhymes:English/(.+?)\\|");
-    MatchCollection seeAlsoMatches = seeAlso.Matches(content);
-    foreach (Match match in seeAlsoMatches) {
-        var newRhymePage = match.Groups[1].Value;
-        if (previousRhymePage == newRhymePage) {
-            continue;
-        }
-        var subrhymes = await GetRhyme(site, newRhymePage, rhyme, null);
-        rhymingWords.AddRange(subrhymes);
-    }
-
-    var suffixRegex = new Regex("\\#\\s?For more rhymes, add (.+?) to some .+Rhymes:English/(.+?)\\|");
-    MatchCollection suffixRegexMatches = suffixRegex.Matches(content);
-    foreach (Match match in suffixRegexMatches) {
-        var unproccessedSuffixes = match.Groups[1].Value; // e.g. "''s'', ''es'' or '' 's''"
-        var processedSuffixes = GetRhymeSuffixes(unproccessedSuffixes);
-        var newRhymePage = match.Groups[2].Value;
-
-        // regex out subrhymeSuffixes
-        foreach(var suffix in processedSuffixes) {
-            var subrhymes = await GetRhyme(site, newRhymePage, rhyme, null);
-            subrhymes = subrhymes.Select(x => x + suffix).ToList();
-            rhymingWords.AddRange(subrhymes);
-        }
-    }
-
-    // regex out rhymes in page
-    var regex = new Regex("\\*\\s?\\[\\[(.+?)(\\]\\]|\\|)");
-    MatchCollection matches = regex.Matches(content);
-    foreach (Match match in matches) {
-        rhymingWords.Add(match.Groups[1].Value);
-    }
-
-    var regex2 = new Regex("\\*\\s?\\{\\{l\\|en\\|(.+?)(\\}\\}|\\|)");
-    MatchCollection matches2 = regex2.Matches(content);
-    foreach (Match match in matches2) {
-        rhymingWords.Add(match.Groups[1].Value);
-    }
-
-    var regex3 = new Regex("\\*\\s?\\[\\[w:(.+?)\\|");
-    MatchCollection matches3 = regex3.Matches(content);
-    foreach (Match match in matches3) {
-        rhymingWords.Add(match.Groups[1].Value);
-    }
-
-    return rhymingWords;
-}
-
-static async Task GetRhymes(List<Word> words) {
-    var wordsDict = new Dictionary<string, Word>();
-    foreach (string line in File.ReadLines("syllables.csv"))
-    { 
-        var word = new Word(line);
-        wordsDict.Add(word.text, word);
-    }
-
-    var client = new WikiClient
-    {
-        ClientUserAgent = "WCLQuickStart/1.0 (your user name or contact information here)"
-    };
-    var site = new WikiSite(client, "https://en.wiktionary.org/w/api.php");
-    await site.Initialization;
-
-
-    var pageGen = new AllPagesGenerator(site)
-    {
-        StartTitle = "English/aɪ",
-        NamespaceId = 106,
-        PaginationSize = 50
-    };
-
-    var rhymepagecount = 0;
-
-    using StreamWriter output = new($"rhymes2.csv", append: false);
-
-    await using (var enumerator = pageGen.EnumPagesAsync(PageQueryOptions.FetchContent).GetAsyncEnumerator())
-    {
-        while (await enumerator.MoveNextAsync(CancellationToken.None))
-        {
-            var page = enumerator.Current;
-            if (page.Title == "Rhymes:Esperanto/aa") {
-                Console.WriteLine("Stopping");
-                break;
-            }
-            Console.WriteLine(page.Title);
-            var rhymes = await GetRhyme(site, page.Title, null, page.Content);
-            rhymepagecount++;
-            Console.WriteLine($"{rhymepagecount}/7599 complete");
-            rhymes = rhymes.Select(r => r.ToLower()).Distinct().Where(r => wordsDict.ContainsKey(r)).ToList();
-            if (rhymes.Count > 0) {
-                var outputLine = String.Join(",", rhymes);
-                output.WriteLine(outputLine);
-            }            
-        }
-    }
-
-    return;
-}
-
-static async Task DownloadWord() {
-    var client = new WikiClient
-    {
-        ClientUserAgent = "WCLQuickStart/1.0 (your user name or contact information here)"
-    };
-    var site = new WikiSite(client, "https://en.wiktionary.org/w/api.php");
-    await site.Initialization;
-
-    var pageRead = new WikiPage(site, "unidirectional");
-    await pageRead.RefreshAsync(PageQueryOptions.FetchContent);
-    var pronunciation = GetPronounciation(pageRead);
-    var word = new Word(pageRead.ToString(), pronunciation, 5);
-    Console.WriteLine(word);
-    Console.ReadLine();
-}
-
-static async Task DownloadAllWords()
-{
-    var client = new WikiClient
-    {
-        ClientUserAgent = "WCLQuickStart/1.0 (your user name or contact information here)"
-    };
-
-    var site = new WikiSite(client, "https://en.wiktionary.org/w/api.php");
-
-    await site.Initialization;
-
-    for (int i=1; i<=12; i++) {
-        await DownloadWords(site, i);
-    }
-
-    await site.LogoutAsync();
-    client.Dispose();        // Or you may use `using` statement.
-}
-
-static async Task DownloadWords(WikiSite site, int syllableCount) {
-
-    using StreamWriter file = new($"{syllableCount}words.txt", append: true);
-    
-    var catmembers = new CategoryMembersGenerator(site, $"Category:English_{syllableCount}-syllable_words")
-    {
-        MemberTypes = CategoryMemberTypes.Page,
-        PaginationSize = 50
-    };
-
-    await using (var enumerator = catmembers.EnumPagesAsync(PageQueryOptions.FetchContent).GetAsyncEnumerator())
-    {
-        while (await enumerator.MoveNextAsync(CancellationToken.None))
-        {
-            var page = enumerator.Current;
-            var bannedLetters = new char[]{' ', '-', '@', '.', '$', 'ǀ', 'ǃ'};
-
-            if (page.ToString().IndexOfAny(bannedLetters) != -1) {
-                continue;
-            }
-
-            var pronunciation = GetPronounciation(page);
-            var word = new Word(page.ToString(), pronunciation, syllableCount);
-
-            Console.WriteLine(word);
-            await file.WriteLineAsync(word.ToString());
-        }
-    }
-}
-
 public class Word {
     public string? text;
     public string? IPA;
     public int syllableCount;
+    public double freqScore; // number of times out a 1 million it appears in google book corpus
     public int? primaryStressSyllableIndex;
     public int? secondaryStressSyllableIndex;
     public List<int> rhymeGroups = new List<int>();
@@ -329,10 +270,11 @@ public class Word {
 
     public Word(){}
 
-    public Word(string text, string IPA, int syllableCount) {
+    public Word(string text, string IPA, int syllableCount, double freqScore) {
         this.text = text;
         this.IPA = IPA;
         this.syllableCount = syllableCount;
+        this.freqScore = freqScore;
         primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
         secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA);
     }
@@ -359,7 +301,7 @@ public class Word {
 
     public override string ToString()
     {
-        return $"{text},{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex}";
+        return $"{text},{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex},{freqScore},{IPA}";
     }
 
     static int? GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
@@ -388,7 +330,7 @@ public class Word {
     }
 
     static int EstimateSyllableIndex(int syllableCount, string pronunciation, int characterIndex) {
-        Console.WriteLine($"{syllableCount} {characterIndex} {pronunciation} {pronunciation.Length}");
+        //Console.WriteLine($"{syllableCount} {characterIndex} {pronunciation} {pronunciation.Length}");
         if (characterIndex == 0) {
             return 0;
         }
@@ -398,4 +340,28 @@ public class Word {
         return Math.Max(1, result);
     }
 
+}
+
+//https://api.datamuse.com/words?sp=flower&md=sfr&max=1&ipa=1
+//[{"word":"flower","score":67939,"numSyllables":2,"tags":["pron:F L AW1 ER0 ","ipa_pron:fɫˈaʊɝ","f:28.794326"]}]
+// https://api.datamuse.com/words?rel_rhy=flower&md=srf&ipa=1&max=1000
+// [{"word":"power","score":5369,"numSyllables":2,"tags":["pron:P AW1 ER0 ","ipa_pron:pˈaʊɝ","f:547.875315"]},
+public class DatamuseWord {
+    public string word {get; set;}
+    public int numSyllables {get; set;}
+
+    public string[] tags {get; set;}
+
+    public double GetFreqScore() {
+        return double.Parse(tags[2].Substring(2));
+    }
+
+    public string GetIPA() {
+        return tags[1].Substring(9);
+    }
+
+    public Word ToWord() {
+        var word = new Word(this.word, GetIPA(), numSyllables, GetFreqScore());
+        return word;
+    }
 }

@@ -11,6 +11,7 @@ h1 {
   font-size: min(32pt, 5vw);
   color: #111;
   outline: none;
+  transition: opacity 0.5s;
 }
 
 #flash-preventer {
@@ -24,6 +25,14 @@ h1 {
   bottom:0px;
   left:0px;
   pointer-events: none;
+}
+
+#grid-container {
+  transition: opacity 0.5s;
+}
+
+.fade-out {
+  opacity: 0;
 }
 
 #flash-preventer.fade {
@@ -69,6 +78,10 @@ h1 {
 
 .menu-item:hover {
   opacity: 1;
+}
+
+.menu-item.hidden {
+  display: none;
 }
 
 #grid-container {
