@@ -108,7 +108,7 @@ h1 {
 }
 
 #metre {
-  margin-top: clamp(-26px, -2.5vw, -10px);
+  margin-top: clamp(-26px, -2.5vw, -12px);
   z-index: 0;
 }
 
