@@ -74,14 +74,14 @@ static async Task downloadFromDatamuse(HttpClient client) {
     Object wordsLock = new Object();
 
     var words = new ConcurrentDictionary<string, Word>();
-    foreach (string line in File.ReadLines("syllables2.csv"))
+    foreach (string line in File.ReadLines("datamuse_syllables.csv"))
     { 
         var word = new Word(line);
         words.TryAdd(word.text, word);
     }
 
     var thrownOutWords = new ConcurrentDictionary<string, bool>();
-    foreach (string line in File.ReadLines("thrown_out_words.csv"))
+    foreach (string line in File.ReadLines("datamuse_thrown_out_words.csv"))
     { 
         thrownOutWords.TryAdd(line, true);
     }
@@ -89,10 +89,9 @@ static async Task downloadFromDatamuse(HttpClient client) {
     int wordsProcessed = 0;
     int apiCalls = 0;
 
-    var inputWords = File.ReadLines("words_raw.txt");
+    var inputWords = File.ReadLines("datamuse_words_raw.txt");
 
     await Parallel.ForEachAsync(inputWords, async (wordText, token) => {
-    //foreach(var wordText in File.ReadLines("words_raw.txt")) {
         wordsProcessed++;
         Console.WriteLine("Words processed: " + wordsProcessed);
         if (words.ContainsKey(wordText)) {
@@ -108,7 +107,7 @@ static async Task downloadFromDatamuse(HttpClient client) {
         if (word == null) {
             thrownOutWords.TryAdd(wordText,true);
             lock(throwLock){
-                using (StreamWriter output = new($"thrown_out_words.csv", append: true))
+                using (StreamWriter output = new($"datamuse_thrown_out_words.csv", append: true))
                 {
                     output.WriteLine(wordText);
                 }
@@ -125,7 +124,7 @@ static async Task downloadFromDatamuse(HttpClient client) {
             } else {
                 words.TryAdd(rhymingWord.text, rhymingWord);
                 lock(wordsLock) {
-                    using (StreamWriter wordOutput = new($"syllables2.csv", append: true))
+                    using (StreamWriter wordOutput = new($"datamuse_syllables.csv", append: true))
                     {
                         wordOutput.WriteLine(rhymingWord);
                     }
@@ -135,7 +134,7 @@ static async Task downloadFromDatamuse(HttpClient client) {
 
         lock(rhymeLock)
         {
-            using (StreamWriter rhymeOutput = new($"rhymes2.csv", append: true))
+            using (StreamWriter rhymeOutput = new($"datamuse_rhymes.csv", append: true))
             {
                 if (wordRhymes.Count > 0) {
                     var line = String.Join(",",wordRhymes.Select(r => r.text));
@@ -145,7 +144,7 @@ static async Task downloadFromDatamuse(HttpClient client) {
         }
         lock(wordsLock)
         {
-            using (StreamWriter wordOutput = new($"syllables2.csv", append: true))
+            using (StreamWriter wordOutput = new($"datamuse_syllables.csv", append: true))
             {
                 wordOutput.WriteLine(word);
             }
@@ -154,7 +153,6 @@ static async Task downloadFromDatamuse(HttpClient client) {
         apiCalls++;
         Console.WriteLine("API calls: " + apiCalls);
         Console.WriteLine("Words discovered: " + words.Count);
-    //}
     });
 }
 
