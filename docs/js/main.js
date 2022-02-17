@@ -31,11 +31,17 @@ waitForFontToLoad(() => {
   focusInput();
 });
 
-function onInputUpdated() {
-  removePlaceholderText();
+function onInputPasted(event) {
+  let pastedText = (event.clipboardData || window.clipboardData).getData('text');
+  event.preventDefault();
+  event.data = pastedText;
+  onInputUpdated(event);
+}
+
+function onInputUpdated(event) {
+  removePlaceholderText(event.data);
   render();
   saveState();
-
 
   // html2canvas(document.querySelector("#grid-container"))
   // .then(canvas => {
@@ -86,7 +92,7 @@ function setupPlaceholderText() {
   }
 }
 
-function removePlaceholderText() {
+function removePlaceholderText(stringToReplaceWith) {
   var displayElement = document.querySelector('#display');
   if (displayElement.classList.contains('placeholder')) {
     displayElement.classList.remove('placeholder');
@@ -95,7 +101,7 @@ function removePlaceholderText() {
     metreElement.classList.remove('placeholder');
 
     var inputElement = document.querySelector('#input');
-    inputElement.value = "";
+    inputElement.value = stringToReplaceWith;
 
     setMode("input");    
   }
@@ -183,9 +189,9 @@ function waitForFontToLoad(then) {
   }
 }
 
-function time(func) {
+function time(func, ...params) {
   var startTime = performance.now();
-  func();
+  func(...params);
   var endTime = performance.now();
   console.log(`Function ${func.name} took ${endTime - startTime}ms to run`);
 }
@@ -492,9 +498,8 @@ function aboutClicked() {
   titleElement.classList.add("fade-out");
 
   setTimeout(() => {
-    removePlaceholderText();
+    removePlaceholderText(aboutPoem);
     setMode("about");
-    inputElement.value = aboutPoem;
     titleElement.innerText = 'About Ode';
     render();
     gridElement.classList.remove("fade-out");
