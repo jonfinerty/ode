@@ -160,7 +160,7 @@ static void csvsToJs() {
     output.WriteLine();
     output.WriteLine("let wordDict = {");
     foreach (var word in mergedWords.OrderBy(w => w.Key)) {
-        var props = $"[{word.Value.syllableCount},{word.Value.primaryStressSyllableIndex},{word.Value.secondaryStressSyllableIndex},[{String.Join(',',word.Value.rhymeGroups)}]],";
+        var props = $"[{word.Value.syllableCount},{word.Value.primaryStressSyllableIndex},{word.Value.secondaryStressSyllableIndex},[{String.Join(',',word.Value.rhymeGroups)}],{word.Value.freqScore}],";
         output.WriteLine($"\"{word.Value.text}\":" + props);
     }
     output.WriteLine("}");
