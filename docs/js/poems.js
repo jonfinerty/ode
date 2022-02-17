@@ -163,7 +163,7 @@ although these are at best just guesses.
 Along the side, a number lays
 a count of syllables to gaze.
 A measurement of which is great
-for keeping lines to certain weight.
+for keeping lines a certain weight.
 
 I do not claim it is correct,
 It's likely wrong in some respect.
@@ -173,4 +173,4 @@ tweet at me and have a chatter.
 So here we are, what's left to say?
 More features might be on their way!
 This site and rhyme was made by Jon;
-developer, aged thirty-one.`;
+developer, aged thirty-one. -lexicon`;

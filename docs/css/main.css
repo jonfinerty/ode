@@ -1,11 +1,11 @@
 html {
   font-family: 'Libre Baskerville', serif;
+  overflow: initial !important;
 }
 
-html,body {
+/* html,body {
   height: 100%;
-  overflow-y: hidden;
-}
+} */
 
 body {
   padding-left: calc(100vw - 100%);
@@ -107,6 +107,7 @@ h1 {
 }
 
 .overlaid {
+  box-sizing: border-box;
   border: none;
   outline: none;
   padding: 0;

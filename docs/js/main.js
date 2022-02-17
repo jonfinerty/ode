@@ -2,25 +2,46 @@ let rhymeIndex = {};
 let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about";
 
-window.addEventListener('resize', function(event) {
-  // resizing the window causes the text to resize
-  // and so the metre needs to be rerenders for correct spacing
-  let isShowingPlaceholder = this.document.querySelector('#display').classList.contains('placeholder');
-  if (isShowingPlaceholder) {
-    setupPlaceholderText();
-  } else {
-    onInputUpdated();
-  }
+window.addEventListener('resize', function() {
+    render();
 }, true);
 
 setupTabCapture();
 buildRhymeIndex();
-loadState();
 waitForFontToLoad(() => {
+  loadState();
   setupPlaceholderText();
+  render();
   revealContent();
   focusInput();
 });
+
+function onInputUpdated() {
+  time(() => {
+    removePlaceholderText();
+    render();
+    saveState();
+  });
+
+  // html2canvas(document.querySelector("#grid-container"))
+  // .then(canvas => {
+  //   console.log("HERE")
+  //   var img = canvas.toDataURL("image/png");
+  //   window.open(img);
+  //   console.log(img);
+  // }); 
+}
+
+function onTitleUpdated() {
+  saveState();
+}
+
+function render() {
+  updateHeights();
+  updateDisplayText();
+  updateWidth();
+  updateMetre();
+}
 
 function focusInput() {
   var inputElement = document.querySelector('#input');
@@ -30,10 +51,11 @@ function focusInput() {
 function setupPlaceholderText() {
   var inputElement = document.querySelector("#input");
   if (inputElement.value.trim().length == 0) {
+    mode = "placeholder";
+    console.log("Setting mode to placeholder");
     inputElement.value = placeholderPoem;
-    onInputUpdated();
-    inputElement.value = "";
-    saveState(); // todo: this is a bit janky because onInputUpdated is re-saving the placeholder
+    inputElement.selectionEnd = 0;
+    
     var displayElement = document.querySelector('#display');
     displayElement.classList.add('placeholder');
     
@@ -44,10 +66,18 @@ function setupPlaceholderText() {
 
 function removePlaceholderText() {
   var displayElement = document.querySelector('#display');
-  displayElement.classList.remove('placeholder');
-  
-  var metreElement = document.querySelector('#metre');
-  metreElement.classList.remove('placeholder');
+  if (displayElement.classList.contains('placeholder')) {
+    displayElement.classList.remove('placeholder');
+
+    var metreElement = document.querySelector('#metre');
+    metreElement.classList.remove('placeholder');
+
+    var inputElement = document.querySelector('#input');
+    inputElement.value = "";
+
+    mode = "input"    
+    console.log("Setting mode to input");
+  }
 }
 
 function setupTabCapture() {
@@ -82,31 +112,43 @@ function buildRhymeIndex() {
 }
 
 function loadState() {
+  console.log("loading state");
   let storage = window.localStorage;
   let title = storage.getItem('title');
+  let titleElement = document.querySelector("#title");
   if (title) {
-    let titleElement = document.querySelector("#title");
     titleElement.innerText = title;
+  } else {
+    titleElement.innerText = "Ode";
   }
 
   let content = storage.getItem('content');
+  console.log(content.substring(0,20));
+  let inputElement = document.querySelector("#input");
   if (content) {
-    let inputElement = document.querySelector("#input");
     inputElement.value = content
-    onInputUpdated();
+  } else {
+    inputElement.value = content
   }
 }
 
 function saveState() {
+  if (mode == "about" || mode == "placeholder") {
+    return;
+  }
+
+  console.log("saving state");
+
   let storage = window.localStorage;
 
   let titleElement = document.querySelector("#title");
   let text = titleElement.innerText;
-  storage.setItem('title',text);
+  storage.setItem('title', text);
 
   let inputElement = document.querySelector("#input");
   let content = inputElement.value;
-  storage.setItem('content',content);
+  console.log(content.substring(0,20));
+  storage.setItem('content', content);
 }
 
 function revealContent() {
@@ -126,36 +168,11 @@ function waitForFontToLoad(then) {
   }
 }
 
-function onInputUpdated() {
-  time(() => {
-    removePlaceholderText();
-    updateHeights();
-    updateDisplayText();
-    updateWidth();
-    updateMetre();
-    if (mode == "input") {
-      saveState();
-    }
-  });
-
-  // html2canvas(document.querySelector("#grid-container"))
-  // .then(canvas => {
-  //   console.log("HERE")
-  //   var img = canvas.toDataURL("image/png");
-  //   window.open(img);
-  //   console.log(img);
-  // }); 
-}
-
 function time(func) {
   var startTime = performance.now();
   func();
   var endTime = performance.now();
   console.log(`Took ${endTime - startTime}ms to render`);
-}
-
-function onTitleUpdated() {
-  saveState();
 }
 
 function updateHeights() {
@@ -443,8 +460,8 @@ function getCanvasFont(el = document.body) {
 }
 
 function aboutClicked() {
-  mode = "about";
   saveState();
+
   let inputElement = document.querySelector("#input");
   let titleElement = document.querySelector("#title");
   let gridElement = document.querySelector("#grid-container");
@@ -459,9 +476,12 @@ function aboutClicked() {
   titleElement.classList.add("fade-out");
 
   setTimeout(() => {
+    removePlaceholderText();
+    mode = "about";
+    console.log("setting mode to about")
     inputElement.value = aboutPoem;
-    titleElement.value = 'Ode';
-    onInputUpdated();
+    titleElement.innerText = 'About Ode';
+    render();
     gridElement.classList.remove("fade-out");
     titleElement.classList.remove("fade-out");
   }, 500);
@@ -469,6 +489,7 @@ function aboutClicked() {
 
 function backClicked() {
   mode = "input";
+  console.log("setting mode to input");
   let inputElement = document.querySelector("#input");
   let titleElement = document.querySelector("#title");
   let gridElement = document.querySelector("#grid-container");
@@ -484,7 +505,8 @@ function backClicked() {
 
   setTimeout(() => {
     loadState();
-    onInputUpdated();
+    render();
+    inputElement.focus();
     gridElement.classList.remove("fade-out");
     titleElement.classList.remove("fade-out");
   }, 500);
