@@ -1,6 +1,6 @@
 let rhymeIndex = {};
 let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
-let mode = "input"; // |"about";
+let mode = "input"; // |"about"|"placeholder";
 
 window.addEventListener('resize', function() {
     render();
@@ -9,8 +9,12 @@ window.addEventListener('resize', function() {
 setupTabCapture();
 buildRhymeIndex();
 waitForFontToLoad(() => {
-  loadState();
-  setupPlaceholderText();
+  if (window.location.hash == "#about") {
+    aboutClicked();
+  } else {
+    loadState();
+    setupPlaceholderText();
+  }
   render();
   revealContent();
   focusInput();
