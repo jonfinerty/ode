@@ -2,9 +2,17 @@ let rhymeIndex = {};
 let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
 
-window.addEventListener('resize', function() {
-    render();
-}, true);
+window.addEventListener('resize', () => {
+  render();
+});
+
+window.addEventListener('hashchange',() => {
+  if (window.location.hash == "#about") {
+    aboutClicked();
+  } else {
+    backClicked();
+  }
+});
 
 setupTabCapture();
 buildRhymeIndex();
