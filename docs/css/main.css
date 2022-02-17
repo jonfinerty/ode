@@ -2,6 +2,11 @@ html {
   font-family: 'Libre Baskerville', serif;
 }
 
+html,body {
+  height: 100%;
+  overflow-y: hidden;
+}
+
 body {
   padding-left: calc(100vw - 100%);
 }
@@ -89,7 +94,7 @@ h1 {
   grid-template-columns: 20px auto;
   grid-column-gap: 16px;
   text-align: left;
-  margin-right: 32px;
+  margin-right: 24px;
 }
 
 #syllables {
