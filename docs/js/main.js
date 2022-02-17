@@ -33,7 +33,10 @@ waitForFontToLoad(() => {
 
 function onInputPasted(event) {
   let pastedText = (event.clipboardData || window.clipboardData).getData('text');
-  event.preventDefault();
+  // prevent double paste
+  if (mode == "placeholder") {
+    event.preventDefault();
+  }
   event.data = pastedText;
   onInputUpdated(event);
 }
