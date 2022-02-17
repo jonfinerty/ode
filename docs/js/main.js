@@ -257,25 +257,28 @@ function updateDisplayText() {
   let displayElement = document.querySelector("#display")
   let text = inputElement.value;
   
-  let paragraphCounter = 0;
+  //let paragraphCounter = 0;
   let rhymeSchemeCounter = 0;
   // each is [word, rhymeIndex]
-  let lastWords = [[]];
+  let lastWords = [];
+  // let lastWords =[[]];
   let lines = splitTextToLines(text);
   lines.forEach((line, i) => {
     let words = splitLineToWords(line);
+    // if (words.length == 0) {
+    //   paragraphCounter++;
+    //   lastWords[paragraphCounter] = [];
+    //   return;
+    // }
     if (words.length == 0) {
-      paragraphCounter++;
-      lastWords[paragraphCounter] = [];
       return;
     }
-
     let lastWord = words[words.length-1];
     let rhymeScheme = null;
     let rhymeFound = false;
     let rhymeFoundScheme = null;
-
-    lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
+    lastWords.forEach(previousLastWordAndRhymeScheme => {
+    //lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
       previousLastWord = previousLastWordAndRhymeScheme[0];
       previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
 
@@ -286,10 +289,12 @@ function updateDisplayText() {
     })
     
     if (rhymeFound) {
-      lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
+      // lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
+      lastWords.push([lastWord, rhymeFoundScheme]);
       rhymeScheme = rhymeFoundScheme;
     } else {
-      lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
+      // lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
+      lastWords.push([lastWord,rhymeSchemeCounter]);
       rhymeScheme = rhymeSchemeCounter;
       rhymeSchemeCounter++;
     }
