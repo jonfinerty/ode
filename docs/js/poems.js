@@ -165,10 +165,6 @@ a count of syllables to gaze.
 A measurement of which is great
 for keeping lines a certain weight.
 
-share your work
-
-change the title
-
 I do not claim it is correct,
 It's likely wrong in some respect.
 I'd gladly hear you on the matter
@@ -177,4 +173,12 @@ tweet at me and have a chatter.
 So here we are, what's left to say?
 More features might be on their way!
 This site and rhyme was made by Jon;
-developer, aged thirty-one. -lexicon`;
+developer, aged thirty-one.`;
+
+/*
+
+share your work
+
+change the title
+lexicon
+*/
