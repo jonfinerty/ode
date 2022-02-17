@@ -42,6 +42,11 @@ function onInputPasted(event) {
 }
 
 function onInputUpdated(event) {
+  var inputElement = document.querySelector("#input");
+  if (inputElement.value.length == 0 && mode == 'about') {
+    backClicked();
+    return;
+  }
   removePlaceholderText(event.data);
   render();
   saveState();
@@ -55,14 +60,12 @@ function onInputUpdated(event) {
   // }); 
 }
 
-
 function onInputClicked() {
   if (mode == "placeholder") {
     var inputElement = document.querySelector("#input");
     inputElement.selectionEnd = 0;
   }  
 }
-
 
 function onTitleUpdated() {
   saveState();
@@ -501,9 +504,10 @@ function aboutClicked() {
   titleElement.classList.add("fade-out");
 
   setTimeout(() => {
-    removePlaceholderText(aboutPoem);
+    removePlaceholderText();
     setMode("about");
     titleElement.innerText = 'About Ode';
+    inputElement.value = aboutPoem;
     render();
     gridElement.classList.remove("fade-out");
     titleElement.classList.remove("fade-out");
