@@ -14,6 +14,9 @@ window.addEventListener('hashchange',() => {
   }
 });
 
+// on text area click AND placeholder
+// set cursor to 0
+
 setupTabCapture();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
@@ -42,6 +45,15 @@ function onInputUpdated() {
   //   console.log(img);
   // }); 
 }
+
+
+function onInputClicked() {
+  if (mode == "placeholder") {
+    var inputElement = document.querySelector("#input");
+    inputElement.selectionEnd = 0;
+  }  
+}
+
 
 function onTitleUpdated() {
   saveState();
@@ -224,7 +236,7 @@ function updateDisplayText() {
     let words = splitLineToWords(line);
     if (words.length == 0) {
       paragraphCounter++;
-      rhymeSchemeCounter = 0;
+      //rhymeSchemeCounter = 0;
       lastWords[paragraphCounter] = [];
       return;
     }
@@ -261,7 +273,8 @@ function updateDisplayText() {
     }
     
     var pos = line.lastIndexOf(lastWord);
-    let markedUpLine = escapeHtml(line.substring(0,pos)) + "<span class=\"last-word-"+rhymeScheme+"\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos+lastWord.length));
+    var rhymeCssClass = "rhyme-" + rhymeScheme % 16; // start reusing colours after 16 rhymes
+    let markedUpLine = escapeHtml(line.substring(0,pos)) + "<span class=\""+ rhymeCssClass +"\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos+lastWord.length));
     lines[i] = markedUpLine;
   });
   displayElement.innerHTML = lines.join("\n"); 
