@@ -15,7 +15,7 @@ window.addEventListener('hashchange',() => {
 });
 
 setupTabCapture();
-buildRhymeIndex();
+time(buildRhymeIndex);
 waitForFontToLoad(() => {
   if (window.location.hash == "#about") {
     aboutClicked();
@@ -29,11 +29,10 @@ waitForFontToLoad(() => {
 });
 
 function onInputUpdated() {
-  time(() => {
-    removePlaceholderText();
-    render();
-    saveState();
-  });
+  removePlaceholderText();
+  render();
+  saveState();
+
 
   // html2canvas(document.querySelector("#grid-container"))
   // .then(canvas => {
@@ -63,8 +62,7 @@ function focusInput() {
 function setupPlaceholderText() {
   var inputElement = document.querySelector("#input");
   if (inputElement.value.trim().length == 0) {
-    mode = "placeholder";
-    console.log("Setting mode to placeholder");
+    setMode("placeholder");
     inputElement.value = placeholderPoem;
     inputElement.selectionEnd = 0;
     
@@ -87,8 +85,7 @@ function removePlaceholderText() {
     var inputElement = document.querySelector('#input');
     inputElement.value = "";
 
-    mode = "input"    
-    console.log("Setting mode to input");
+    setMode("input");    
   }
 }
 
@@ -124,7 +121,6 @@ function buildRhymeIndex() {
 }
 
 function loadState() {
-  console.log("loading state");
   let storage = window.localStorage;
   let title = storage.getItem('title');
   let titleElement = document.querySelector("#title");
@@ -135,7 +131,6 @@ function loadState() {
   }
 
   let content = storage.getItem('content');
-  console.log(content.substring(0,20));
   let inputElement = document.querySelector("#input");
   if (content) {
     inputElement.value = content
@@ -149,8 +144,6 @@ function saveState() {
     return;
   }
 
-  console.log("saving state");
-
   let storage = window.localStorage;
 
   let titleElement = document.querySelector("#title");
@@ -159,7 +152,6 @@ function saveState() {
 
   let inputElement = document.querySelector("#input");
   let content = inputElement.value;
-  console.log(content.substring(0,20));
   storage.setItem('content', content);
 }
 
@@ -171,7 +163,6 @@ function revealContent() {
 function waitForFontToLoad(then) {  
   if (document.fonts) {
     document.fonts.load('64px "Libre Baskerville"').then(() => {
-      console.log("loaded");
       then();
     })
   } else {
@@ -184,7 +175,7 @@ function time(func) {
   var startTime = performance.now();
   func();
   var endTime = performance.now();
-  console.log(`Took ${endTime - startTime}ms to render`);
+  console.log(`Function ${func.name} took ${endTime - startTime}ms to run`);
 }
 
 function updateHeights() {
@@ -489,8 +480,7 @@ function aboutClicked() {
 
   setTimeout(() => {
     removePlaceholderText();
-    mode = "about";
-    console.log("setting mode to about")
+    setMode("about");
     inputElement.value = aboutPoem;
     titleElement.innerText = 'About Ode';
     render();
@@ -500,8 +490,7 @@ function aboutClicked() {
 }
 
 function backClicked() {
-  mode = "input";
-  console.log("setting mode to input");
+  setMode("input");
   let inputElement = document.querySelector("#input");
   let titleElement = document.querySelector("#title");
   let gridElement = document.querySelector("#grid-container");
@@ -525,5 +514,9 @@ function backClicked() {
 }
 
 function shareClicked() {
-  console.log("SHARE!");
+}
+
+function setMode(newMode) {
+  //console.log("setting mode to "+mode);
+  mode = newMode;
 }

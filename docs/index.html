@@ -25,11 +25,11 @@
 </head>
 
 <body>
-  <h1 contenteditable="true" id="title" oninput="onTitleUpdated()"></h1>
+  <h1 contenteditable="true" id="title" oninput="time(onTitleUpdated);"></h1>
   <div id="content">
     <div id="grid-container">
       <pre id="syllables"></pre>
-      <textarea autofocus id="input" class="overlaid" spellcheck="false" oninput="onInputUpdated();"></textarea>
+      <textarea autofocus id="input" class="overlaid" spellcheck="false" oninput="time(onInputUpdated);"></textarea>
       <pre id="display" class="overlaid" aria-hidden="true"></pre>
       <pre id="metre" class="overlaid" aria-hidden="true"></pre>
     </div>
