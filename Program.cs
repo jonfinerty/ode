@@ -3,14 +3,15 @@ using System.Collections.Concurrent;
 
 HttpClient client = new HttpClient();
 //sanitiseDatamuseRhymes();
-csvsToJs(100000);
-csvsToJs(150000);
-csvsToJs(200000);
-csvsToJs(250000);
-csvsToJs(300000);
-csvsToJs(350000);
-csvsToJs(400000);
-csvsToJs(500000);
+// csvsToJs(100000);
+// csvsToJs(150000);
+// csvsToJs(200000);
+// csvsToJs(250000);
+// csvsToJs(300000);
+// csvsToJs(350000);
+// csvsToJs(400000);
+// csvsToJs(500000);
+goGetWordTypes();
 return;
 
 
@@ -168,8 +169,7 @@ static void csvsToJs(int wordCountLimit) {
     output.WriteLine();
     output.WriteLine("let wordDict = {");
     foreach (var word in mergedWords.OrderBy(w => w.Key)) {
-        var props = $"[{word.Value.syllableCount},{word.Value.primaryStressSyllableIndex},{word.Value.secondaryStressSyllableIndex},[{String.Join(',',word.Value.rhymeGroups)}],{word.Value.freqScore}],";
-        output.WriteLine($"\"{word.Value.text}\":" + props);
+        output.WriteLine(word.Value.ToJSFormat());
     }
     output.WriteLine("}");
 
@@ -203,10 +203,54 @@ static void csvsToJs(int wordCountLimit) {
     */
 }
 
+static async Task goGetWordTypes(HttpClient client) {
 
+    var wordsToProcess = LoadWords("datamuse_words.csv", true);
+    var processedWords = LoadWords("datamuse_words_with_type.csv",true);
+    
+    int wordsProcessed = 0;
+    int apiCalls = 0;
+
+    await Parallel.ForEachAsync(wordsToProcess, async (word, token) => {
+        wordsProcessed++;
+        Console.WriteLine("Words processed: " + wordsProcessed);
+        if (processedWords.ContainsKey(word.Value.text)) {
+            return;
+        }
+
+        var apiWord = await getWordFromDatamuse(client, word.Value.text);
+        apiCalls++;
+        if (apiWord == null) {
+            Console.WriteLine("WEIRD CANT FIND WORD "+ word.Value.text);
+            return;
+        }
+
+        var wordText = apiWord.text;
+        processedWords.TryAdd(wordText, apiWord);
+        var wordRhymes = await getRhymesFromDatamuse(client, wordText);
+        foreach(var rhymingWord in wordRhymes) {
+            if (processedWords.ContainsKey(rhymingWord.text)) {
+                continue;
+            } else {
+                processedWords.TryAdd(rhymingWord.text, rhymingWord);
+            }
+        }
+
+        apiCalls++;
+        Console.WriteLine("API calls: " + apiCalls);
+        Console.WriteLine("Words discovered: " + processedWords.Count);
+    });
+
+    using (StreamWriter wordOutput = new($"datamuse_syllables_with_type.csv", append: false))
+    {
+        foreach(var word in processedWords) {
+            wordOutput.WriteLine(word.Value.ToCSVFormat);
+        }
+    }
+}
 
 static async Task<Word> getWordFromDatamuse(HttpClient client, string text) {
-    var path = "https://api.datamuse.com/words?sp="+text+"&md=sfr&max=1&ipa=1";
+    var path = "https://api.datamuse.com/words?sp="+text+"&md=sfrp&max=1&ipa=1";
     HttpResponseMessage response = await client.GetAsync(path);
     if (response.IsSuccessStatusCode)
     {
@@ -229,7 +273,7 @@ static async Task<Word> getWordFromDatamuse(HttpClient client, string text) {
 }
 
 static async Task<List<Word>> getRhymesFromDatamuse(HttpClient client, string word) {
-    var path = "https://api.datamuse.com/words?rel_rhy="+word+"&md=srf&ipa=1&max=1000";
+    var path = "https://api.datamuse.com/words?rel_rhy="+word+"&md=srfp&ipa=1&max=1000";
     HttpResponseMessage response = await client.GetAsync(path);
     if (response.IsSuccessStatusCode)
     {
@@ -391,19 +435,22 @@ public class Word {
     public string IPA;
     public int syllableCount;
     public double freqScore; // number of times out a 1 million it appears in google book corpus
+    public string[] types; 
     public int primaryStressSyllableIndex;
     public int secondaryStressSyllableIndex;
     public List<int> rhymeGroups = new List<int>();
     const char primaryStressSymbol = 'ˈ';
     const char secondaryStressSymbol = 'ˌ';
+    const char typesDelimiter = '|';
 
-    public Word(string text, string IPA, int syllableCount, double freqScore, bool isDatamuseWord) {
+    public Word(string text, string IPA, int syllableCount, double freqScore, string[] types) {
         this.text = text;
         this.IPA = IPA;
         this.syllableCount = syllableCount;
         this.freqScore = freqScore;
+        this.types = types;
         primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
-        secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, isDatamuseWord);
+        secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, true);
     }
 
     public Word(string fileLine, bool isDatamuseWord) {
@@ -413,6 +460,7 @@ public class Word {
         if (isDatamuseWord) {
             freqScore = double.Parse(sections[2]);
             IPA = sections[3];
+            types = sections[4].Split(typesDelimiter);
             primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
             secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, isDatamuseWord);
             return;
@@ -450,7 +498,12 @@ public class Word {
     public string ToCSVFormat()
     {
         // stresses are recomputed each time
-        return $"{text},{syllableCount},{freqScore},{IPA}";
+        return $"{text},{syllableCount},{freqScore},{IPA},{String.Join('|',types)}";
+    }
+
+    public string ToJSFormat() {
+        var props = $"[{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex},[{String.Join(',',rhymeGroups)}],{freqScore},[{String.Join(',',types)}]]";
+        return $"\"{text}\":" + props + ',';
     }
 
     static int GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
@@ -514,23 +567,44 @@ public class Word {
 //https://api.datamuse.com/words?sp=flower&md=sfr&max=1&ipa=1
 //[{"word":"flower","score":67939,"numSyllables":2,"tags":["pron:F L AW1 ER0 ","ipa_pron:fɫˈaʊɝ","f:28.794326"]}]
 // https://api.datamuse.com/words?rel_rhy=flower&md=srf&ipa=1&max=1000
-// [{"word":"power","score":5369,"numSyllables":2,"tags":["pron:P AW1 ER0 ","ipa_pron:pˈaʊɝ","f:547.875315"]},
+// [{"word":"power","score":5369,"numSyllables":2,"tags":["n","pron:P AW1 ER0 ","ipa_pron:pˈaʊɝ","f:547.875315"]},
+// "n" means noun, "v" means verb, "adj" means adjective, "adv" means adverb, "prop" and "u" unknown, can have multiple
 public class DatamuseWord {
+
+    private string[] wordTypes = new string[]{
+        "n", // noun
+        "v", // verb
+        "adj", // adjective
+        "adv", // adverb
+        "prop", // proper noun (will also have 'n')
+        "u" // unknown
+    };
+
     public string word {get; set;}
     public int numSyllables {get; set;}
 
     public string[] tags {get; set;}
 
+    // tag starts with 'f:'
     public double GetFreqScore() {
-        return double.Parse(tags[2].Substring(2));
+        var freqTagIdentifier = "f:";
+        var freqTag = tags.FirstOrDefault(t => t.StartsWith(freqTagIdentifier));
+        return double.Parse(freqTag.Substring(freqTagIdentifier.Length));
     }
 
+    // tag starts with 'ipa_pron:'
     public string GetIPA() {
+        var ipaTagIdentifier = "ipa_pron";
+        var ipaTag = tags.FirstOrDefault(t => t.StartsWith(ipaTagIdentifier));
+        return double.Parse(ipaTag.Substring(ipaTagIdentifier.Length));
         return tags[1].Substring(9);
     }
 
+    public string[] GetTypes() {
+        return tags.Where(t => wordTypes.Contains(t));
+    }
+
     public Word ToWord() {
-        var word = new Word(this.word, GetIPA(), numSyllables, GetFreqScore(), true);
-        return word;
+        return new Word(this.word, GetIPA(), numSyllables, GetFreqScore(), GetTypes());
     }
 }
