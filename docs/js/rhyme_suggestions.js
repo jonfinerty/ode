@@ -19,6 +19,10 @@ function buildRhymeIndex() {
     }
 }
 
+document.getElementById('rhyme-suggestions-container').addEventListener('mouseenter', function(e) {
+    clearTimeout(hoverTimeout);
+});
+
 // oh no. make more efficient?
 document.getElementById('grid-container').addEventListener('mousemove', function(e) {
     var x = e.clientX;
@@ -65,14 +69,42 @@ function onHoverWordChanged(wordSpan) {
         return;
     }
     hoverTimeout = setTimeout((word) => {
-        showRhymeSuggestions(word.innerText);    
+        showRhymeSuggestions(word);    
     }, 1000, wordSpan);
 }
 
-function showRhymeSuggestions(word) {
-    let rhymes = getWordRhymes(word);
+function hideRhymeSuggestions() {
+    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    suggestionsContainer.classList.add("hidden");
+}
+
+// todo reshow on resize, i.e. repositoin
+// todo close on input
+function showRhymeSuggestions(wordSpan) {
+    let wordSpanPos = wordSpan.getBoundingClientRect();
+    let rhymeCssClass = null;
+    for (let i = 0; i<wordSpan.classList.length; i++) {
+        const className = wordSpan.classList[i];
+        if (className.startsWith('rhyme-')) {
+            rhymeCssClass = className;
+        }
+    }
+    let rhymes = getWordRhymes(wordSpan.innerText);
+    if (rhymes.length == 0) {
+        return;
+    }
+    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    suggestionsContainer.style.left = wordSpanPos.right + 20 +'px';
+    suggestionsContainer.style.top = wordSpanPos.top -20 +'px';
+    suggestionsContainer.classList.remove("hidden");
+
     var suggestions = document.querySelector("#rhyme-suggestions");
-    suggestions.innerText = rhymes.join(" ");
+    removeClassesByPrefix(suggestions, "rhyme-");
+    if (rhymeCssClass) {
+        suggestions.classList.add(rhymeCssClass);
+    }
+    suggestions.innerHTML = rhymes.map(r => {return "<span>" + r + "</span>"}).join("<br>");
+    suggestions.scrollTop = 0;
 }
 
 function getWordRhymes(inputWord) {
@@ -98,6 +130,15 @@ function getWordRhymes(inputWord) {
     }).filter((word, index, list) => {
         return list.indexOf(word) == index && word != inputWord; // remove dups and the given word
     });
-    // todo order, dedup
+
     return rhymingWords;
+}
+
+function removeClassesByPrefix(element, prefix)
+{
+    for(var i = element.classList.length - 1; i >= 0; i--) {
+        if(element.classList[i].startsWith(prefix)) {
+            element.classList.remove(element.classList[i]);
+        }
+    }
 }

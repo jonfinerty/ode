@@ -11,7 +11,7 @@ HttpClient client = new HttpClient();
 // csvsToJs(350000);
 // csvsToJs(400000);
 // csvsToJs(500000);
-goGetWordTypes();
+goGetWordTypes(client).Wait();
 return;
 
 
@@ -206,13 +206,16 @@ static void csvsToJs(int wordCountLimit) {
 static async Task goGetWordTypes(HttpClient client) {
 
     var wordsToProcess = LoadWords("datamuse_words.csv", true);
-    var processedWords = LoadWords("datamuse_words_with_type.csv",true);
+    var processedWords = new ConcurrentDictionary<string, Word>();
     
     int wordsProcessed = 0;
     int apiCalls = 0;
 
     await Parallel.ForEachAsync(wordsToProcess, async (word, token) => {
         wordsProcessed++;
+        // if (wordsProcessed > 100) {
+        //     return;
+        // }
         Console.WriteLine("Words processed: " + wordsProcessed);
         if (processedWords.ContainsKey(word.Value.text)) {
             return;
@@ -244,13 +247,13 @@ static async Task goGetWordTypes(HttpClient client) {
     using (StreamWriter wordOutput = new($"datamuse_syllables_with_type.csv", append: false))
     {
         foreach(var word in processedWords) {
-            wordOutput.WriteLine(word.Value.ToCSVFormat);
+            wordOutput.WriteLine(word.Value.ToCSVFormat());
         }
     }
 }
 
 static async Task<Word> getWordFromDatamuse(HttpClient client, string text) {
-    var path = "https://api.datamuse.com/words?sp="+text+"&md=sfrp&max=1&ipa=1";
+    var path = "https://api.datamuse.com/words?sp="+text+"&md=sfrp&max=50&ipa=1";
     HttpResponseMessage response = await client.GetAsync(path);
     if (response.IsSuccessStatusCode)
     {
@@ -260,12 +263,12 @@ static async Task<Word> getWordFromDatamuse(HttpClient client, string text) {
             Console.WriteLine("Throwing out 1: " + text);
             return null;
         } else {
-            var word = words[0];
-            if (word.word != text) {
+            var word = words.FirstOrDefault(w => w.word == text);
+            if (word == null) {
                 Console.WriteLine("Throwing out 2: " + text);
                 return null;
             }
-            return words[0].ToWord();
+            return word.ToWord();
         }
     } else {
         throw new Exception("AH");
@@ -460,7 +463,7 @@ public class Word {
         if (isDatamuseWord) {
             freqScore = double.Parse(sections[2]);
             IPA = sections[3];
-            types = sections[4].Split(typesDelimiter);
+            //types = sections[4].Split(typesDelimiter);
             primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
             secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, isDatamuseWord);
             return;
@@ -588,20 +591,20 @@ public class DatamuseWord {
     // tag starts with 'f:'
     public double GetFreqScore() {
         var freqTagIdentifier = "f:";
-        var freqTag = tags.FirstOrDefault(t => t.StartsWith(freqTagIdentifier));
+        var freqTag = tags.First(t => t.StartsWith(freqTagIdentifier));
         return double.Parse(freqTag.Substring(freqTagIdentifier.Length));
     }
 
     // tag starts with 'ipa_pron:'
     public string GetIPA() {
         var ipaTagIdentifier = "ipa_pron";
-        var ipaTag = tags.FirstOrDefault(t => t.StartsWith(ipaTagIdentifier));
-        return double.Parse(ipaTag.Substring(ipaTagIdentifier.Length));
-        return tags[1].Substring(9);
+        var ipaTag = tags.First(t => t.StartsWith(ipaTagIdentifier));
+        return ipaTag.Substring(ipaTagIdentifier.Length);
+        //return tags[1].Substring(9);
     }
 
     public string[] GetTypes() {
-        return tags.Where(t => wordTypes.Contains(t));
+        return tags.Where(t => wordTypes.Contains(t)).ToArray();
     }
 
     public Word ToWord() {

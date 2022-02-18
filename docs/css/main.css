@@ -20,7 +20,7 @@ h1 {
 }
 
 #flash-preventer {
-  z-index: 4;
+  z-index: 5;
   background-color: white;
   opacity: 1;
   transition: opacity 0.4s;
@@ -67,7 +67,7 @@ h1 {
   background: #ffffff;
   box-shadow: 0px 0px 10px 10px #ffffff;
   border-top-left-radius: 10px;
-  z-index: 3; /* needs to be ontop of the content */
+  z-index: 4; /* needs to be ontop of the content */
 }
 
 .menu-item {
@@ -154,6 +154,43 @@ h1 {
   font-size: clamp(10px, 1.5vw, 16px);
   line-height: clamp(32px,5vw,64px);
 }
+
+#rhyme-suggestions-container {
+  position: absolute;
+  font-size: clamp(16px,2.5vw,32px);
+  font-family: 'Libre Baskerville', serif;
+  line-height: clamp(20px,3vw,40px);
+  z-index: 3;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px 10px #ffffff
+}
+
+#rhyme-suggestions {
+  overflow-y: scroll;
+  max-height: 50vh;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+}
+
+#rhyme-suggestions-container:before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: calc(100% - 17px); /* scrollbar nonsense */
+  background: linear-gradient(
+      to bottom, 
+      rgba(255,255,255,1) 0, 
+      rgba(255,255,255,0) 50px
+  ),
+  linear-gradient(
+      to top, 
+      rgba(255,255,255,1) 0, 
+      rgba(255,255,255,0) 50px
+  ); 
+  pointer-events: none;
+}
+
 
 .rhyme-0 {
   color:#2D4FA2;
