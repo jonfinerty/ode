@@ -1,34 +1,17 @@
-function wordsRhyme(word1, word2) {
-    //controversially
-    if (word1 == word2) {
-        return false;
-    }
-
-    let word1Props = getWordProps(word1);
-    if (!word1Props) {
-        return false;
-    }
-    let word2Props = getWordProps(word2);
-    if (!word2Props) {
-        return false;
-    }
-
-    return word1Props[3].some(rhymeGroupId => word2Props[3].includes(rhymeGroupId));
-}
 
 function updateDisplayText() {
-    let inputElement = document.querySelector("#input");
-    let displayElement = document.querySelector("#display")
-    let text = inputElement.value;
+    const inputElement = document.querySelector("#input");
+    const displayElement = document.querySelector("#display")
+    const text = inputElement.value;
 
     //let paragraphCounter = 0;
     let rhymeSchemeCounter = 0;
-    // each is [word, rhymeIndex]
-    let lastWords = [];
+    // each is [word, rhymeScheme]
+    const lastWords = [];
     // let lastWords =[[]];
-    let lines = splitTextToLines(text);
+    const lines = splitTextToLines(text);
     lines.forEach((line, i) => {
-        let words = splitLineToWords(line);
+        const words = splitLineToWords(line);
         // if (words.length == 0) {
         //   paragraphCounter++;
         //   lastWords[paragraphCounter] = [];
@@ -37,7 +20,7 @@ function updateDisplayText() {
         if (words.length == 0) {
             return;
         }
-        let lastWord = words[words.length - 1];
+        const lastWord = words[words.length - 1];
         let rhymeScheme = null;
         let rhymeFound = false;
         let rhymeFoundScheme = null;
@@ -46,7 +29,7 @@ function updateDisplayText() {
             previousLastWord = previousLastWordAndRhymeScheme[0];
             previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
 
-            if (wordsRhyme(previousLastWord, lastWord)) {
+            if (previousLastWord.rhymesWith(lastWord)) {
                 rhymeFound = true;
                 rhymeFoundScheme = previousLastWordRhymeScheme;
             }
@@ -93,7 +76,7 @@ function updateDisplayText() {
             if (words.length - 1 == i) {
                 wordIsRhyme = true;
             } else {
-                wordIsRhyme = wordsRhyme(word, lastWord);
+                wordIsRhyme = word.rhymesWith(lastWord);
             }
 
             let cssClasses = wordCssClass;
@@ -101,18 +84,14 @@ function updateDisplayText() {
                 cssClasses = cssClasses + " " + rhymeCssClass;
             }
             //issue with replacing text multiple times, as you might hit 'span' or 'class', so chunk through rather than replace all
-            var pos = unescapedLinePart.indexOf(word);
-            markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0, pos)) + "<span class=\"" + cssClasses + "\">" + escapeHtml(word) + "</span>";
-            unescapedLinePart = unescapedLinePart.substring(pos + word.length);
+            const pos = unescapedLinePart.indexOf(word.text);
+            markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0, pos)) + "<span class=\"" + cssClasses + "\">" + escapeHtml(word.text) + "</span>";
+            unescapedLinePart = unescapedLinePart.substring(pos + word.text.length);
         });
 
         lines[i] = markedUpLine + escapeHtml(unescapedLinePart);// + markedEscapedUpEndOfLine;
     });
     displayElement.innerHTML = lines.join("\n");
-}
-
-function hightlightWordsInLine(line, word) {
-
 }
 
 function escapeHtml(text) {

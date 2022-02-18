@@ -5,18 +5,16 @@ let lastWordToBeHovered = null;
 let hoverTimeout = null;
 
 function buildRhymeIndex() {
-    for (var word in wordDict) {
-        var wordProps = wordDict[word];
-        if (wordProps[3]) {
-            wordProps[3].forEach(rhymeGroup => {
-                var rhyme = rhymeIndex[rhymeGroup];
-                if (rhyme) {
-                    rhymeIndex[rhymeGroup].push(word);
-                } else {
-                    rhymeIndex[rhymeGroup] = [word];
-                }
-            });
-        }
+    for (var key in wordDict) {
+        const word = new Word(key);
+        word.rhymeGroupIds.forEach(rhymeGroupId => {
+            const rhymeGroup = rhymeIndex[rhymeGroupId];
+            if (rhymeGroup) {
+                rhymeIndex[rhymeGroup].push(word.text);
+            } else {
+                rhymeIndex[rhymeGroup] = [word.text];
+            }
+        });
     }
 }
 
@@ -27,15 +25,15 @@ document.getElementById('rhyme-suggestions-container').addEventListener('mouseen
 // make more efficient
 function coordinatesToWordSpan(x, y) {
     // maybe don't look this up every move?
-    let wordSpans = document.querySelectorAll(".word");
+    const wordSpans = document.querySelectorAll(".word");
     for (var i=0; i<wordSpans.length; i++) {
-        let wordSpan = wordSpans[i];
-        let boundaries = wordSpan.getBoundingClientRect();
-        var insideX = x >= boundaries.left && x <= boundaries.right;
+        const wordSpan = wordSpans[i];
+        const boundaries = wordSpan.getBoundingClientRect();
+        const insideX = x >= boundaries.left && x <= boundaries.right;
         if (!insideX) {
             continue;
         }
-        var insideY = y >= boundaries.top && y <= boundaries.bottom;
+        const insideY = y >= boundaries.top && y <= boundaries.bottom;
         if (insideY) {
             return wordSpan;
         } 
@@ -46,20 +44,20 @@ function coordinatesToWordSpan(x, y) {
 
 // oh no. make more efficient?
 document.getElementById('grid-container').addEventListener('mousemove', function(event) {
-    var x = event.clientX;
-    var y = event.clientY;
+    const x = event.clientX;
+    const y = event.clientY;
 
     // if we're in the same ol' word, just shortcut;
     if (currentHoveredWord) {
-        let boundaries = currentHoveredWord.getBoundingClientRect();
-        var insideX = x >= boundaries.left && x <= boundaries.right;
-        var insideY = y >= boundaries.top && y <= boundaries.bottom;
+        const boundaries = currentHoveredWord.getBoundingClientRect();
+        const insideX = x >= boundaries.left && x <= boundaries.right;
+        const insideY = y >= boundaries.top && y <= boundaries.bottom;
         if (insideX && insideY) {
             return;
         }
     }
 
-    var wordSpan = coordinatesToWordSpan(x, y);
+    const wordSpan = coordinatesToWordSpan(x, y);
     if (wordSpan != currentHoveredWord) {
         currentHoveredWord = wordSpan;
         lastWordToBeHovered = wordSpan;
@@ -82,12 +80,12 @@ function onHoverWordChanged(wordSpan) {
 }
 
 function rhymeSuggestionsShowing() {
-    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
     return !suggestionsContainer.classList.contains("hidden");
 }
 
 function hideRhymeSuggestions() {
-    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
     suggestionsContainer.classList.add("hidden");
 }
 
@@ -97,7 +95,7 @@ function showRhymeSuggestionsAtCursor() {
 }
 
 function showRhymeSuggestions(wordSpan) {
-    let wordSpanPos = wordSpan.getBoundingClientRect();
+    const wordSpanPos = wordSpan.getBoundingClientRect();
     let rhymeCssClass = null;
     for (let i = 0; i<wordSpan.classList.length; i++) {
         const className = wordSpan.classList[i];
@@ -105,16 +103,16 @@ function showRhymeSuggestions(wordSpan) {
             rhymeCssClass = className;
         }
     }
-    let rhymes = getWordRhymes(wordSpan.innerText);
+    const rhymes = getStringRhymes(wordSpan.innerText);
     if (rhymes.length == 0) {
         return;
     }
-    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
     suggestionsContainer.style.left = wordSpanPos.right + 20 +'px';
     suggestionsContainer.style.top = wordSpanPos.top -20 +'px';
     suggestionsContainer.classList.remove("hidden");
 
-    var suggestions = document.querySelector("#rhyme-suggestions");
+    const suggestions = document.querySelector("#rhyme-suggestions");
     removeClassesByPrefix(suggestions, "rhyme-");
     if (rhymeCssClass) {
         suggestions.classList.add(rhymeCssClass);
@@ -123,31 +121,27 @@ function showRhymeSuggestions(wordSpan) {
     suggestions.scrollTop = 0;
 }
 
-function getWordRhymes(inputWord) {
-    var wordProps = getWordProps(inputWord);
-    var rhymingWords = [];
+function getStringRhymes(inputString) {
+    const word = getWord(inputString);
+    const rhymingWords = [];
 
-    if (!wordProps) {
+    if (!word) {
         return rhymingWords;
     }
 
-    var rhymeGroups = wordProps[3]
-    rhymeGroups.forEach(rhymeGroup => {
-        rhymeGroupWords = rhymeIndex[rhymeGroup];
-        rhymeGroupWords.forEach(rhymingWord => {
-            var rhymingWordProps = getWordProps(rhymingWord);
-            rhymingWords.push([rhymingWord,rhymingWordProps]);
+    const rhymeGroupIds = word.rhymeGroupIds;
+    rhymeGroupIds.forEach(rhymeGroupId => {
+        rhymeGroupString = rhymeIndex[rhymeGroupId];
+        rhymeGroupStrings.forEach(rhymingString => {
+            var rhymingWord = new Word(rhymingString);
+            rhymingWords.push(rhymingWord);
         });
     });
 
-    rhymingWords.sort((w1,w2) => {
-        let w1Props = w1[1];
-        let w2Props = w2[1];
-        return w2Props[4] - w1Props[4];
-    });
+    rhymingWords.sort(rhymeSort);
 
-    rhymingWords = rhymingWords.map(w => {
-        return w[0]
+    rhymingWords = rhymingWords.map(word => {
+        return word.text;
     }).filter((word, index, list) => {
         return list.indexOf(word) == index && word != inputWord; // remove dups and the given word
     });
@@ -155,9 +149,16 @@ function getWordRhymes(inputWord) {
     return rhymingWords;
 }
 
-function removeClassesByPrefix(element, prefix)
-{
-    for(var i = element.classList.length - 1; i >= 0; i--) {
+function rhymeSort(word1, word2) {
+
+    // proper nouns last
+
+
+    return word2.frequency - word1.frequency;
+}
+
+function removeClassesByPrefix(element, prefix) {
+    for(let i = element.classList.length - 1; i >= 0; i--) {
         if(element.classList[i].startsWith(prefix)) {
             element.classList.remove(element.classList[i]);
         }
