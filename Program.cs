@@ -3,15 +3,12 @@ using System.Collections.Concurrent;
 
 HttpClient client = new HttpClient();
 //sanitiseDatamuseRhymes();
-// csvsToJs(100000);
-// csvsToJs(150000);
-// csvsToJs(200000);
-// csvsToJs(250000);
-// csvsToJs(300000);
-// csvsToJs(350000);
-// csvsToJs(400000);
-// csvsToJs(500000);
-goGetWordTypes(client).Wait();
+csvsToJs(100000);
+csvsToJs(150000);
+csvsToJs(200000);
+csvsToJs(250000);
+csvsToJs(300000);
+//goGetWordTypesAgain(client).Wait();
 return;
 
 
@@ -79,39 +76,16 @@ static HashSet<string> LoadUnaccentedParticles() {
 } 
 
 static void csvsToJs(int wordCountLimit) {
-    var freqThreshold = 0;
-    //var wordCountLimit = 200000;
     var outputFilename = "docs/js/words_"+wordCountLimit+".js";
 
-    var mergedWords = new Dictionary<string, Word>();
-
     var unaccentedParticles = LoadUnaccentedParticles();
-    var wiktionaryWords = LoadWords("wiktionary_syllables.csv", false);
-    var datamuseWords = LoadWords("datamuse_words.csv", true);
-
-    // assume wiktionary word crawl is more correct
-    foreach(var word in wiktionaryWords) {
-        if (unaccentedParticles.Contains(word.Key)){
-            word.Value.SetAsUnaccentedParticle();
-        }
-        mergedWords.Add(word.Key, word.Value);
-    }
-
-    foreach(var word in datamuseWords) {
-        if (mergedWords.ContainsKey(word.Key)) {
-            // wiktionary words don't have IPA or Freq stored
-            mergedWords[word.Key].IPA = word.Value.IPA; 
-            mergedWords[word.Key].freqScore = word.Value.freqScore; 
-        } else if (word.Value.freqScore > freqThreshold) {
-            mergedWords.Add(word.Key, word.Value);
-        }
-    }
+    var datamuseWords = LoadWords("datamuse_words_with_type.csv", true);
 
     foreach(var particle in unaccentedParticles) {
-        mergedWords[particle].SetAsUnaccentedParticle();
+        datamuseWords[particle].SetAsUnaccentedParticle();
     }
 
-    mergedWords = mergedWords.OrderByDescending(w => w.Value.freqScore).Take(wordCountLimit).ToDictionary(x => x.Key, x => x.Value);
+    datamuseWords = datamuseWords.Where(w => !w.Key.Contains("-")).OrderByDescending(w => w.Value.freqScore).Take(wordCountLimit).ToDictionary(x => x.Key, x => x.Value);
 
     // assume datamuse rhyme data is better?
     int rhymeIndex = 0;
@@ -124,100 +98,39 @@ static void csvsToJs(int wordCountLimit) {
         datamuseRhymes.Add(rhymeIndex, rhymingGroup);
         foreach(string word in rhymingGroup) {
             // might not be in there due to freq threshold
-            if (mergedWords.ContainsKey(word)) {
-                mergedWords[word].rhymeGroups.Add(rhymeIndex);
+            if (datamuseWords.ContainsKey(word)) {
+                datamuseWords[word].rhymeGroups.Add(rhymeIndex);
             }
         }
         rhymeIndex++;
-    }
-
-    // backfill any missing rhymes with wiktionary
-    var wiktionaryRhymes = new List<List<string>>();
-    foreach(string line in File.ReadLines("wiktionary_rhymes.csv")) {
-        var rhymingGroup = line.Split(',').ToList();
-        wiktionaryRhymes.Add(rhymingGroup);
-    }
-
-    foreach(var word in mergedWords) {
-        if (word.Value.rhymeGroups.Count == 0) {
-            var rhymeFound = false;
-
-            var wiktionaryRhymingGroups = wiktionaryRhymes.Where(r => r.Contains(word.Key));
-            foreach (var wiktionaryRhymingGroup in wiktionaryRhymingGroups) {
-                foreach (var wiktionaryRhymingWord in wiktionaryRhymingGroup) {
-                    // see if we have a datamuses group with this word if so, add unrhymed word to it
-                    foreach (var datamuseRhymingGroup in datamuseRhymes) {
-                        if (datamuseRhymingGroup.Value.Contains(wiktionaryRhymingWord)) {
-                            word.Value.rhymeGroups.Add(datamuseRhymingGroup.Key);
-                            rhymeFound = true;
-                            break;
-                        }
-                    }
-                    if (rhymeFound) {
-                        break;
-                    }
-                }
-                if (rhymeFound) {
-                    break;
-                }
-            }
-        }
     }
 
     using StreamWriter output = new(outputFilename, append: false);
     output.WriteLine("\"use strict\";");
     output.WriteLine();
     output.WriteLine("let wordDict = {");
-    foreach (var word in mergedWords.OrderBy(w => w.Key)) {
+    foreach (var word in datamuseWords.OrderBy(w => w.Key)) {
         output.WriteLine(word.Value.ToJSFormat());
     }
     output.WriteLine("}");
-
-    /*
-    // read syllables.csv
-    var words = new Dictionary<string, Word>();
-    foreach (string line in File.ReadLines("syllables.csv"))
-    { 
-        var word = new Word(line);
-        words.Add(word.text, word);
-    }
-    // read rhymes.csv
-    int rhymeIndex = 0;
-    foreach(string line in File.ReadLines("rhymes.csv")) {
-        var rhymingGroup = line.Split(',');
-        foreach(string word in rhymingGroup) {
-            words[word].rhymeGroups.Add(rhymeIndex);
-        }
-        rhymeIndex++;
-    }
-
-    using StreamWriter output = new($"docs/js/words.js", append: false);
-    output.WriteLine("\"use strict\";");
-    output.WriteLine();
-    output.WriteLine("let wordDict = {");
-    foreach (var word in words) {
-        var props = $"[{word.Value.syllableCount},{word.Value.primaryStressSyllableIndex},{word.Value.secondaryStressSyllableIndex},[{String.Join(',',word.Value.rhymeGroups)}]],";
-        output.WriteLine($"\"{word.Value.text}\":" + props);
-    }
-    output.WriteLine("}");
-    */
 }
 
-static async Task goGetWordTypes(HttpClient client) {
+static async Task goGetWordTypesAgain(HttpClient client) {
 
-    var wordsToProcess = LoadWords("datamuse_words.csv", true);
+    var wordsToProcess = LoadWords("datamuse_words_with_type.csv", true);
     var processedWords = new ConcurrentDictionary<string, Word>();
     
+    Console.WriteLine(wordsToProcess.Where(w => w.Value.types.Count == 0).Count());
+
     int wordsProcessed = 0;
     int apiCalls = 0;
 
     await Parallel.ForEachAsync(wordsToProcess, async (word, token) => {
         wordsProcessed++;
-        // if (wordsProcessed > 100) {
-        //     return;
-        // }
+
         Console.WriteLine("Words processed: " + wordsProcessed);
-        if (processedWords.ContainsKey(word.Value.text)) {
+        if (word.Value.types.Count > 0) {
+            processedWords.TryAdd(word.Key, word.Value);
             return;
         }
 
@@ -230,21 +143,11 @@ static async Task goGetWordTypes(HttpClient client) {
 
         var wordText = apiWord.text;
         processedWords.TryAdd(wordText, apiWord);
-        var wordRhymes = await getRhymesFromDatamuse(client, wordText);
-        foreach(var rhymingWord in wordRhymes) {
-            if (processedWords.ContainsKey(rhymingWord.text)) {
-                continue;
-            } else {
-                processedWords.TryAdd(rhymingWord.text, rhymingWord);
-            }
-        }
-
         apiCalls++;
         Console.WriteLine("API calls: " + apiCalls);
-        Console.WriteLine("Words discovered: " + processedWords.Count);
     });
 
-    using (StreamWriter wordOutput = new($"datamuse_syllables_with_type.csv", append: false))
+    using (StreamWriter wordOutput = new($"datamuse_syllables_with_type2.csv", append: false))
     {
         foreach(var word in processedWords) {
             wordOutput.WriteLine(word.Value.ToCSVFormat());
@@ -438,7 +341,7 @@ public class Word {
     public string IPA;
     public int syllableCount;
     public double freqScore; // number of times out a 1 million it appears in google book corpus
-    public string[] types; 
+    public List<string> types = new List<string>(); 
     public int primaryStressSyllableIndex;
     public int secondaryStressSyllableIndex;
     public List<int> rhymeGroups = new List<int>();
@@ -446,7 +349,7 @@ public class Word {
     const char secondaryStressSymbol = 'ˌ';
     const char typesDelimiter = '|';
 
-    public Word(string text, string IPA, int syllableCount, double freqScore, string[] types) {
+    public Word(string text, string IPA, int syllableCount, double freqScore, List<string> types) {
         this.text = text;
         this.IPA = IPA;
         this.syllableCount = syllableCount;
@@ -463,7 +366,9 @@ public class Word {
         if (isDatamuseWord) {
             freqScore = double.Parse(sections[2]);
             IPA = sections[3];
-            //types = sections[4].Split(typesDelimiter);
+            if (sections.Length > 4) {
+                types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToList();
+            }
             primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
             secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, isDatamuseWord);
             return;
@@ -496,6 +401,7 @@ public class Word {
         syllableCount = 1;
         primaryStressSyllableIndex = -1;
         secondaryStressSyllableIndex = -1;
+        types.Add("p");
     }
 
     public string ToCSVFormat()
@@ -505,7 +411,11 @@ public class Word {
     }
 
     public string ToJSFormat() {
-        var props = $"[{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex},[{String.Join(',',rhymeGroups)}],{freqScore},[{String.Join(',',types)}]]";
+        if (types.Count == 0) {
+            Console.WriteLine(text);
+            types.Add("u");
+        }
+        var props = $"[{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex},[{String.Join(',',rhymeGroups)}],{freqScore},[{String.Join(',',types.Select(t => $"\"{t}\""))}]]";
         return $"\"{text}\":" + props + ',';
     }
 
@@ -603,8 +513,8 @@ public class DatamuseWord {
         //return tags[1].Substring(9);
     }
 
-    public string[] GetTypes() {
-        return tags.Where(t => wordTypes.Contains(t)).ToArray();
+    public List<string> GetTypes() {
+        return tags.Where(t => wordTypes.Contains(t)).ToList();
     }
 
     public Word ToWord() {
