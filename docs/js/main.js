@@ -15,7 +15,7 @@ window.addEventListener('hashchange', () => {
 });
 
 setupEscapeKey();
-setupTabCapture();
+setupInputEvents();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
   if (window.location.hash == "#about") {
@@ -61,6 +61,8 @@ function onInputUpdated(event) {
 }
 
 function onInputClicked() {
+  hideRhymeSuggestions();
+
   if (mode == "placeholder") {
     var inputElement = document.querySelector("#input");
     inputElement.selectionEnd = 0;
@@ -113,11 +115,13 @@ function removePlaceholderText(stringToReplaceWith) {
   }
 }
 
-function setupTabCapture() {
+function setupInputEvents() {
   var inputElement = document.querySelector("#input");
-  inputElement.onkeydown = function (e) {
-    if (e.keyCode === 9 || e.which === 9) {
-      e.preventDefault();
+  inputElement.onkeydown = function (event) {
+    hideRhymeSuggestions();
+
+    if (event.keyCode === 9 || event.which === 9) {
+      event.preventDefault();
       var element = this;
       var tabStartPos = element.selectionStart;
       var tabEndPos = element.selectionEnd;
@@ -130,12 +134,10 @@ function setupTabCapture() {
 
 function setupEscapeKey() {
   document.onkeydown = function(event) {
-    console.log(event);
     event = event || window.event;
     isEscape = (event.key === "Escape" || event.key === "Esc");
 
     if (isEscape) {
-      console.log("here");
       hideRhymeSuggestions();
       if (mode == "about") {
         backClicked();

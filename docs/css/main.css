@@ -166,7 +166,7 @@ h1 {
 }
 
 #rhyme-suggestions {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 50vh;
   padding-top: 20px;
   padding-bottom: 20px;
