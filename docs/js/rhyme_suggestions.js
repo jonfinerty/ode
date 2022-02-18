@@ -24,21 +24,8 @@ document.getElementById('rhyme-suggestions-container').addEventListener('mouseen
     clearTimeout(hoverTimeout);
 });
 
-// oh no. make more efficient?
-document.getElementById('grid-container').addEventListener('mousemove', function(e) {
-    var x = e.clientX;
-    var y = e.clientY;
-
-    // if we're in the same ol' word, just shortcut;
-    if (currentHoveredWord) {
-        let boundaries = currentHoveredWord.getBoundingClientRect();
-        var insideX = x >= boundaries.left && x <= boundaries.right;
-        var insideY = y >= boundaries.top && y <= boundaries.bottom;
-        if (insideX && insideY) {
-            return;
-        }
-    }
-
+// make more efficient
+function coordinatesToWordSpan(x, y) {
     // maybe don't look this up every move?
     let wordSpans = document.querySelectorAll(".word");
     for (var i=0; i<wordSpans.length; i++) {
@@ -50,15 +37,34 @@ document.getElementById('grid-container').addEventListener('mousemove', function
         }
         var insideY = y >= boundaries.top && y <= boundaries.bottom;
         if (insideY) {
-            if (currentHoveredWord != wordSpan) {
-                currentHoveredWord = wordSpan;
-                lastWordToBeHovered = wordSpan;
-                onHoverWordChanged(currentHoveredWord);
-            }
-            return;
+            return wordSpan;
         } 
     }
+
+    return null;
+}
+
+// oh no. make more efficient?
+document.getElementById('grid-container').addEventListener('mousemove', function(event) {
+    var x = event.clientX;
+    var y = event.clientY;
+
+    // if we're in the same ol' word, just shortcut;
     if (currentHoveredWord) {
+        let boundaries = currentHoveredWord.getBoundingClientRect();
+        var insideX = x >= boundaries.left && x <= boundaries.right;
+        var insideY = y >= boundaries.top && y <= boundaries.bottom;
+        if (insideX && insideY) {
+            return;
+        }
+    }
+
+    var wordSpan = coordinatesToWordSpan(x, y);
+    if (wordSpan != currentHoveredWord) {
+        currentHoveredWord = wordSpan;
+        lastWordToBeHovered = wordSpan;
+        onHoverWordChanged(currentHoveredWord);
+    } else if (currentHoveredWord) {
         currentHoveredWord = null;
         onHoverWordChanged(currentHoveredWord);
     }
@@ -83,6 +89,11 @@ function rhymeSuggestionsShowing() {
 function hideRhymeSuggestions() {
     var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
     suggestionsContainer.classList.add("hidden");
+}
+
+function showRhymeSuggestionsAtCursor() {
+    console.log("BING");
+    // how to cursor location to word span?
 }
 
 function showRhymeSuggestions(wordSpan) {

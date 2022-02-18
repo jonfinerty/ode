@@ -167,10 +167,17 @@ h1 {
 
 #rhyme-suggestions {
   overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
   max-height: 50vh;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-right: 20px;
+}
+
+#rhyme-suggestions::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 #rhyme-suggestions-container:before {
