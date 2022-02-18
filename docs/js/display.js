@@ -63,28 +63,50 @@ function updateDisplayText() {
             rhymeSchemeCounter++;
         }
 
-        var pos = line.lastIndexOf(lastWord);
+        // var pos = line.lastIndexOf(lastWord);
         var rhymeCssClass = "rhyme-" + rhymeScheme % 16; // start reusing colours after 16 rhymes
-        let unescapedLinePart = line.substring(0, pos);
-        let markedEscapedUpEndOfLine = "<span class=\"" + rhymeCssClass + "\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos + lastWord.length));
+        var wordCssClass = "word";
+        // let unescapedLinePart = line.substring(0, pos);
+        // let markedEscapedUpEndOfLine = "<span class=\"" + rhymeCssClass + "\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos + lastWord.length));
 
         let markedUpLine = "";
-        // mid line rhymes - i.e the raven
-        words.forEach((word, j) => {
+        // // mid line rhymes - i.e the raven
+        // words.forEach((word, j) => {
+        //     // don't check last word against itself
+        //     if (words.length - 1 == j) {
+        //         return;
+        //     }
+
+        //     if (wordsRhyme(word, lastWord)) {
+        //         //issue with replacing text multiple times, as you might hit 'span' or 'class'
+        //         var pos = unescapedLinePart.indexOf(word);
+        //         markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0, pos)) + "<span class=\"" + rhymeCssClass + "\">" + escapeHtml(word) + "</span>";
+        //         unescapedLinePart = unescapedLinePart.substring(pos + word.length);
+        //     }
+        // });
+
+        let unescapedLinePart = line;
+        words.forEach((word, i) => {
             // don't check last word against itself
-            if (words.length - 1 == j) {
-                return;
+            let wordIsRhyme = false
+            // always take last word as a rhyme
+            if (words.length - 1 == i) {
+                wordIsRhyme = true;
+            } else {
+                wordIsRhyme = wordsRhyme(word, lastWord);
             }
 
-            if (wordsRhyme(word, lastWord)) {
-                //issue with replacing text multiple times, as you might hit 'span' or 'class'
-                var pos = unescapedLinePart.indexOf(word);
-                markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0, pos)) + "<span class=\"" + rhymeCssClass + "\">" + escapeHtml(word) + "</span>";
-                unescapedLinePart = unescapedLinePart.substring(pos + word.length);
+            let cssClasses = wordCssClass;
+            if (wordIsRhyme) {
+                cssClasses = cssClasses + " " + rhymeCssClass;
             }
+            //issue with replacing text multiple times, as you might hit 'span' or 'class', so chunk through rather than replace all
+            var pos = unescapedLinePart.indexOf(word);
+            markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0, pos)) + "<span class=\"" + cssClasses + "\">" + escapeHtml(word) + "</span>";
+            unescapedLinePart = unescapedLinePart.substring(pos + word.length);
         });
 
-        lines[i] = markedUpLine + unescapedLinePart + markedEscapedUpEndOfLine;
+        lines[i] = markedUpLine + escapeHtml(unescapedLinePart);// + markedEscapedUpEndOfLine;
     });
     displayElement.innerHTML = lines.join("\n");
 }

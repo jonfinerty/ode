@@ -72,9 +72,9 @@ function onTitleUpdated() {
 
 function render() {
   updateHeights();
-  updateDisplayText();
+  time(updateDisplayText);
   updateWidth();
-  updateMetre();
+  time(updateMetre);
 }
 
 function focusInput() {
