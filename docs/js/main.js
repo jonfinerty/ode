@@ -1,4 +1,3 @@
-let rhymeIndex = {};
 let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
 
@@ -16,7 +15,6 @@ window.addEventListener('hashchange',() => {
 
 // on text area click AND placeholder
 // set cursor to 0
-
 setupTabCapture();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
@@ -128,22 +126,6 @@ function setupTabCapture() {
   }
 }
 
-function buildRhymeIndex() {
-  for (var word in wordDict) {
-    var wordProps = wordDict[word];
-    if (wordProps[3]) {
-      wordProps[3].forEach(rhymeGroup => {
-        var rhyme = rhymeIndex[rhymeGroup];
-        if (rhyme) {
-          rhymeIndex[rhymeGroup].push(word);
-        } else {
-          rhymeIndex[rhymeGroup] = [word];
-        }
-      });
-    }
-  }
-}
-
 function loadState() {
   let storage = window.localStorage;
   let title = storage.getItem('title');
@@ -222,112 +204,6 @@ function updateWidth() {
   metreElement.style.width = displayElement.clientWidth + "px"; 
 }
 
-function escapeHtml(text) {
-  var map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-
-  return text.replace(/[&<>"']/g, function(char) { return map[char]; });
-}
-
-function wordsRhyme(word1, word2) {
-  //controversially
-  if (word1 == word2) {
-    return false;
-  }
-
-  let word1Props = getWordProps(word1);
-  if (!word1Props) {
-    return false;
-  }
-  let word2Props = getWordProps(word2);
-  if (!word2Props) {
-    return false;
-  }
-
-  return word1Props[3].some(rhymeGroupId => word2Props[3].includes(rhymeGroupId));
-}
-
-function updateDisplayText() {
-  let inputElement = document.querySelector("#input");
-  let displayElement = document.querySelector("#display")
-  let text = inputElement.value;
-  
-  //let paragraphCounter = 0;
-  let rhymeSchemeCounter = 0;
-  // each is [word, rhymeIndex]
-  let lastWords = [];
-  // let lastWords =[[]];
-  let lines = splitTextToLines(text);
-  lines.forEach((line, i) => {
-    let words = splitLineToWords(line);
-    // if (words.length == 0) {
-    //   paragraphCounter++;
-    //   lastWords[paragraphCounter] = [];
-    //   return;
-    // }
-    if (words.length == 0) {
-      return;
-    }
-    let lastWord = words[words.length-1];
-    let rhymeScheme = null;
-    let rhymeFound = false;
-    let rhymeFoundScheme = null;
-    lastWords.forEach(previousLastWordAndRhymeScheme => {
-    //lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
-      previousLastWord = previousLastWordAndRhymeScheme[0];
-      previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
-
-      if (wordsRhyme(previousLastWord, lastWord)) {
-        rhymeFound = true;
-        rhymeFoundScheme = previousLastWordRhymeScheme;
-      }
-    })
-    
-    if (rhymeFound) {
-      // lastWords[paragraphCounter].push([lastWord,rhymeFoundScheme]);
-      lastWords.push([lastWord, rhymeFoundScheme]);
-      rhymeScheme = rhymeFoundScheme;
-    } else {
-      // lastWords[paragraphCounter].push([lastWord,rhymeSchemeCounter]);
-      lastWords.push([lastWord,rhymeSchemeCounter]);
-      rhymeScheme = rhymeSchemeCounter;
-      rhymeSchemeCounter++;
-    }
-    
-    var pos = line.lastIndexOf(lastWord);
-    var rhymeCssClass = "rhyme-" + rhymeScheme % 16; // start reusing colours after 16 rhymes
-    let unescapedLinePart = line.substring(0,pos);
-    let markedEscapedUpEndOfLine = "<span class=\""+ rhymeCssClass +"\">" + escapeHtml(lastWord) + "</span>" + escapeHtml(line.substring(pos+lastWord.length));
-
-    let markedUpLine = "";
-    // mid line rhymes - i.e the raven
-    words.forEach((word, j) => {
-      // don't check last word against itself
-      if (words.length-1 == j) {
-        return;
-      }
-
-      if (wordsRhyme(word, lastWord)) {
-        //issue with replacing text multiple times, as you might hit 'span' or 'class'
-        var pos = unescapedLinePart.indexOf(word);
-        markedUpLine = markedUpLine + escapeHtml(unescapedLinePart.substring(0,pos)) + "<span class=\""+ rhymeCssClass +"\">" + escapeHtml(word) + "</span>";
-        unescapedLinePart = unescapedLinePart.substring(pos+word.length);
-      }
-    });
-
-    lines[i] = markedUpLine + unescapedLinePart + markedEscapedUpEndOfLine;
-  });
-  displayElement.innerHTML = lines.join("\n"); 
-}
-
-function hightlightWordsInLine(line, word) {
-
-}
 
 function splitTextToLines(text) {
   return text.split("\n");
@@ -353,117 +229,6 @@ function stripPunctuationFromWord(word) {
   //todo: improve this regex
   //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
   return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g,"");
-}
-
-function distributeEvenly(syllables, characterCount) { // syllables = ['●','○'] or ['?']
-  let syllableIndex = 0;
-  let output = "";
-  if (syllables.length >= characterCount) {
-    return syllables.join('');
-  } else if (syllables.length <= Math.floor(characterCount / 2)) {
-    let leap = Math.floor(characterCount / syllables.length);
-    for (let i=0; i<characterCount; i++) {
-      if (i%leap == Math.floor(leap/2) && syllableIndex < syllables.length) {
-        output+=syllables[syllableIndex];
-        syllableIndex++;
-      } else {
-        output += "&nbsp;";
-      }
-    }
-  } else {
-    let leap = Math.floor(characterCount / (characterCount-syllables.length))
-    for (let i=0; i<characterCount; i++) {
-      if (i%leap == Math.floor(leap/2) || syllableIndex >= syllables.length) {
-        output += "&nbsp;";
-      } else {
-        output+=syllables[syllableIndex];
-        syllableIndex++;
-      }
-    }
-  }
-  return output;
-}
-
-function updateMetre() {
-  let metreFontSize = getCanvasFont(document.querySelector("#metre"));
-  let displayFontSize = getCanvasFont(document.querySelector("#display"));
-  let metreCharacterSize = getTextWidth("●", metreFontSize);
-  let input_element = document.querySelector("#input")
-  let text = input_element.value;
-  let metre = "";
-  let syllablesOutput = "";
-
-  let lines = splitTextToLines(text);
-  lines.forEach(line => {
-    var lineSyllableCount = 0;
-    var lineMetre = "";
-    let words = splitLineToWords(line);
-
-    let runningTextLength = 0;
-    let runningMetreLength = 0;
-    words.forEach(word => {
-      let wordProps = getWordProps(word);
-      let wordIndex = line.indexOf(word);
-      let precedingWhitespaceAndPunctuation = line.substring(0, wordIndex);
-      let precedingSize = getTextWidth(precedingWhitespaceAndPunctuation, displayFontSize);
-
-      runningTextLength += precedingSize;
-      
-      //how many spaces to get up to runningTextLength from runningMetreLength
-      let spacesNeeded = Math.floor((Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize) + 0.4); //favour an extra space
-      lineMetre += "&nbsp;".repeat(spacesNeeded);
-      runningMetreLength += spacesNeeded * metreCharacterSize;
-
-      let wordSize = getTextWidth(word, displayFontSize);
-      runningTextLength += wordSize;
-      let metreCharactersNeeded = Math.floor(wordSize / metreCharacterSize);
-      let syllableArray = [];
-      if (wordProps) {
-        let syllableCount = wordProps[0];
-        lineSyllableCount += syllableCount;
-        for (var i=0; i<syllableCount; i++) {
-          if (i == wordProps[1] || i == wordProps[2]) {
-            syllableArray.push('●');
-          } else {
-            syllableArray.push('○');
-          }
-        }
-      } else {
-        syllableArray = ['?'];
-        lineSyllableCount++;
-        if (word.length > 4) {
-          syllableArray.push('?');
-          lineSyllableCount++;
-        }
-        if (word.length > 8) {
-          syllableArray.push('?');
-          lineSyllableCount++;
-        }
-      }
-      let wordMetre = distributeEvenly(syllableArray, metreCharactersNeeded);
-      lineMetre += wordMetre
-      runningMetreLength += (metreCharactersNeeded * metreCharacterSize);
-
-      while((runningTextLength - runningMetreLength) > 0) {
-        lineMetre += "&nbsp;"
-        runningMetreLength += metreCharacterSize;
-      }
-
-      line = line.substring(wordIndex+word.length);
-    });
-
-    if (lineSyllableCount == 0) {
-      syllablesOutput += '<br>';
-    } else {
-      syllablesOutput += lineSyllableCount + '<br>';
-    }
-    metre = metre + lineMetre + '<br>';
-  })
-
-  let metreElement = document.querySelector("#metre");
-  metreElement.innerHTML = metre;
-  let syllablesElement = document.querySelector("#syllables");
-  syllablesElement.innerHTML = syllablesOutput;
 }
 
 function getWordProps(text) {
@@ -501,27 +266,6 @@ function getWordProps(text) {
   // }
 
   return null;
-}
-
-
-function getTextWidth(text, font) {
-  // re-use for better performance
-  const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-  const context = canvas.getContext("2d");
-  context.font = font;
-  const metrics = context.measureText(text);
-  return metrics.width;
-}
-
-function getCssStyle(element, prop) {
-    return window.getComputedStyle(element, null).getPropertyValue(prop);
-}
-
-function getCanvasFont(el = document.body) {
-  const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
-  const fontSize = getCssStyle(el, 'font-size') || '16px';
-  const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
-  return `${fontWeight} ${fontSize} ${fontFamily}`;
 }
 
 function aboutClicked() {

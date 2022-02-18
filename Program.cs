@@ -3,7 +3,14 @@ using System.Collections.Concurrent;
 
 HttpClient client = new HttpClient();
 //sanitiseDatamuseRhymes();
-csvsToJs();
+csvsToJs(100000);
+csvsToJs(150000);
+csvsToJs(200000);
+csvsToJs(250000);
+csvsToJs(300000);
+csvsToJs(350000);
+csvsToJs(400000);
+csvsToJs(500000);
 return;
 
 
@@ -70,9 +77,10 @@ static HashSet<string> LoadUnaccentedParticles() {
     return words;
 } 
 
-static void csvsToJs() {
+static void csvsToJs(int wordCountLimit) {
     var freqThreshold = 0;
-    var wordCountLimit = 100000;
+    //var wordCountLimit = 200000;
+    var outputFilename = "docs/js/words_"+wordCountLimit+".js";
 
     var mergedWords = new Dictionary<string, Word>();
 
@@ -155,7 +163,7 @@ static void csvsToJs() {
         }
     }
 
-    using StreamWriter output = new($"docs/js/words.js", append: false);
+    using StreamWriter output = new(outputFilename, append: false);
     output.WriteLine("\"use strict\";");
     output.WriteLine();
     output.WriteLine("let wordDict = {");
