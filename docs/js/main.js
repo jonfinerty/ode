@@ -21,7 +21,6 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-setupEscapeKey();
 setupInputEvents();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
@@ -125,6 +124,16 @@ function removePlaceholderText(stringToReplaceWith) {
 function setupInputEvents() {
   var inputElement = document.querySelector("#input");
   inputElement.onkeydown = function (event) {
+
+    if (event.key === "Escape" || event.key === "Esc") {
+      if (rhymeSuggestionsShowing()) {
+        hideRhymeSuggestions();
+      } else if (mode == "about") {
+        backClicked();
+      }
+      return;
+    }
+
     hideRhymeSuggestions();
 
     if (event.ctrlKey && event.key === ' ') {
@@ -141,20 +150,6 @@ function setupInputEvents() {
       onInputUpdated();
     }
   }
-}
-
-function setupEscapeKey() {
-  document.onkeydown = function(event) {
-    event = event || window.event;
-    isEscape = (event.key === "Escape" || event.key === "Esc");
-
-    if (isEscape) {
-      hideRhymeSuggestions();
-      if (mode == "about") {
-        backClicked();
-      }
-    }
-  };
 }
 
 function loadState() {

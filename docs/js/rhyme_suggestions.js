@@ -83,6 +83,7 @@ function onHoverWordChanged(wordSpan) {
 
 function rhymeSuggestionsShowing() {
     var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    console.log(!suggestionsContainer.classList.contains("hidden"))
     return !suggestionsContainer.classList.contains("hidden");
 }
 
@@ -92,8 +93,12 @@ function hideRhymeSuggestions() {
 }
 
 function showRhymeSuggestionsAtCursor() {
-    console.log("BING");
-    // how to cursor location to word span?
+    var xy = getCursorXY();
+    // nudge left and right for cursor at end or beginning of word
+    var wordspan = coordinatesToWordSpan(xy.x+3, xy.y+2) || coordinatesToWordSpan(xy.x-3, xy.y+2);
+    if (wordspan != null) {
+        showRhymeSuggestions(wordspan);
+    }     
 }
 
 function showRhymeSuggestions(wordSpan) {
@@ -163,3 +168,37 @@ function removeClassesByPrefix(element, prefix)
         }
     }
 }
+
+function getCursorXY() {
+    let inputElement = document.querySelector("#input");
+    const {
+      offsetLeft: inputX,
+      offsetTop: inputY,
+    } = inputElement
+
+    const div = document.createElement('div')
+    const copyStyle = getComputedStyle(inputElement)
+    for (const prop of copyStyle) {
+      div.style[prop] = copyStyle[prop]
+    }
+
+    const inputValue = input.value
+    const selectionPoint = inputElement.selectionStart;
+    const textContent = inputValue.substr(0, selectionPoint);
+    div.innerHTML = textContent.replace(/\n/g, "<br>");;
+
+    const span = document.createElement('span')
+
+    span.textContent = inputValue.substr(selectionPoint) || '.'
+    div.appendChild(span)
+    document.body.appendChild(div)
+
+    const { offsetLeft: spanX, offsetTop: spanY } = span;
+    const { offsetLeft: mirrorDivX, offsetTop: mirrorDivY } = div;
+
+    document.body.removeChild(div)
+    return {
+      x: inputX + spanX - mirrorDivX,
+      y: inputY + spanY - mirrorDivY,
+    }
+  }
