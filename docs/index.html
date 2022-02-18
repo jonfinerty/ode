@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400&display=swap">
-  
+
 </head>
 
 <body>
@@ -29,15 +29,20 @@
   <div id="content">
     <div id="grid-container">
       <pre id="syllables"></pre>
-      <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);" oninput="time(onInputUpdated, event);" onclick="onInputClicked();"></textarea>
+      <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);"
+        oninput="time(onInputUpdated, event);" onclick="onInputClicked();"></textarea>
       <pre id="display" class="overlaid" aria-hidden="true"></pre>
       <pre id="metre" class="overlaid" aria-hidden="true"></pre>
     </div>
   </div>
   <div id="flash-preventer"></div>
-  <div id="menu"><a href="#share" id="menu-item-share" class="menu-item" onclick="shareClicked();">share</a><a href="#about" id="menu-item-about" class="menu-item" onclick="aboutClicked();">about</a><a href="#" id="menu-item-back" class="menu-item hidden" onclick="backClicked();">back</a></div>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <div id="menu"><a href="#share" id="menu-item-share" class="menu-item" onclick="shareClicked();">share</a><a
+      href="#about" id="menu-item-about" class="menu-item" onclick="aboutClicked();">about</a><a href="#"
+      id="menu-item-back" class="menu-item hidden" onclick="backClicked();">back</a></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- <script src="js/vendor/modernizr-3.11.2.min.js"></script> -->
   <script src="js/plugins.js"></script>
   <script src="js/words.js"></script>

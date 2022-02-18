@@ -5,7 +5,7 @@ window.addEventListener('resize', () => {
   render();
 });
 
-window.addEventListener('hashchange',() => {
+window.addEventListener('hashchange', () => {
   if (window.location.hash == "#about") {
     aboutClicked();
   } else {
@@ -15,6 +15,7 @@ window.addEventListener('hashchange',() => {
 
 // on text area click AND placeholder
 // set cursor to 0
+
 setupTabCapture();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
@@ -62,7 +63,7 @@ function onInputClicked() {
   if (mode == "placeholder") {
     var inputElement = document.querySelector("#input");
     inputElement.selectionEnd = 0;
-  }  
+  }
 }
 
 function onTitleUpdated() {
@@ -87,10 +88,10 @@ function setupPlaceholderText() {
     setMode("placeholder");
     inputElement.value = placeholderPoem;
     inputElement.selectionEnd = 0;
-    
+
     var displayElement = document.querySelector('#display');
     displayElement.classList.add('placeholder');
-    
+
     var metreElement = document.querySelector('#metre');
     metreElement.classList.add('placeholder');
   }
@@ -107,20 +108,20 @@ function removePlaceholderText(stringToReplaceWith) {
     var inputElement = document.querySelector('#input');
     inputElement.value = stringToReplaceWith;
 
-    setMode("input");    
+    setMode("input");
   }
 }
 
 function setupTabCapture() {
   var inputElement = document.querySelector("#input");
-  inputElement.onkeydown = function(e){
-    if(e.keyCode === 9 || e.which === 9){
+  inputElement.onkeydown = function (e) {
+    if (e.keyCode === 9 || e.which === 9) {
       e.preventDefault();
       var element = this;
       var tabStartPos = element.selectionStart;
       var tabEndPos = element.selectionEnd;
-      element.value = element.value.substring(0,tabStartPos) + "\t" + element.value.substring(tabEndPos);
-      element.selectionEnd = tabStartPos+1; 
+      element.value = element.value.substring(0, tabStartPos) + "\t" + element.value.substring(tabEndPos);
+      element.selectionEnd = tabStartPos + 1;
       onInputUpdated();
     }
   }
@@ -166,7 +167,7 @@ function revealContent() {
   flashPreventerElement.classList.add('fade');
 }
 
-function waitForFontToLoad(then) {  
+function waitForFontToLoad(then) {
   if (document.fonts) {
     document.fonts.load('64px "Libre Baskerville"').then(() => {
       then();
@@ -200,10 +201,9 @@ function updateWidth() {
   let inputElement = document.querySelector("#input")
   let displayElement = document.querySelector("#display");
   let metreElement = document.querySelector("#metre");
-  inputElement.style.width = displayElement.clientWidth + "px"; 
-  metreElement.style.width = displayElement.clientWidth + "px"; 
+  inputElement.style.width = displayElement.clientWidth + "px";
+  metreElement.style.width = displayElement.clientWidth + "px";
 }
-
 
 function splitTextToLines(text) {
   return text.split("\n");
@@ -228,7 +228,7 @@ function stripPunctuationFromWord(word) {
   word = word.replace(/’/g, "'");
   //todo: improve this regex
   //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
-  return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g,"");
+  return word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g, "");
 }
 
 function getWordProps(text) {
@@ -238,7 +238,7 @@ function getWordProps(text) {
     return wordDict[word];
   }
 
-  word = word.replace(/(\')/g,"");
+  word = word.replace(/(\')/g, "");
   if (word in wordDict) {
     return wordDict[word];
   }
@@ -247,18 +247,18 @@ function getWordProps(text) {
   // if (sLessWord in wordDict) {
   //   return wordDict[sLessWord];
   // }
-  
+
   // esLessWord = word.replace(/es$/g,"");
   // if (esLessWord in wordDict) {
   //   return wordDict[esLessWord];
   // }
-  
+
   // ingLessWord = word.replace(/ing$/g,"");
   // if (ingLessWord in wordDict) {
   //   let ingWordProps = wordDict[ingLessWord];
   //   return [ingWordProps[0]+1, ingWordProps[1], ingWordProps[2]];
   // }
-  
+
   // edLessWord = word.replace(/ed$/g,"");
   // if (edLessWord in wordDict) {
   //   let edWordProps = wordDict[edLessWord];
