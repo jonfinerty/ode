@@ -86,7 +86,7 @@ h1 {
   opacity: 1;
 }
 
-.menu-item.hidden {
+.hidden {
   display: none;
 }
 

@@ -109,8 +109,13 @@ function showRhymeSuggestions(wordSpan) {
 
 function getWordRhymes(inputWord) {
     var wordProps = getWordProps(inputWord);
-    var rhymeGroups = wordProps[3]
     var rhymingWords = [];
+
+    if (!wordProps) {
+        return rhymingWords;
+    }
+    
+    var rhymeGroups = wordProps[3]
     rhymeGroups.forEach(rhymeGroup => {
         rhymeGroupWords = rhymeIndex[rhymeGroup];
         rhymeGroupWords.forEach(rhymingWord => {

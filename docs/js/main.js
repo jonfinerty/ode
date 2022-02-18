@@ -2,6 +2,7 @@ let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
 
 window.addEventListener('resize', () => {
+  showRhymeSuggestions(currentHoveredWord);
   render();
 });
 
@@ -13,9 +14,7 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-// on text area click AND placeholder
-// set cursor to 0
-
+setupEscapeKey();
 setupTabCapture();
 time(buildRhymeIndex);
 waitForFontToLoad(() => {
@@ -46,6 +45,8 @@ function onInputUpdated(event) {
     backClicked();
     return;
   }
+
+  hideRhymeSuggestions();
   removePlaceholderText(event.data);
   render();
   saveState();
@@ -125,6 +126,22 @@ function setupTabCapture() {
       onInputUpdated();
     }
   }
+}
+
+function setupEscapeKey() {
+  document.onkeydown = function(event) {
+    console.log(event);
+    event = event || window.event;
+    isEscape = (event.key === "Escape" || event.key === "Esc");
+
+    if (isEscape) {
+      console.log("here");
+      hideRhymeSuggestions();
+      if (mode == "about") {
+        backClicked();
+      }
+    }
+  };
 }
 
 function loadState() {
@@ -269,6 +286,7 @@ function getWordProps(text) {
 }
 
 function aboutClicked() {
+  hideRhymeSuggestions();
   saveState();
 
   let inputElement = document.querySelector("#input");
@@ -296,6 +314,7 @@ function aboutClicked() {
 }
 
 function backClicked() {
+  hideRhymeSuggestions();
   setMode("input");
   let inputElement = document.querySelector("#input");
   let titleElement = document.querySelector("#title");
@@ -320,6 +339,7 @@ function backClicked() {
 }
 
 function shareClicked() {
+  hideRhymeSuggestions();
 }
 
 function setMode(newMode) {
