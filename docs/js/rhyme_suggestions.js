@@ -1,6 +1,7 @@
 
 let rhymeIndex = {};
 let currentHoveredWord = null;
+let lastWordToBeHovered = null;
 let hoverTimeout = null;
 
 function buildRhymeIndex() {
@@ -51,6 +52,7 @@ document.getElementById('grid-container').addEventListener('mousemove', function
         if (insideY) {
             if (currentHoveredWord != wordSpan) {
                 currentHoveredWord = wordSpan;
+                lastWordToBeHovered = wordSpan;
                 onHoverWordChanged(currentHoveredWord);
             }
             return;
@@ -73,13 +75,16 @@ function onHoverWordChanged(wordSpan) {
     }, 1000, wordSpan);
 }
 
+function rhymeSuggestionsShowing() {
+    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
+    return !suggestionsContainer.classList.contains("hidden");
+}
+
 function hideRhymeSuggestions() {
     var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
     suggestionsContainer.classList.add("hidden");
 }
 
-// todo reshow on resize, i.e. repositoin
-// todo close on input
 function showRhymeSuggestions(wordSpan) {
     let wordSpanPos = wordSpan.getBoundingClientRect();
     let rhymeCssClass = null;
@@ -114,7 +119,7 @@ function getWordRhymes(inputWord) {
     if (!wordProps) {
         return rhymingWords;
     }
-    
+
     var rhymeGroups = wordProps[3]
     rhymeGroups.forEach(rhymeGroup => {
         rhymeGroupWords = rhymeIndex[rhymeGroup];

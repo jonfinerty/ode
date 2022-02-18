@@ -2,8 +2,15 @@ let placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
 
 window.addEventListener('resize', () => {
-  showRhymeSuggestions(currentHoveredWord);
-  render();
+  //explicit dont rerender display as we need the same spans to anchor suggestions to
+  time(updateHeights);
+  time(updateWidth);
+  time(updateMetre);
+  time(() => {
+    if (rhymeSuggestionsShowing()) {
+      showRhymeSuggestions(lastWordToBeHovered);
+    }
+  });
 });
 
 window.addEventListener('hashchange', () => {
@@ -119,6 +126,10 @@ function setupInputEvents() {
   var inputElement = document.querySelector("#input");
   inputElement.onkeydown = function (event) {
     hideRhymeSuggestions();
+
+    if (event.ctrlKey && event.key === ' ') {
+      showRhymeSuggestionsAtCursor();
+    }
 
     if (event.keyCode === 9 || event.which === 9) {
       event.preventDefault();
