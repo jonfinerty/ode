@@ -8,11 +8,7 @@ window.addEventListener('resize', () => {
   time(updateHeights);
   time(updateWidth);
   time(updateMetre);
-  time(() => {
-    if (rhymeSuggestionsShowing()) {
-      showRhymeSuggestions(lastWordToBeHovered);
-    }
-  });
+  time(rerenderRhymeSuggestions);
 });
 
 window.addEventListener('hashchange', () => {

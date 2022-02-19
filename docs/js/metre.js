@@ -32,7 +32,7 @@ function updateMetre() {
             const wordSize = getTextWidth(word.text, displayFontSize);
             runningTextLength += wordSize;
             const metreCharactersNeeded = Math.floor(wordSize / metreCharacterSize);
-            
+
             const wordMetre = distributeEvenly(word.getDisplaySyllables(), metreCharactersNeeded);
             lineMetre += wordMetre
             runningMetreLength += (metreCharactersNeeded * metreCharacterSize);

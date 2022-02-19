@@ -48,9 +48,11 @@ class Word {
         }
     }
 
-    isProperNoun() {
-        // some things are both a proper noun and other this
-        // in this case we only the ones
+    isJustParticle() {
+        return this.tags.length == 1 && this.tags.includes('p');
+    }
+
+    isJustProperNoun() {
         return (this.tags.length == 2 && this.tags.includes('n') && this.tags.includes('prop')) ||
             (this.tags.length == 1 && this.tags.includes('prop'));
     }
