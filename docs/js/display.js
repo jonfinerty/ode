@@ -32,7 +32,14 @@ function updateDisplayText() {
 
             if (previousLastWord.rhymesWith(lastWord)) {
                 rhymeFound = true;
-                rhymeFoundScheme = previousLastWordRhymeScheme;
+                if (previousLastWordRhymeScheme == -1) {
+                    // HERE
+                    rhymeFoundScheme = rhymeSchemeCounter;
+                    rhymeSchemeCounter++;
+                } else {
+                    rhymeFoundScheme = previousLastWordRhymeScheme;
+
+                }
             }
         })
 
