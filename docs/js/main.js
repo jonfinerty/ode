@@ -51,7 +51,7 @@ function onInputUpdated(event) {
   }
 
   hideRhymeSuggestions();
-  removePlaceholderText(event.data);
+  removePlaceholderText(event?.data);
   render();
   saveState();
 
@@ -79,7 +79,8 @@ function onTitleUpdated() {
 
 function render() {
   updateHeights();
-  time(updateDisplayText);
+  time(renderDisplay);
+  time(applyRhymeHighlighting);
   updateWidth();
   time(updateMetre);
 }
@@ -145,6 +146,7 @@ function setupInputEvents() {
       const tabEndPos = element.selectionEnd;
       element.value = element.value.substring(0, tabStartPos) + "\t" + element.value.substring(tabEndPos);
       element.selectionEnd = tabStartPos + 1;
+      console.log("hmm");
       onInputUpdated();
     }
   }

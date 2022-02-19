@@ -24,7 +24,7 @@ document.getElementById('rhyme-suggestions-container').addEventListener('mouseen
 });
 
 // make more efficient
-function coordinatesToWordSpan(x, y) {
+function viewPortCoordinatesToWordSpan(x, y) {
     // maybe don't look this up every move?
     const wordSpans = document.querySelectorAll(".word");
     for (let i=0; i<wordSpans.length; i++) {
@@ -43,6 +43,13 @@ function coordinatesToWordSpan(x, y) {
     return null;
 }
 
+function documentCoordinatesToWordSpan(x ,y) {
+    console.log(document.body.scrollLeft);
+    console.log(document.body.scrollTop);
+
+   return viewPortCoordinatesToWordSpan(x- window.scrollX, y- window.scrollY);
+}
+
 // oh no. make more efficient?
 document.getElementById('grid-container').addEventListener('mousemove', function(event) {
     const x = event.clientX;
@@ -58,7 +65,7 @@ document.getElementById('grid-container').addEventListener('mousemove', function
         }
     }
 
-    const wordSpan = coordinatesToWordSpan(x, y);
+    const wordSpan = viewPortCoordinatesToWordSpan(x, y);
     if (wordSpan != currentHoveredWordSpan) {
         currentHoveredWordSpan = wordSpan;
         onHoveredWordSpanChanged(currentHoveredWordSpan);
@@ -90,9 +97,12 @@ function hideRhymeSuggestions() {
 }
 
 function showRhymeSuggestionsAtCursor() {
-    var xy = getCursorXY();
+    var xy = getCursorDocumentXY();
+    console.log("document x y")
+    console.log(xy);
     // nudge left and right for cursor at end or beginning of word
-    var wordspan = coordinatesToWordSpan(xy.x+3, xy.y+2) || coordinatesToWordSpan(xy.x-3, xy.y+2);
+    var wordspan = documentCoordinatesToWordSpan(xy.x+3, xy.y+2) || documentCoordinatesToWordSpan(xy.x-3, xy.y+2);
+    console.log("hmm: " + wordspan);
     if (wordspan != null) {
         showRhymeSuggestions(wordspan);
     }     
@@ -165,7 +175,6 @@ function rhymeSort(word1, word2) {
     // proper nouns last
     // then particles
     // then freq
-
     if (word1.isJustProperNoun() && !word2.isJustProperNoun()) {
         return 1;
     }
@@ -173,10 +182,10 @@ function rhymeSort(word1, word2) {
         return -1;
     }
 
-    if (word1.isJustParticle() && !word2.isJustParticle()) {
+    if (word1.isParticle() && !word2.isParticle()) {
         return 1;
     }
-    if (!word1.isJustParticle() && word2.isJustParticle()) {
+    if (!word1.isParticle() && word2.isParticle()) {
         return -1;
     }
 
@@ -191,14 +200,13 @@ function removeClassesByPrefix(element, prefix) {
     }
 }
 
-function getCursorXY() {
+function getCursorDocumentXY() {
     let inputElement = document.querySelector("#input");
     let displayElement = document.querySelector("#display");
     const {
       offsetLeft: inputX,
       offsetTop: inputY,
     } = inputElement
-
     const preElement = document.createElement('pre')
     const copyStyle = getComputedStyle(displayElement)
     for (const prop of copyStyle) {
@@ -208,7 +216,7 @@ function getCursorXY() {
     const inputValue = inputElement.value
     const selectionPoint = inputElement.selectionStart;
     const textContent = inputValue.substr(0, selectionPoint);
-    preElement.innerHTML = textContent;// textContent.replace(/\n/g, "<br>");;
+    preElement.innerHTML = textContent;
 
     const span = document.createElement('span')
 
@@ -222,6 +230,6 @@ function getCursorXY() {
     document.body.removeChild(preElement)
     return {
       x: inputX + spanX - mirrorDivX,
-      y: inputY + spanY - mirrorDivY,
+      y: inputY + spanY - mirrorDivY
     }
   }

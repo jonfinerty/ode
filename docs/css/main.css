@@ -125,7 +125,8 @@ h1 {
   font-size: clamp(16px,2.5vw,32px);
   font-family: 'Libre Baskerville', serif;
   line-height: clamp(32px,5vw,64px);
-  tab-size: 2;
+  /* to increase need to work out metre bug */
+  tab-size: 1; 
 }
 
 /* Move the textarea in front of the result */

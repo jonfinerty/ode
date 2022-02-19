@@ -81,6 +81,17 @@ static HashSet<string> LoadUnaccentedParticles() {
     return words;
 } 
 
+static HashSet<string> LoadParticleOverrides() {
+    var words = new HashSet<string>();
+
+    foreach (string line in File.ReadLines("poetic_particle_overrides.csv"))
+    { 
+        words.Add(line);
+    }
+
+    return words;
+} 
+
 static void csvsToJs(int wordCountLimit, Dictionary<string,Word> datamuseWords) {
     var outputFilename = "docs/js/words_"+wordCountLimit+".js";
 
@@ -88,6 +99,13 @@ static void csvsToJs(int wordCountLimit, Dictionary<string,Word> datamuseWords) 
 
     foreach(var particle in unaccentedParticles) {
         datamuseWords[particle].SetAsUnaccentedParticle();
+    }
+
+    
+    var particlesOverrides = LoadParticleOverrides();
+
+    foreach(var particle in particlesOverrides) {
+        datamuseWords[particle].SetAsParticle();
     }
 
     datamuseWords = datamuseWords.Where(w => !w.Key.Contains("-")).OrderByDescending(w => w.Value.freqScore).Take(wordCountLimit).ToDictionary(x => x.Key, x => x.Value);
@@ -108,6 +126,39 @@ static void csvsToJs(int wordCountLimit, Dictionary<string,Word> datamuseWords) 
             }
         }
         rhymeIndex++;
+    }
+
+    // backfill any missing rhymes with wiktionary
+    var wiktionaryRhymes = new List<List<string>>();
+    foreach(string line in File.ReadLines("wiktionary_rhymes.csv")) {
+        var rhymingGroup = line.Split(',').ToList();
+        wiktionaryRhymes.Add(rhymingGroup);
+    }
+
+    foreach(var word in datamuseWords) {
+        if (word.Value.rhymeGroups.Count == 0) {
+            var rhymeFound = false;
+
+            var wiktionaryRhymingGroups = wiktionaryRhymes.Where(r => r.Contains(word.Key));
+            foreach (var wiktionaryRhymingGroup in wiktionaryRhymingGroups) {
+                foreach (var wiktionaryRhymingWord in wiktionaryRhymingGroup) {
+                    // see if we have a datamuses group with this word if so, add unrhymed word to it
+                    foreach (var datamuseRhymingGroup in datamuseRhymes) {
+                        if (datamuseRhymingGroup.Value.Contains(wiktionaryRhymingWord)) {
+                            word.Value.rhymeGroups.Add(datamuseRhymingGroup.Key);
+                            rhymeFound = true;
+                            break;
+                        }
+                    }
+                    if (rhymeFound) {
+                        break;
+                    }
+                }
+                if (rhymeFound) {
+                    break;
+                }
+            }
+        }
     }
 
     using StreamWriter output = new(outputFilename, append: false);
@@ -407,11 +458,19 @@ public class Word {
         return;
     }
 
+    public void SetAsParticle() {
+        if (!types.Contains("p")) {
+            types.Add("p");
+        }
+    }
+
     public void SetAsUnaccentedParticle() {
         syllableCount = 1;
         primaryStressSyllableIndex = -1;
         secondaryStressSyllableIndex = -1;
-        types.Add("p");
+        if (!types.Contains("p")) {
+            types.Add("p");
+        }
     }
 
     public string ToCSVFormat()

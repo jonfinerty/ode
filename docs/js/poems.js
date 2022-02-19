@@ -25,8 +25,7 @@ const poems = [
  I took the one less traveled by,
  And that has made all the difference.
  
-
-                   - Robert Frost`,
+                                                 Robert Frost`,
 
  `Once upon a midnight dreary, while I pondered, weak and weary,
  Over many a quaint and curious volume of forgotten lore—
@@ -154,8 +153,7 @@ const poems = [
  And my soul from out that shadow that lies floating on the floor
              Shall be lifted—nevermore!
              
-
-                    - Edgar Allan Poe`,
+- Edgar Allan Poe`,
 
 `You may write me down in history
 With your bitter, twisted lies,
@@ -208,9 +206,8 @@ I am the dream and the hope of the slave.
 I rise
 I rise
 I rise.
-
-
-                    - Maya Angelou`,
+                                              
+                                              Maya Angelou`,
 
 `Do not go gentle into that good night,
 Old age should burn and rave at close of day;
@@ -237,8 +234,7 @@ Curse, bless, me now with your fierce tears, I pray.
 Do not go gentle into that good night.
 Rage, rage against the dying of the light.
 
-
-                    - Dylan Thomas`,
+                                                              Dylan Thomas`,
 
 `We wear the mask that grins and lies,
 It hides our cheeks and shades our eyes,—
@@ -257,9 +253,8 @@ We sing, but oh the clay is vile
 Beneath our feet, and long the mile;
 But let the world dream otherwise,
        We wear the mask!
-       
-       
-                    - Paul Laurence Dunbar`,
+
+                        Paul Laurence Dunbar`,
 
 `If you can keep your head when all about you
 Are losing theirs and blaming it on you;
@@ -297,8 +292,7 @@ With sixty seconds’ worth of distance run—
 Yours is the Earth and everything that’s in it,
 And—which is more—you’ll be a Man, my son!
 
-
-                    - Rudyard Kipling`,
+                                                         Rudyard Kipling`,
 
 `Stop all the clocks, cut off the telephone, 
 Prevent the dog from barking with a juicy bone, 
@@ -320,8 +314,7 @@ Pack up the moon and dismantle the sun;
 Pour away the ocean and sweep up the wood; 
 For nothing now can ever come to any good.
 
-
-                    - W. H. Auden`,
+                                                                            W. H. Auden`,
 
 `They fuck you up, your mum and dad.   
 They may not mean to, but they do.   
@@ -398,7 +391,6 @@ But I have promises to keep,
 And miles to go before I sleep,   
 And miles to go before I sleep.
 
-
                     - Robert Frost`,
 
 `Hold fast to dreams
@@ -409,7 +401,6 @@ Hold fast to dreams
 For when dreams go
 Life is a barren field
 Frozen with snow.
-
 
                     - Langston Hughes`,
 
@@ -424,10 +415,7 @@ I am the swift uplifting rush
 Of quiet birds in circled flight.
 I am the soft stars that shine at night.
 Do not stand at my grave and cry;
-I am not there. I did not die.
-
-
-                    - `,
+I am not there. I did not die.`,
 
 `Out of the night that covers me,
 Black as the Pit from pole to pole,
@@ -444,7 +432,9 @@ Finds, and shall find, me unafraid.
 It matters not how strait the gate,
 How charged with punishments the scroll.
 I am the master of my fate:
-I am the captain of my soul.`,
+I am the captain of my soul.
+
+                                      - William Ernest Henley`,
 
 `I was angry with my friend:
 I told my wrath, my wrath did end.
@@ -461,7 +451,9 @@ And he knew that it was mine,
 And into my garden stole
 When the night had veiled the pole;
 In the morning glad I see
-My foe outstretched beneath the tree.`,
+My foe outstretched beneath the tree.
+
+                                     - William Blake`,
 
 `I wandered lonely as a cloud
 That floats on high o’er vales and hills,
@@ -486,7 +478,9 @@ In vacant or in pensive mood,
 They flash upon that inward eye
 Which is the bliss of solitude;
 And then my heart with pleasure fills,
-And dances with the daffodils.`,
+And dances with the daffodils.
+
+                            - William Wordsworth`,
 
 `Life gets faster every day,
 No time to think, no time to play.
@@ -496,7 +490,10 @@ Tension leads to sleeplessness.
 When will all this madness cease?
 Where is free time? Where is peace?
 I'm running, doing, till I drop.
-Give me buttons: Pause, Mute, STOP!`,
+Give me buttons: Pause, Mute, STOP!
+
+                           - Joanna Fuchs
+`,
 
 `I come with no wrapping or pretty pink bows. 
 I am who I am, from my head to my toes. 
@@ -507,7 +504,10 @@ You can be you and I can be me.
 I try to stay strong when pain knocks me down. 
 And the times that I cry are when no one's around. 
 To error is human or so that's what they say. 
-Well, tell me who's perfect anyway.`,
+Well, tell me who's perfect anyway.
+
+                        - S Raine
+`,
 
 `I do not like them in a box
 I do not like them with a fox
@@ -516,7 +516,9 @@ I do not like them with a mouse
 I do not like them here or there
 I do not like them anywhere
 I do not like green eggs and ham
-I do not like them Sam I am`
+I do not like them Sam I am
+
+                       - Dr Seuss`
 ];
 
 let aboutPoem = `It shows you metre, helps you rhyme.

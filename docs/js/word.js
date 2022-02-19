@@ -3,7 +3,7 @@
 function stripPunctuationFromString(string) {
     // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
     string = string.replace(/’/g, "'");
-    // black magic which removes pairs of apostrophes
+    // black magic which removes pairs of apostrophes <- todo: this should be on the line->word parsing not here
     string = string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')
     return string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g, "");
 }
@@ -35,8 +35,8 @@ class Word {
         }
     }
 
-    isJustParticle() {
-        return this.tags.length == 1 && this.tags.includes('p');
+    isParticle() {
+        return this.tags.includes('p');
     }
 
     isJustProperNoun() {
@@ -44,7 +44,18 @@ class Word {
             (this.tags.length == 1 && this.tags.includes('prop'));
     }
 
+    isUnknownType() {
+        return this.tags.length == 1 && this.tags.includes('u');
+    }
+
     rhymesWith(otherWord) {
+        // controversial time!
+        const thisText = stripPunctuationFromString(this.text).toLowerCase();
+        const otherText = stripPunctuationFromString(otherWord.text).toLowerCase();
+        if (thisText == otherText) {
+            return false;
+        }
+
         return this.rhymeGroupIds.some(rhymeGroupId => otherWord.rhymeGroupIds.includes(rhymeGroupId));
     }
 
@@ -71,6 +82,21 @@ function getBestFitWordProperties(string) {
 
     if (standardisedText in wordDict) {
         return wordDict[standardisedText];
+    }
+
+    const llLessWord =  standardisedText.replace(/(\'ll)$/g, "");
+    if (llLessWord in wordDict) {
+        return wordDict[llLessWord];
+    }
+
+    const dLessWord =  standardisedText.replace(/(\'d)$/g, "");
+    if (dLessWord in wordDict) {
+        return wordDict[dLessWord];
+    }
+
+    const veLessWord =  standardisedText.replace(/(\'ve)$/g, "");
+    if (veLessWord in wordDict) {
+        return wordDict[veLessWord];
     }
 
     standardisedText = standardisedText.replace(/(\')/g, "");
