@@ -1,4 +1,4 @@
-
+"use strict";
 
 function updateMetre() {
     const metreFontSize = getCanvasFont(document.querySelector("#metre"));

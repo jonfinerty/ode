@@ -1,3 +1,4 @@
+"use strict";
 
 function updateDisplayText() {
     const inputElement = document.querySelector("#input");
@@ -26,8 +27,8 @@ function updateDisplayText() {
         let rhymeFoundScheme = null;
         lastWords.forEach(previousLastWordAndRhymeScheme => {
             //lastWords[paragraphCounter].forEach(previousLastWordAndRhymeScheme => {
-            previousLastWord = previousLastWordAndRhymeScheme[0];
-            previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
+            const previousLastWord = previousLastWordAndRhymeScheme[0];
+            const previousLastWordRhymeScheme = previousLastWordAndRhymeScheme[1];
 
             if (previousLastWord.rhymesWith(lastWord)) {
                 rhymeFound = true;
@@ -69,7 +70,6 @@ function updateDisplayText() {
         // });
 
         let unescapedLinePart = line;
-        console.log((words.map(w => w.text).join(' ')));
         words.forEach((word, i) => {
             // don't check last word against itself
             let wordIsRhyme = false

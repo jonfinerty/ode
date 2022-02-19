@@ -1,3 +1,5 @@
+"use strict";
+
 const placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
 
