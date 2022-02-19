@@ -3,12 +3,14 @@ using System.Collections.Concurrent;
 
 HttpClient client = new HttpClient();
 //sanitiseDatamuseRhymes();
-csvsToJs(100000);
-csvsToJs(150000);
-csvsToJs(200000);
-csvsToJs(250000);
-csvsToJs(300000);
-//goGetWordTypesAgain(client).Wait();
+
+
+var datamuseWords = LoadWords("datamuse_words_with_type.csv");
+csvsToJs(100000, datamuseWords);
+csvsToJs(150000, datamuseWords);
+csvsToJs(200000, datamuseWords);
+csvsToJs(250000, datamuseWords);
+csvsToJs(300000, datamuseWords);
 return;
 
 
@@ -32,7 +34,7 @@ static void sanitiseDatamuseRhymes() {
 }
 
 static void sanitiseDatamuseData() {
-    var words = LoadWords("datamuse_words.csv", true);
+    var words = LoadWords("datamuse_words.csv");
     var orderedWords = words.Values.OrderBy(w => w.text).Where(w => !w.text.Contains('-')).ToList();
     using (StreamWriter output = new($"datamuse_words2.csv", append: false))
     {
@@ -42,12 +44,16 @@ static void sanitiseDatamuseData() {
     }
 }
 
-static Dictionary<string, Word> LoadWords(string filename, bool isDatamuseFile) {
+static Dictionary<string, Word> LoadWords(string filename) {
     var words = new Dictionary<string, Word>();
+    Console.WriteLine("Loading words");
+    int counter = 0;
     foreach (string line in File.ReadLines(filename))
     { 
-        var word = new Word(line, isDatamuseFile);
+        var word = new Word(line);
         words.TryAdd(word.text, word);
+        counter++;
+        Console.WriteLine("words loaded: " + counter);
     }
 
     return words;
@@ -75,11 +81,10 @@ static HashSet<string> LoadUnaccentedParticles() {
     return words;
 } 
 
-static void csvsToJs(int wordCountLimit) {
+static void csvsToJs(int wordCountLimit, Dictionary<string,Word> datamuseWords) {
     var outputFilename = "docs/js/words_"+wordCountLimit+".js";
 
     var unaccentedParticles = LoadUnaccentedParticles();
-    var datamuseWords = LoadWords("datamuse_words_with_type.csv", true);
 
     foreach(var particle in unaccentedParticles) {
         datamuseWords[particle].SetAsUnaccentedParticle();
@@ -117,7 +122,7 @@ static void csvsToJs(int wordCountLimit) {
 
 static async Task goGetWordTypesAgain(HttpClient client) {
 
-    var wordsToProcess = LoadWords("datamuse_words_with_type.csv", true);
+    var wordsToProcess = LoadWords("datamuse_words_with_type.csv");
     var processedWords = new ConcurrentDictionary<string, Word>();
     
     Console.WriteLine(wordsToProcess.Where(w => w.Value.types.Count == 0).Count());
@@ -209,7 +214,7 @@ static async Task downloadFromDatamuse(HttpClient client) {
     var words = new ConcurrentDictionary<string, Word>();
     foreach (string line in File.ReadLines("datamuse_syllables.csv"))
     { 
-        var word = new Word(line, true);
+        var word = new Word(line);
         words.TryAdd(word.text, word);
     }
 
@@ -355,46 +360,51 @@ public class Word {
         this.syllableCount = syllableCount;
         this.freqScore = freqScore;
         this.types = types;
-        primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
-        secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, true);
+        var ipa = new IPA(IPA);
+        var stresses = ipa.GetSyllableIndexesOfStresses();
+        if (stresses.Count > 0) {
+            primaryStressSyllableIndex = Math.Min(syllableCount, stresses[0]);
+        } else {
+            primaryStressSyllableIndex = -1;
+        }
+
+        if (stresses.Count > 1) {
+            secondaryStressSyllableIndex = Math.Min(syllableCount, stresses[1]);
+            if (primaryStressSyllableIndex == secondaryStressSyllableIndex) {
+                secondaryStressSyllableIndex = -1;
+            }
+        } else {
+            secondaryStressSyllableIndex = -1;
+        }
     }
 
-    public Word(string fileLine, bool isDatamuseWord) {
+    public Word(string fileLine) {
         var sections = fileLine.Split(',');
         text = sections[0].ToLower();
         syllableCount = int.Parse(sections[1]);
-        if (isDatamuseWord) {
-            freqScore = double.Parse(sections[2]);
-            IPA = sections[3];
-            if (sections.Length > 4) {
-                types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToList();
-            }
-            primaryStressSyllableIndex = GetPrimaryStressSyllableIndex(syllableCount, IPA);
-            secondaryStressSyllableIndex = GetSecondaryStressSyllableIndex(syllableCount, IPA, isDatamuseWord);
-            return;
+    
+        freqScore = double.Parse(sections[2]);
+        IPA = sections[3];
+        if (sections.Length > 4) {
+            types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToList();
         }
-
-        // default freq score
-        freqScore = 1;
-
-        if (sections[2].Length > 0) {
-            primaryStressSyllableIndex = int.Parse(sections[2]);
-            if (primaryStressSyllableIndex >= syllableCount) {
-                Console.WriteLine("Updating primary syllable stress within bounds");
-                primaryStressSyllableIndex = syllableCount-1;
-            }
+        var ipa = new IPA(IPA);
+        var stresses = ipa.GetSyllableIndexesOfStresses();
+        if (stresses.Count > 0) {
+            primaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[0]);
         } else {
             primaryStressSyllableIndex = -1;
         }
-        if (sections[3].Length > 0) {
-            secondaryStressSyllableIndex = int.Parse(sections[3]);
-            if (primaryStressSyllableIndex >= syllableCount) {
-                Console.WriteLine("Updating primary syllable stress within bounds");
-                primaryStressSyllableIndex = syllableCount-1;
+
+        if (stresses.Count > 1 && syllableCount > 1) {
+            secondaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[1]);
+            if (primaryStressSyllableIndex == secondaryStressSyllableIndex) {
+                secondaryStressSyllableIndex = -1;
             }
         } else {
-            primaryStressSyllableIndex = -1;
+            secondaryStressSyllableIndex = -1;
         }
+        return;
     }
 
     public void SetAsUnaccentedParticle() {
@@ -412,69 +422,12 @@ public class Word {
 
     public string ToJSFormat() {
         if (types.Count == 0) {
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
             types.Add("u");
         }
         var props = $"[{syllableCount},{primaryStressSyllableIndex},{secondaryStressSyllableIndex},[{String.Join(',',rhymeGroups)}],{freqScore},[{String.Join(',',types.Select(t => $"\"{t}\""))}]]";
         return $"\"{text}\":" + props + ',';
     }
-
-    static int GetPrimaryStressSyllableIndex(int syllableCount, string pronunciation) {
-        if (pronunciation == null) {
-            return -1;
-        }
-
-        if (pronunciation.Length <= 0) {
-            return -1;
-        }
-        var characterIndex = pronunciation.IndexOf(primaryStressSymbol);
-        if (characterIndex == -1) {
-            return -1;
-        }
-
-        return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
-    }
-
-    static int GetSecondaryStressSyllableIndex(int syllableCount, string pronunciation, bool isDatamuseWord) {
-        if (pronunciation == null) {
-            return -1;
-        }
-
-        if (pronunciation.Length <= 0) {
-            return -1;
-        }
-
-        var characterIndex = -1;
-
-        if (isDatamuseWord) {
-            var firstOccurance = pronunciation.IndexOf(primaryStressSymbol);
-            if (firstOccurance != -1) {
-                characterIndex = pronunciation.IndexOf(primaryStressSymbol, firstOccurance + 1);
-            }
-        } else {
-            characterIndex = pronunciation.IndexOf(secondaryStressSymbol);
-        }
-
-        if (characterIndex == -1) {
-            return -1;
-        }
-
-        return EstimateSyllableIndex(syllableCount, pronunciation, characterIndex);
-    }
-
-    // todo: improve
-    static int EstimateSyllableIndex(int syllableCount, string pronunciation, int characterIndex) {
-        if (characterIndex == 0) {
-            return 0;
-        }
-        if (syllableCount == 1) {
-            return 0;
-        }
-
-        var result = Convert.ToInt32(((double) characterIndex / pronunciation.Length)*syllableCount);
-        return Math.Clamp(result,1,syllableCount-1);
-    }
-
 }
 
 //https://api.datamuse.com/words?sp=flower&md=sfr&max=1&ipa=1
@@ -510,7 +463,6 @@ public class DatamuseWord {
         var ipaTagIdentifier = "ipa_pron";
         var ipaTag = tags.First(t => t.StartsWith(ipaTagIdentifier));
         return ipaTag.Substring(ipaTagIdentifier.Length);
-        //return tags[1].Substring(9);
     }
 
     public List<string> GetTypes() {
