@@ -23,7 +23,10 @@ const poems = [
  Somewhere ages and ages hence:
  Two roads diverged in a wood, and I—
  I took the one less traveled by,
- And that has made all the difference.`,
+ And that has made all the difference.
+ 
+
+                   - Robert Frost`,
 
  `Once upon a midnight dreary, while I pondered, weak and weary,
  Over many a quaint and curious volume of forgotten lore—
@@ -149,7 +152,10 @@ const poems = [
      And his eyes have all the seeming of a demon’s that is dreaming,
      And the lamp-light o’er him streaming throws his shadow on the floor;
  And my soul from out that shadow that lies floating on the floor
-             Shall be lifted—nevermore!`,
+             Shall be lifted—nevermore!
+             
+
+                    - Edgar Allan Poe`,
 
 `You may write me down in history
 With your bitter, twisted lies,
@@ -201,7 +207,11 @@ Bringing the gifts that my ancestors gave,
 I am the dream and the hope of the slave.
 I rise
 I rise
-I rise.`,
+I rise.
+
+
+                    - Maya Angelou`,
+
 `Do not go gentle into that good night,
 Old age should burn and rave at close of day;
 Rage, rage against the dying of the light.
@@ -225,7 +235,10 @@ Rage, rage against the dying of the light.
 And you, my father, there on the sad height,
 Curse, bless, me now with your fierce tears, I pray.
 Do not go gentle into that good night.
-Rage, rage against the dying of the light.`,
+Rage, rage against the dying of the light.
+
+
+                    - Dylan Thomas`,
 
 `We wear the mask that grins and lies,
 It hides our cheeks and shades our eyes,—
@@ -243,7 +256,10 @@ To thee from tortured souls arise.
 We sing, but oh the clay is vile
 Beneath our feet, and long the mile;
 But let the world dream otherwise,
-       We wear the mask!`,
+       We wear the mask!
+       
+       
+                    - Paul Laurence Dunbar`,
 
 `If you can keep your head when all about you
 Are losing theirs and blaming it on you;
@@ -279,7 +295,10 @@ If all men count with you, but none too much;
 If you can fill the unforgiving minute
 With sixty seconds’ worth of distance run—
 Yours is the Earth and everything that’s in it,
-And—which is more—you’ll be a Man, my son!`,
+And—which is more—you’ll be a Man, my son!
+
+
+                    - Rudyard Kipling`,
 
 `Stop all the clocks, cut off the telephone, 
 Prevent the dog from barking with a juicy bone, 
@@ -299,7 +318,10 @@ I thought that love would last for ever: I was wrong.
 The stars are not wanted now: put out every one; 
 Pack up the moon and dismantle the sun; 
 Pour away the ocean and sweep up the wood; 
-For nothing now can ever come to any good.`,
+For nothing now can ever come to any good.
+
+
+                    - W. H. Auden`,
 
 `They fuck you up, your mum and dad.   
 They may not mean to, but they do.   
@@ -314,7 +336,10 @@ And half at one another’s throats.
 Man hands on misery to man.
 It deepens like a coastal shelf.
 Get out as early as you can,
-And don’t have any kids yourself.`,
+And don’t have any kids yourself.
+
+
+                    - Philip Larkin`,
 
 `Shall I compare thee to a summer’s day?
 Thou art more lovely and more temperate:
@@ -329,7 +354,10 @@ Nor lose possession of that fair thou ow’st;
 Nor shall death brag thou wander’st in his shade,
 When in eternal lines to time thou grow’st:
    So long as men can breathe or eyes can see,
-   So long lives this, and this gives life to thee.`,
+   So long lives this, and this gives life to thee.
+   
+
+                    - William Shakespeare`,
 
 `Double, double toil and trouble;
 Fire burn and caldron bubble.
@@ -345,7 +373,10 @@ Like a hell-broth boil and bubble.
 Double, double toil and trouble;
 Fire burn and caldron bubble.
 Cool it with a baboon's blood,
-Then the charm is firm and good.`,
+Then the charm is firm and good.
+
+
+                    - William Shakespeare`,
 
 `Whose woods these are I think I know.   
 His house is in the village though;   
@@ -365,7 +396,10 @@ Of easy wind and downy flake.
 The woods are lovely, dark and deep,   
 But I have promises to keep,   
 And miles to go before I sleep,   
-And miles to go before I sleep.`,
+And miles to go before I sleep.
+
+
+                    - Robert Frost`,
 
 `Hold fast to dreams
 For if dreams die
@@ -374,7 +408,10 @@ That cannot fly.
 Hold fast to dreams
 For when dreams go
 Life is a barren field
-Frozen with snow.`,
+Frozen with snow.
+
+
+                    - Langston Hughes`,
 
 `Do not stand at my grave and weep
 I am not there. I do not sleep.
@@ -387,7 +424,10 @@ I am the swift uplifting rush
 Of quiet birds in circled flight.
 I am the soft stars that shine at night.
 Do not stand at my grave and cry;
-I am not there. I did not die.`,
+I am not there. I did not die.
+
+
+                    - `,
 
 `Out of the night that covers me,
 Black as the Pit from pole to pole,
