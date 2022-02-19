@@ -1,7 +1,7 @@
 "use strict";
 
 let rhymeIndex = {};
-let currentHoveredWord = null;
+let currentHoveredWordSpan = null;
 let rhymeSuggestionWordSpanAnchor = null;
 let hoverTimeout = null;
 
@@ -49,8 +49,8 @@ document.getElementById('grid-container').addEventListener('mousemove', function
     const y = event.clientY;
 
     // if we're in the same ol' word, just shortcut;
-    if (currentHoveredWord) {
-        const boundaries = currentHoveredWord.getBoundingClientRect();
+    if (currentHoveredWordSpan) {
+        const boundaries = currentHoveredWordSpan.getBoundingClientRect();
         const insideX = x >= boundaries.left && x <= boundaries.right;
         const insideY = y >= boundaries.top && y <= boundaries.bottom;
         if (insideX && insideY) {
@@ -59,23 +59,23 @@ document.getElementById('grid-container').addEventListener('mousemove', function
     }
 
     const wordSpan = coordinatesToWordSpan(x, y);
-    if (wordSpan != currentHoveredWord) {
-        currentHoveredWord = wordSpan;
-        onHoverWordChanged(currentHoveredWord);
-    } else if (currentHoveredWord) {
-        currentHoveredWord = null;
-        onHoverWordChanged(currentHoveredWord);
+    if (wordSpan != currentHoveredWordSpan) {
+        currentHoveredWordSpan = wordSpan;
+        onHoveredWordSpanChanged(currentHoveredWordSpan);
+    } else if (currentHoveredWordSpan) {
+        currentHoveredWordSpan = null;
+        onHoveredWordSpanChanged(currentHoveredWordSpan);
     }
 });
 
 // can be null
-function onHoverWordChanged(wordSpan) {
+function onHoveredWordSpanChanged(wordSpan) {
     clearTimeout(hoverTimeout);
     if (!wordSpan) {
         return;
     }
-    hoverTimeout = setTimeout((word) => {
-        showRhymeSuggestions(word);    
+    hoverTimeout = setTimeout((scopedWordSpan) => {
+        showRhymeSuggestions(scopedWordSpan);    
     }, 1000, wordSpan);
 }
 

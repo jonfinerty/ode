@@ -47,7 +47,9 @@ function renderDisplay() {
 function applyRhymeHighlighting() {
     const wordSpans = document.querySelectorAll(".word");
     wordSpans.forEach(wordSpan => {
-        
+        wordSpans.forEach(wordSpan2 => {
+            
+        })
     })
 }
 
