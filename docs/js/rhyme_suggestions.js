@@ -80,12 +80,7 @@ function onHoverWordChanged(wordSpan) {
 }
 
 function rhymeSuggestionsShowing() {
-<<<<<<< HEAD
-    var suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
-    console.log(!suggestionsContainer.classList.contains("hidden"))
-=======
     const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
->>>>>>> 1f4fe12b3f5f2c75dea25863e847853e72cc3233
     return !suggestionsContainer.classList.contains("hidden");
 }
 
