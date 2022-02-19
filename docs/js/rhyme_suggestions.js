@@ -120,8 +120,9 @@ function showRhymeSuggestions(wordSpan) {
     }
     
     const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
-    suggestionsContainer.style.left = wordSpanPos.right + 20 +'px';
-    suggestionsContainer.style.top = wordSpanPos.top -20 +'px';
+    
+    suggestionsContainer.style.left = window.scrollX + wordSpanPos.right + 20 +'px';
+    suggestionsContainer.style.top = window.scrollY + wordSpanPos.y -20 +'px';
     suggestionsContainer.classList.remove("hidden");
 
     const suggestions = document.querySelector("#rhyme-suggestions");
