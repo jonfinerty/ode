@@ -241,7 +241,7 @@ function splitLineToWords(line) {
   const words = [];
   strings.forEach(string => {
     //blackmagic to remove >pairs< of apostrophes
-    words.push(new Word(string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')));
+    words.push(new Word(string));
   });
 
   return words;

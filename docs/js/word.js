@@ -3,29 +3,16 @@
 function stripPunctuationFromString(string) {
     // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
     string = string.replace(/’/g, "'");
-    //todo: improve this regex
+    // black magic which removes pairs of apostrophes
+    string = string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')
     return string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g, "");
 }
 
 class Word {
 
     constructor(string) {
-        let standardisedText = stripPunctuationFromString(string).toLowerCase();
-        if (standardisedText.length == 0) {
-            console.log("WEIRD: " + string + " " + standardisedText);
-        }
 
-        let properties = null;
-        if (standardisedText in wordDict) {
-            properties = wordDict[standardisedText];
-        }
-
-        if (!properties) {
-          standardisedText = standardisedText.replace(/(\')/g, "");
-          if (standardisedText in wordDict) {
-            properties = wordDict[standardisedText];
-          }
-        }
+        const properties = getBestFitWordProperties(string);
 
         if (properties) {
             this.isKnownWord = true;
@@ -38,8 +25,8 @@ class Word {
             this.tags = properties[5];
         } else {
             this.isKnownWord = false;
-            this.text = standardisedText;
-            this.syllableCount = Math.floor(standardisedText.length / 4) + 1;
+            this.text = string;
+            this.syllableCount = Math.floor(string.length / 4) + 1;
             this.firstStressedSyllableIndex = -1;
             this.secondStressedSyllableIndex = -1;
             this.rhymeGroupIds = [];
@@ -74,4 +61,58 @@ class Word {
 
         return syllableArray;
     }
+}
+
+function getBestFitWordProperties(string) {
+    let standardisedText = stripPunctuationFromString(string).toLowerCase();
+    if (standardisedText.length == 0) {
+        console.log("WEIRD: " + string + " " + standardisedText);
+    }
+
+    if (standardisedText in wordDict) {
+        return wordDict[standardisedText];
+    }
+
+    standardisedText = standardisedText.replace(/(\')/g, "");
+    if (standardisedText in wordDict) {
+        return wordDict[standardisedText];
+    }
+
+    const sLessWord = standardisedText.replace(/s$/g, "");
+    if (sLessWord in wordDict) {
+        return wordDict[sLessWord];
+    }
+
+    const esLessWord = standardisedText.replace(/es$/g, "");
+    if (esLessWord in wordDict) {
+        return wordDict[esLessWord];
+    }
+
+    const ingLessWord = standardisedText.replace(/ing$/g, "");
+    if (ingLessWord in wordDict) {
+        let ingWordProps = wordDict[ingLessWord];
+        return [
+            ingWordProps[0] + 1,
+            ingWordProps[1],
+            ingWordProps[2],
+            ingWordProps[3],
+            ingWordProps[4],
+            ingWordProps[5]
+        ];
+    }
+
+    const edLessWord = standardisedText.replace(/ed$/g, "");
+    if (edLessWord in wordDict) {
+        let edWordProps = wordDict[edLessWord];
+        return [
+            edWordProps[0] + 1,
+            edWordProps[1],
+            edWordProps[2],
+            edWordProps[3],
+            edWordProps[4],
+            edWordProps[5]
+        ];
+    }
+
+    return null;
 }

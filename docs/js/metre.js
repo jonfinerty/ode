@@ -43,6 +43,8 @@ function updateMetre() {
             }
 
             line = line.substring(wordIndex + word.text.length);
+
+            lineSyllableCount += word.syllableCount;
         });
 
         if (lineSyllableCount == 0) {
@@ -56,6 +58,7 @@ function updateMetre() {
     const metreElement = document.querySelector("#metre");
     metreElement.innerHTML = metre;
     const syllablesElement = document.querySelector("#syllables");
+    console.log("syllable count: " + syllablesOutput);
     syllablesElement.innerHTML = syllablesOutput;
 }
 

@@ -134,12 +134,10 @@ function showRhymeSuggestions(wordSpan) {
 }
 
 function getStringRhymes(inputString) {
-    console.log("showing rhymes for: " + inputString);
     const word = new Word(inputString);
     const rhymingWords = [];
 
     const rhymeGroupIds = word.rhymeGroupIds;
-    console.log(rhymeGroupIds);
     rhymeGroupIds.forEach(rhymeGroupId => {
         const rhymeGroupStrings = rhymeIndex[rhymeGroupId] || [];
         rhymeGroupStrings.forEach(rhymingString => {
@@ -149,8 +147,6 @@ function getStringRhymes(inputString) {
     });
 
     rhymingWords.sort(rhymeSort);
-
-    console.log(rhymingWords);
 
     const sortedFiltedRhymingStrings = rhymingWords.map(word => {
         return word.text;
@@ -211,7 +207,6 @@ function getCursorXY() {
     const inputValue = inputElement.value
     const selectionPoint = inputElement.selectionStart;
     const textContent = inputValue.substr(0, selectionPoint);
-    console.log(textContent);
     preElement.innerHTML = textContent;// textContent.replace(/\n/g, "<br>");;
 
     const span = document.createElement('span')
