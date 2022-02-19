@@ -243,7 +243,7 @@ function splitLineToWords(line) {
   const words = [];
   strings.forEach(string => {
     //blackmagic to remove >pairs< of apostrophes
-    words.push(getWord(string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')));
+    words.push(new Word(string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')));
   });
 
   return words;
@@ -317,69 +317,4 @@ function shareClicked() {
 function setMode(newMode) {
   //console.log("setting mode to "+mode);
   mode = newMode;
-}
-
-class Word {
-
-  constructor(string) {
-    // todo: think about storing non standardise word and if stripping is needed?
-    const standardisedText = stripPunctuationFromWord(string).toLowerCase();
-    let properties = null;
-    if (standardisedText in wordDict) {
-      properties = wordDict[standardisedText];
-    }
-    // try this out, if put in, need to check how highlighting works, and if need
-    // to store the orginal text somewhere
-    // else {
-    //   standardisedText = standardisedText.replace(/(\')/g, "");
-    //   if (standardisedText in wordDict) {
-    //     properties = wordDict[standardisedText];
-    //   }
-    // }
-
-    if (properties) {
-      this.isKnownWord = true;
-      this.text = standardisedText;
-      this.syllableCount = properties[1];
-      this.firstStressedSyllableIndex = properties[2];
-      this.secondStressedSyllableIndex = properties[3];
-      this.rhymeGroupIds = properties[4];
-      this.frequency = properties[5];
-      this.tags = properties[6];
-    } else {
-      this.isKnownWord = false;
-      this.text = standardisedText;
-      this.syllableCount = Math.floor(standardisedText.length / 4) + 1;
-      this.firstStressedSyllableIndex = -1;
-      this.secondStressedSyllableIndex = -1;
-      this.rhymeGroupIds = [];
-      this.frequency = 0;
-      this.tags = ['u'];
-    }
-  }
-
-  isProperNoun() {
-    // some things are both a proper noun and other this
-    // in this case we only the ones
-    return (this.tags.length == 2 && this.tags.includes('n') && this.tags.includes('prop')) ||
-           (this.tags.length == 1 && this.tags.includes('prop'));
-  }
-
-  rhymesWith(otherWord) {
-    return this.rhymeGroupIds.some(rhymeGroupId => otherWord.rhymeGroupIds.includes(rhymeGroupId));
-  }
-
-  getDisplaySyllables() {
-    const syllableArray = [];
-            
-    for (var i = 0; i < syllableCount; i++) {
-        if (i == this.firstStressedSyllableIndex || i == this.secondStressedSyllableIndex) {
-            syllableArray.push('●');
-        } else {
-            this.isKnownWord ? syllableArray.push('○') : syllableArray.push('?')
-        }
-    }
-
-    return syllableArray;
-  }
 }

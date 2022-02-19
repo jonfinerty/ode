@@ -69,6 +69,7 @@ function updateDisplayText() {
         // });
 
         let unescapedLinePart = line;
+        console.log((words.map(w => w.text).join(' ')));
         words.forEach((word, i) => {
             // don't check last word against itself
             let wordIsRhyme = false

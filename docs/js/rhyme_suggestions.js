@@ -10,9 +10,9 @@ function buildRhymeIndex() {
         word.rhymeGroupIds.forEach(rhymeGroupId => {
             const rhymeGroup = rhymeIndex[rhymeGroupId];
             if (rhymeGroup) {
-                rhymeIndex[rhymeGroup].push(word.text);
+                rhymeIndex[rhymeGroupId].push(word.text);
             } else {
-                rhymeIndex[rhymeGroup] = [word.text];
+                rhymeIndex[rhymeGroupId] = [word.text];
             }
         });
     }
@@ -126,16 +126,14 @@ function showRhymeSuggestions(wordSpan) {
 }
 
 function getStringRhymes(inputString) {
-    const word = getWord(inputString);
+    console.log("showing rhymes for: " + inputString);
+    const word = new Word(inputString);
     const rhymingWords = [];
 
-    if (!word) {
-        return rhymingWords;
-    }
-
     const rhymeGroupIds = word.rhymeGroupIds;
+    console.log(rhymeGroupIds);
     rhymeGroupIds.forEach(rhymeGroupId => {
-        rhymeGroupString = rhymeIndex[rhymeGroupId];
+        const rhymeGroupStrings = rhymeIndex[rhymeGroupId] || [];
         rhymeGroupStrings.forEach(rhymingString => {
             var rhymingWord = new Word(rhymingString);
             rhymingWords.push(rhymingWord);
@@ -144,13 +142,15 @@ function getStringRhymes(inputString) {
 
     rhymingWords.sort(rhymeSort);
 
-    rhymingWords = rhymingWords.map(word => {
+    console.log(rhymingWords);
+
+    const sortedFiltedRhymingStrings = rhymingWords.map(word => {
         return word.text;
     }).filter((word, index, list) => {
-        return list.indexOf(word) == index && word != inputWord; // remove dups and the given word
+        return list.indexOf(word) == index && word != inputString; // remove dups and the given word
     });
 
-    return rhymingWords;
+    return sortedFiltedRhymingStrings;
 }
 
 function rhymeSort(word1, word2) {
