@@ -251,14 +251,6 @@ function splitLineToWords(line) {
   return words;
 }
 
-function stripPunctuationFromString(string) {
-  // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
-  string = string.replace(/’/g, "'");
-  //todo: improve this regex
-  //text = text.replace(/(\"|<|>|{|}|\[|\]|\(|\)|\!)+/g, "")
-  return string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g, "");
-}
-
 function aboutClicked() {
   hideRhymeSuggestions();
   saveState();
