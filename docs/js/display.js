@@ -1,5 +1,56 @@
 "use strict";
 
+function renderDisplay() {
+    const inputElement = document.querySelector("#input");
+    const displayElement = document.querySelector("#display")
+    const text = inputElement.value;
+
+    let stanzaIndex = 0;
+    let wordCounter = 0
+    const lines = splitTextToLines(text);
+    lines.forEach((line, lineIndex) => {
+        const words = splitLineToWords(line);
+
+        if (words.length == 0) {
+            stanzaIndex++;
+            return;
+        }
+
+        let processedLine = "";
+        let remainingUnprocessedLine = line;
+        words.forEach((word, wordIndex) => {
+            const wordStringPos = remainingUnprocessedLine.indexOf(word.text);
+            let cssClasses = "word";
+            if (wordIndex == 0) {
+                cssClasses += " first-word";
+            }
+            if (wordIndex == words.length-1) {
+                cssClasses += " last-word";
+            }
+            // might be too much?
+            const dataAttributes = "data-line-number=\"" + lineIndex + "\"" +
+            " data-stanza-number=\"" + stanzaIndex +"\"" +
+            " data-word-number=\"" + wordCounter + "\"" +
+            " data-line-word-number\"" + wordIndex +"\"";
+            // line number, stanza number, word index?
+            const cssClasses =  "class=\"" + cssClasses + "\"";
+            const wordSpan = "<span " + dataAttributes + " " + cssClasses+ ">" + escapeHtml(word.text) + "</span>"
+            processedLine = processedLine + escapeHtml(remainingUnprocessedLine.substring(0, wordStringPos)) + wordSpan;
+            remainingUnprocessedLine = remainingUnprocessedLine.substring(wordStringPos + word.text.length);
+        });
+
+        lines[i] = processedLine + escapeHtml(remainingUnprocessedLine);
+    });
+    displayElement.innerHTML = lines.join("\n");
+}
+
+function applyRhymeHighlighting() {
+    const wordSpans = document.querySelectorAll(".word");
+    wordSpans.forEach(wordSpan => {
+        
+    })
+}
+
 function updateDisplayText() {
     const inputElement = document.querySelector("#input");
     const displayElement = document.querySelector("#display")
