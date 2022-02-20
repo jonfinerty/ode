@@ -2,6 +2,7 @@
 
 const placeholderPoem = poems[Math.floor(Math.random() * poems.length)];
 let mode = "input"; // |"about"|"placeholder";
+let timeIndent = 0;
 
 window.addEventListener('resize', () => {
   //explicit dont rerender display as we need the same spans to anchor suggestions to
@@ -52,7 +53,7 @@ function onInputUpdated(event) {
 
   hideRhymeSuggestions();
   removePlaceholderText(event?.data);
-  render();
+  time(render);
   saveState();
 
   // html2canvas(document.querySelector("#grid-container"))
@@ -78,10 +79,10 @@ function onTitleUpdated() {
 }
 
 function render() {
-  updateHeights();
+  time(updateHeights);
   time(renderDisplay);
   time(applyRhymeHighlighting);
-  updateWidth();
+  time(updateWidth);
   time(updateMetre);
 }
 
@@ -204,10 +205,12 @@ function waitForFontToLoad(then) {
 }
 
 function time(func, ...params) {
-  const startTime = performance.now();
+  timeIndent++;
+  const measureName = "-".repeat(timeIndent-1) + func.name + "-" + timeIndent;
+  console.time(measureName);
   func(...params);
-  const endTime = performance.now();
-  console.log(`Function ${func.name} took ${endTime - startTime}ms to run`);
+  console.timeEnd(measureName);
+  timeIndent--;
 }
 
 function updateHeights() {
@@ -243,6 +246,7 @@ function splitLineToWords(line) {
   const words = [];
   strings.forEach(string => {
     //blackmagic to remove >pairs< of apostrophes
+    string = string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')
     words.push(new Word(string));
   });
 

@@ -1,13 +1,5 @@
 "use strict";
 
-function stripPunctuationFromString(string) {
-    // todo: keep non-enclosing ' (i.e 'here' -> here, but 'bout -> 'bout, nothin' -> nothin')
-    string = string.replace(/’/g, "'");
-    // black magic which removes pairs of apostrophes <- todo: this should be on the line->word parsing not here
-    string = string.replace(/^['’](.+(?=['’]$))['’]$/, '$1')
-    return string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()<>\|"“”]/g, "");
-}
-
 class Word {
 
     constructor(string) {
@@ -50,8 +42,8 @@ class Word {
 
     rhymesWith(otherWord) {
         // controversial time!
-        const thisText = stripPunctuationFromString(this.text).toLowerCase();
-        const otherText = stripPunctuationFromString(otherWord.text).toLowerCase();
+        const thisText = standardiseText(this.text);
+        const otherText = standardiseText(otherWord.text);
         if (thisText == otherText) {
             return false;
         }
@@ -74,14 +66,26 @@ class Word {
     }
 }
 
+function standardiseText(text) {
+    return text.replace(/’/g, "'").toLowerCase(); 
+}
+
+// to: think about rhyme groups and the 'x'less variants
 function getBestFitWordProperties(string) {
-    let standardisedText = stripPunctuationFromString(string).toLowerCase();
-    if (standardisedText.length == 0) {
-        console.log("WEIRD: " + string + " " + standardisedText);
-    }
+    let standardisedText = standardiseText(string);
 
     if (standardisedText in wordDict) {
         return wordDict[standardisedText];
+    }
+
+    const aposSLessWord = standardisedText.replace(/(\'s)$/g, "");
+    if (aposSLessWord in wordDict) {
+        return wordDict[aposSLessWord];
+    }
+
+    const aposLessWord = standardisedText.replace(/(\')/g, "");
+    if (aposLessWord in wordDict) {
+        return wordDict[aposLessWord];
     }
 
     const llLessWord =  standardisedText.replace(/(\'ll)$/g, "");
@@ -97,11 +101,6 @@ function getBestFitWordProperties(string) {
     const veLessWord =  standardisedText.replace(/(\'ve)$/g, "");
     if (veLessWord in wordDict) {
         return wordDict[veLessWord];
-    }
-
-    standardisedText = standardisedText.replace(/(\')/g, "");
-    if (standardisedText in wordDict) {
-        return wordDict[standardisedText];
     }
 
     const sLessWord = standardisedText.replace(/s$/g, "");

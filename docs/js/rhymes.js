@@ -1,10 +1,6 @@
 "use strict";
 
 let rhymeCounter = 1;
-// thoughts 
-// 1 - last word highlighting
-// 2 - mid same line highlighting
-// 3 - EXPERIMENT, mid line + prev line highting
 
 function applyRhymeHighlighting() {
     rhymeCounter = 1;
@@ -13,12 +9,16 @@ function applyRhymeHighlighting() {
     const lastWordSpans = document.querySelectorAll(".last-word");
 
     // rhymes work like a sliding window
+
+    // this looks like a bit of slow code, but turns out first access of the dom
+    // (through iterating lastWordSpans) is significantly slower (10x) than
+    // subsequent, clearly is built somewhere
     const maximumDistance = 12;
     highlightListOfWordSpansWithRhymes(lastWordSpans, true, maximumDistance);
 
+
     // mid line rhyming
     for (let i = 0; i < lineCount; i++) {
-        // "[data-foo='1']"
         const lineAndPreviousLineWordSpans = document.querySelectorAll("[data-line-number='" + (i - 1) + "'],[data-line-number='" + i + "']");
         highlightListOfWordSpansWithRhymes(lineAndPreviousLineWordSpans, false);
     }
@@ -30,20 +30,22 @@ function highlightListOfWordSpansWithRhymes(spans, includeParticlesAndUnknown, m
         maximumDistance = spans.length;
     }
 
-    spans.forEach((span1, index) => {
-        const word1 = new Word(span1.innerText);
+    const spansAndWords = Array.from(spans, span => [span, new Word(span.innerText)]);
 
+    spansAndWords.forEach((spanAndWord, index) => {
+        const span1 = spanAndWord[0];
+        const word1 = spanAndWord[1];
         if (!includeParticlesAndUnknown && (word1.isParticle() || word1.isUnknownType())) {
             return;
         }
 
-        for (let i = index + 1; i < Math.min(index+maximumDistance,spans.length); i++) {
+        for (let i = index + 1; i < Math.min(index + maximumDistance, spans.length); i++) {
             const span2 = spans[i];
-            const word2 = new Word(span2.innerText);
+            const word2 = spansAndWords[i][1];
 
             if (!includeParticlesAndUnknown && (word2.isParticle() || word2.isUnknownType())) {
                 continue;
-            }    
+            }
 
             if (word1.rhymesWith(word2)) {
                 highlightWordSpansAsRhyming(span1, span2);
