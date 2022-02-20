@@ -262,7 +262,8 @@ function splitLineToWords(line) {
   return words;
 }
 
-function aboutClicked() {
+function aboutClicked(event) {
+  event?.stopPropagation();
   hideRhymeSuggestions();
   saveState();
 
@@ -290,7 +291,8 @@ function aboutClicked() {
   }, 500);
 }
 
-function backClicked() {
+function backClicked(event) {
+  event?.stopPropagation();
   hideRhymeSuggestions();
   setMode("input");
   const inputElement = document.querySelector("#input");
@@ -315,9 +317,9 @@ function backClicked() {
   }, 500);
 }
 
-function shareClicked() {
+function shareClicked(event) {
+  event?.stopPropagation();
   hideRhymeSuggestions();
-
 
   html2canvas(document.querySelector("#poem"))
     .then(canvas => {
