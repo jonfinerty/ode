@@ -68,6 +68,9 @@ function onInputClicked() {
 }
 
 function onTitleUpdated() {
+  const titleElement = document.querySelector('#title');
+  titleElement.classList.remove(".placeholder");
+  console.log("here");
   saveState();
 }
 
@@ -110,6 +113,11 @@ function removePlaceholderText(stringToReplaceWith) {
     const inputElement = document.querySelector('#input');
     inputElement.value = stringToReplaceWith;
 
+    const titleElement = document.querySelector('#title');
+    if (getTitle() == "Ode") {
+      titleElement.classList.add('placeholder');
+    }
+
     setMode("input");
   }
 }
@@ -147,20 +155,17 @@ function setupInputEvents() {
 
 function loadState() {
   const storage = window.localStorage;
-  const title = storage.getItem('title');
+  const title = storage.getItem('title') || "Ode";
 
-  if (title) {
-    setTitle(title);
-  } else {
-    setTitle("Ode");
-  }
+  setTitle(title);
 
   const content = storage.getItem('content');
   const inputElement = document.querySelector("#input");
-  if (content) {
-    inputElement.value = content
-  } else {
-    inputElement.value = content
+  inputElement.value = content
+
+  if (content && title == "Ode") {
+    const inputElement = document.querySelector("#title");
+    inputElement.classList.add("placeholder");
   }
 }
 
@@ -175,13 +180,16 @@ function setTitle(text) {
 }
 
 function saveState() {
-  if (mode == "about" || mode == "placeholder") {
+  if (mode == "about") {
     return;
   }
 
   const storage = window.localStorage;
-
   storage.setItem('title', getTitle());
+
+  if (mode == 'placeholder') {
+    return;
+  }
 
   const inputElement = document.querySelector("#input");
   const content = inputElement.value;

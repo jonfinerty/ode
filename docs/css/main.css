@@ -44,6 +44,9 @@ h1 {
   opacity: 0;
 }
 
+#title.placeholder {
+  opacity: 0.4;
+}
 #metre.placeholder {
   opacity: 0.6;
 }
