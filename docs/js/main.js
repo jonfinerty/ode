@@ -348,7 +348,7 @@ function shareImage(imageFile) {
   const shareData = {
     files: [imageFile],
     title: getTitle(),
-    text: 'Poem text?'
+    text: document.querySelector("#input").value
   }
 
   // todo: override, desktop share is garbage
@@ -365,19 +365,6 @@ function setMode(newMode) {
   mode = newMode;
 }
 
-let pendingUpdate = false;
-function viewportHandler() {
-  if (pendingUpdate) {
-    return;
-  }
-  pendingUpdate = true;
-
-  requestAnimationFrame(() => {
-    pendingUpdate = false;
-    updateMenuPosition();
-  });
-}
-
 function updateMenuPosition() {
   const menu = document.querySelector("#menu");
   const viewport = window.visualViewport;
@@ -389,5 +376,5 @@ function updateMenuPosition() {
   menu.style.right = right + "px";
 }
 
-window.visualViewport.addEventListener('scroll', viewportHandler);
-window.visualViewport.addEventListener('resize', viewportHandler);
+window.visualViewport.addEventListener('scroll', updateMenuPosition);
+window.visualViewport.addEventListener('resize', updateMenuPosition);
