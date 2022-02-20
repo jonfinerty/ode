@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title></title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:title" content="">
   <meta property="og:type" content="">
@@ -25,14 +25,16 @@
 </head>
 
 <body>
-  <h1 contenteditable="true" id="title" oninput="time(onTitleUpdated);"></h1>
-  <div id="content">
-    <div id="grid-container">
-      <pre id="syllables"></pre>
-      <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);"
-        oninput="time(onInputUpdated, event);" onclick="onInputClicked();"></textarea>
-      <pre id="display" class="overlaid" aria-hidden="true"></pre>
-      <pre id="metre" class="overlaid" aria-hidden="true"></pre>
+  <div id="poem">
+    <h1 contenteditable="true" id="title" oninput="time(onTitleUpdated);"></h1>
+    <div id="content">
+      <div id="grid-container">
+        <pre id="syllables"></pre>
+        <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);"
+          oninput="time(onInputUpdated, event);" onclick="onInputClicked();"></textarea>
+        <pre id="display" class="overlaid" aria-hidden="true"></pre>
+        <pre id="metre" class="overlaid" aria-hidden="true"></pre>
+      </div>
     </div>
   </div>
   <div id="flash-preventer"></div>
@@ -47,7 +49,7 @@
     integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script src="js/plugins.js"></script>
+  <script src="js/plugins.js"></script>
   <script src="js/words_200000.js"></script>
   <script src="js/word.js"></script>
   <script src="js/poems.js"></script>

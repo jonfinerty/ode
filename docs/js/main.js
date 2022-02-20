@@ -55,14 +55,6 @@ function onInputUpdated(event) {
   removePlaceholderText(event?.data);
   time(render);
   saveState();
-
-  // html2canvas(document.querySelector("#grid-container"))
-  // .then(canvas => {
-  //   console.log("HERE")
-  //   var img = canvas.toDataURL("image/png");
-  //   window.open(img);
-  //   console.log(img);
-  // }); 
 }
 
 function onInputClicked() {
@@ -147,7 +139,6 @@ function setupInputEvents() {
       const tabEndPos = element.selectionEnd;
       element.value = element.value.substring(0, tabStartPos) + "\t" + element.value.substring(tabEndPos);
       element.selectionEnd = tabStartPos + 1;
-      console.log("hmm");
       onInputUpdated();
     }
   }
@@ -206,7 +197,7 @@ function waitForFontToLoad(then) {
 
 function time(func, ...params) {
   timeIndent++;
-  const measureName = "-".repeat(timeIndent-1) + func.name;
+  const measureName = "-".repeat(timeIndent - 1) + func.name;
   console.time(measureName);
   func(...params);
   console.timeEnd(measureName);
@@ -308,6 +299,44 @@ function backClicked() {
 
 function shareClicked() {
   hideRhymeSuggestions();
+
+
+  html2canvas(document.querySelector("#poem"))
+    .then(canvas => {
+      const img = canvas.toDataURL("image/png");
+      const imageFile = dataURLToImageFile("poem_image.png", img);
+      shareImage(imageFile);
+    });
+}
+
+function dataURLToImageFile(filename, dataURL) {
+  const dataURLParts = dataURL.split(',');
+  const mimeType = dataURLParts[0].match(/:(.*?);/)[1];
+  const decodedData = atob(dataURLParts[1]);
+  let dataLength = decodedData.length;
+  const uInt8Array = new Uint8Array(dataLength);
+
+  while (dataLength--) {
+    uInt8Array[dataLength] = decodedData.charCodeAt(dataLength);
+  }
+
+  return new File([uInt8Array], filename, { type: mimeType });
+}
+
+function shareImage(imageFile) {
+
+  const shareData = {
+    files: [imageFile],
+    title: 'Poem',
+    text: 'Poem text?'
+  }
+
+  if (!navigator.canShare(shareData)) {
+    // can't native share image
+  }
+  else if (navigator.canShare(shareData)) {
+    navigator.share(shareData);
+  }
 }
 
 function setMode(newMode) {
