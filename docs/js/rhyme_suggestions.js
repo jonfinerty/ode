@@ -25,6 +25,15 @@ document.getElementById('rhyme-suggestions-container').addEventListener('mouseen
 
 // make more efficient
 function viewPortCoordinatesToWordSpan(x, y) {
+
+    // menu covers words
+    // const menuBoundaries = document.querySelector('#menu').getBoundingClientRect();
+    // const insideMenuX = x >= menuBoundaries.left && x <= menuBoundaries.right;
+    // const insideMenuY = y >= menuBoundaries.top && y <= menuBoundaries.bottom;
+    // if (insideMenuX && insideMenuY) {
+    //     return;
+    // }
+    
     // maybe don't look this up every move?
     const wordSpans = document.querySelectorAll(".word");
     for (let i=0; i<wordSpans.length; i++) {
@@ -52,15 +61,7 @@ document.getElementById('grid-container').addEventListener('mousemove', function
     const x = event.clientX;
     const y = event.clientY;
 
-    // if we're in the same ol' word, just shortcut;
-    if (currentHoveredWordSpan) {
-        const boundaries = currentHoveredWordSpan.getBoundingClientRect();
-        const insideX = x >= boundaries.left && x <= boundaries.right;
-        const insideY = y >= boundaries.top && y <= boundaries.bottom;
-        if (insideX && insideY) {
-            return;
-        }
-    }
+   
 
     const wordSpan = viewPortCoordinatesToWordSpan(x, y);
     if (wordSpan != currentHoveredWordSpan) {

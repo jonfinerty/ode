@@ -63,8 +63,7 @@ h1 {
   position: fixed;
   bottom: 0;
   right: 0;
-  /* (100vw - 100%) is scrollbar width */
-  padding-right: calc(32px - (100vw - 100%));
+  padding-right: 32px;
   padding-left: 8px;
   padding-bottom: 12px;
   background: #ffffff;
