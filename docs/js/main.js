@@ -31,6 +31,7 @@ waitForFontToLoad(() => {
     setupPlaceholderText();
   }
   render();
+  updateMenuPosition();
   revealContent();
   focusInput();
 });
