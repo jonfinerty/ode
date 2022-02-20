@@ -44,9 +44,6 @@ function viewPortCoordinatesToWordSpan(x, y) {
 }
 
 function documentCoordinatesToWordSpan(x ,y) {
-    console.log(document.body.scrollLeft);
-    console.log(document.body.scrollTop);
-
    return viewPortCoordinatesToWordSpan(x- window.scrollX, y- window.scrollY);
 }
 
@@ -98,11 +95,8 @@ function hideRhymeSuggestions() {
 
 function showRhymeSuggestionsAtCursor() {
     var xy = getCursorDocumentXY();
-    console.log("document x y")
-    console.log(xy);
     // nudge left and right for cursor at end or beginning of word
     var wordspan = documentCoordinatesToWordSpan(xy.x+3, xy.y+2) || documentCoordinatesToWordSpan(xy.x-3, xy.y+2);
-    console.log("hmm: " + wordspan);
     if (wordspan != null) {
         showRhymeSuggestions(wordspan);
     }     
