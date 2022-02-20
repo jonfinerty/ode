@@ -22,6 +22,7 @@ window.addEventListener('hashchange', () => {
 
 setupInputEvents();
 time(buildRhymeIndex);
+updateMenuPosition();
 waitForFontToLoad(() => {
   if (window.location.hash == "#about") {
     aboutClicked();
@@ -147,11 +148,11 @@ function setupInputEvents() {
 function loadState() {
   const storage = window.localStorage;
   const title = storage.getItem('title');
-  const titleElement = document.querySelector("#title");
+
   if (title) {
-    titleElement.innerText = title;
+    setTitle(title);
   } else {
-    titleElement.innerText = "Ode";
+    setTitle("Ode");
   }
 
   const content = storage.getItem('content');
@@ -163,6 +164,16 @@ function loadState() {
   }
 }
 
+function getTitle() {
+  const titleElement = document.querySelector("#title");
+  return titleElement.innerText;
+}
+
+function setTitle(text) {
+  const titleElement = document.querySelector("#title");
+  titleElement.innerText = text;
+}
+
 function saveState() {
   if (mode == "about" || mode == "placeholder") {
     return;
@@ -170,9 +181,7 @@ function saveState() {
 
   const storage = window.localStorage;
 
-  const titleElement = document.querySelector("#title");
-  const text = titleElement.innerText;
-  storage.setItem('title', text);
+  storage.setItem('title', getTitle());
 
   const inputElement = document.querySelector("#input");
   const content = inputElement.value;
@@ -304,7 +313,7 @@ function shareClicked() {
   html2canvas(document.querySelector("#poem"))
     .then(canvas => {
       const img = canvas.toDataURL("image/png");
-      const imageFile = dataURLToImageFile("poem_image.png", img);
+      const imageFile = dataURLToImageFile(getTitle() + ".png", img);
       shareImage(imageFile);
     });
 }
@@ -327,10 +336,11 @@ function shareImage(imageFile) {
 
   const shareData = {
     files: [imageFile],
-    title: 'Poem',
+    title: getTitle(),
     text: 'Poem text?'
   }
 
+  // todo: override, desktop share is garbage
   if (!navigator.canShare(shareData)) {
     // can't native share image
   }
@@ -343,3 +353,30 @@ function setMode(newMode) {
   //console.log("setting mode to "+mode);
   mode = newMode;
 }
+
+let pendingUpdate = false;
+function viewportHandler() {
+  if (pendingUpdate) {
+    return;
+  }
+  pendingUpdate = true;
+
+  requestAnimationFrame(() => {
+    pendingUpdate = false;
+    updateMenuPosition();
+  });
+}
+
+function updateMenuPosition() {
+  const menu = document.querySelector("#menu");
+  const viewport = window.visualViewport;
+  // bottom and right count from bottom right corner (i.e. bottom right corner of page is 0,0)
+  const bottom = (window.innerHeight - (viewport.offsetTop + viewport.height));
+  const right = (window.innerWidth - (viewport.offsetLeft + viewport.width));
+  // console.log(bottom, right);
+  menu.style.bottom = bottom + "px";
+  menu.style.right = right + "px";
+}
+
+window.visualViewport.addEventListener('scroll', viewportHandler);
+window.visualViewport.addEventListener('resize', viewportHandler);
