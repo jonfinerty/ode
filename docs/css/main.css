@@ -146,7 +146,7 @@ h1 {
 
 #metre {
   user-select: none;
-  margin-top: clamp(-26px, -2.5vw, -12px);
+  margin-top: clamp(-26px, -2.5vw, -14px);
   z-index: 0;
 }
 
