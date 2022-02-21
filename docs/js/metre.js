@@ -62,7 +62,7 @@ function updateMetre() {
                 stanzaCounter++;
             }
         } else {
-            syllablesOutput += "<span class=\"syllable-count\" data-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
+            syllablesOutput += "<span class=\"syllable-count\" data-poem-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
             lineCounter++;
         }
         metre = metre + lineMetre + '<br>';

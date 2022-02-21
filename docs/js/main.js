@@ -140,6 +140,10 @@ function setupInputEvents() {
           event.preventDefault();
           previousAutocompleteSuggestion();
           break;
+        case "Tab":
+        case "Enter":
+          event.preventDefault();
+          fillInAutoComplete();
         default:
           hideAutocomplete();
       }
@@ -184,11 +188,12 @@ function loadState() {
 
   const content = storage.getItem('content');
   const inputElement = document.querySelector("#input");
-  inputElement.value = content
-
-  if (content && title == "Ode") {
-    const inputElement = document.querySelector("#title");
-    inputElement.classList.add("placeholder");
+  if (content) {
+    inputElement.value = content;
+    if (title == "Ode") {
+      const titleElement = document.querySelector("#title");
+      titleElement.classList.add("placeholder");
+    }
   }
 }
 
@@ -303,9 +308,9 @@ function aboutClicked(event) {
   titleElement.classList.add("fade-out");
 
   setTimeout(() => {
+    titleElement.innerText = 'About Ode';
     removePlaceholderText();
     setMode("about");
-    titleElement.innerText = 'About Ode';
     inputElement.value = aboutPoem;
     render();
     gridElement.classList.remove("fade-out");

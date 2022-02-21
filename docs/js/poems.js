@@ -516,7 +516,17 @@ a count of syllables to gaze.
 A measurement of which is great
 for keeping lines a certain weight.
 
-I do not claim it is correct,
+Now rest your mouse upon a word
+To see the rhymes which are preferred. 
+To shortcut through this interface:
+You simply press down 'ctrl'+'space'.
+
+One more thing which is quite vital- 
+Give your handiwork a title!
+So edit "Ode" right at the top,
+with something snazzy, make it pop!
+
+I do not claim this tool's correct,
 It's likely wrong in some respect.
 I'd gladly hear you on the matter
 tweet at me and have a chatter.

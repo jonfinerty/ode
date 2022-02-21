@@ -16,12 +16,11 @@ function applyRhymeHighlighting() {
     const maximumDistance = 12;
     highlightListOfWordSpansWithRhymes(lastWordSpans, true, maximumDistance);
 
-
     // mid line rhyming
     // todo, this line count is magic
     for (let i = 0; i < lineCount; i++) {
-        // todo, within the same stanza
-        const lineAndPreviousLineWordSpans = document.querySelectorAll("[data-line-number='" + (i - 1) + "'],[data-line-number='" + i + "']");
+        // input line number to stop matching across paragraph breaks;
+        const lineAndPreviousLineWordSpans = document.querySelectorAll("[data-input-line-number='" + (i - 1) + "'],[data-input-line-number='" + i + "']");
         highlightListOfWordSpansWithRhymes(lineAndPreviousLineWordSpans, false);
     }
 }

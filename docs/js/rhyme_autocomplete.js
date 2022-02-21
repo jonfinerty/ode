@@ -5,9 +5,12 @@ let autocompleteSpan = null;
 function isCursorAtEndOfLine() {
     const inputElement = document.querySelector("#input");
     const selectionPoint = inputElement.selectionStart;
-    const textPastCursor = inputElement.value.substring(selectionPoint);
+
+    // cursor needs to either be starting a new line or have a gap after a word
+    //TODO.
 
     // if first instance of a non-whitespace char is before a newline
+    const textPastCursor = inputElement.value.substring(selectionPoint);
     const firstNonWhitespaceCharIndex = textPastCursor.search(/\S/);
     const firstNewLineIndex = textPastCursor.indexOf('\n');
     if (firstNewLineIndex == -1) {
@@ -43,6 +46,32 @@ function hideAutocomplete() {
     autocompleteSpan = null;
 }
 
+function fillInAutoComplete() {
+    if (autocompleteSpan == null) {
+        return
+    }
+
+    const rhymeRootString = autocompleteSpan.dataset.rhymeRoot;
+    const rhymeIndex = parseInt(autocompleteSpan.dataset.rhymeIndex);
+    const preferredSyllables = autocompleteSpan.dataset.preferredSyllables;
+    const rhymes = getStringRhymes(rhymeRootString, preferredSyllables);
+
+    const currentSuggestion = rhymes[rhymeIndex];
+
+    const inputElement = document.querySelector("#input");
+    console.log(inputElement.value);
+    const selectionPoint = inputElement.selectionStart;
+    const textUpToCursor = inputElement.value.substring(0, selectionPoint);
+    console.log(selectionPoint);
+    console.log(textUpToCursor);
+    const textBeyondCursor = inputElement.value.substring(selectionPoint);
+    console.log(textBeyondCursor);
+
+    inputElement.value = textUpToCursor + currentSuggestion + textBeyondCursor;
+    inputElement.selectionEnd = selectionPoint + currentSuggestion.length + 1;
+    onInputUpdated();
+}
+
 function nextAutocompleteSuggestion() {
     if (autocompleteSpan == null) {
         return
@@ -55,7 +84,7 @@ function nextAutocompleteSuggestion() {
     // i.e. there's a next one to go to
     if (rhymeIndex + 1 < rhymes.length) {
         rhymeIndex += 1;
-        autocompleteSpan.innerText = " " + rhymes[rhymeIndex];
+        autocompleteSpan.innerText = rhymes[rhymeIndex];
         autocompleteSpan.dataset.rhymeIndex = rhymeIndex;
     }
 
@@ -73,7 +102,7 @@ function previousAutocompleteSuggestion() {
     // i.e. there's a next one to go to
     if (rhymeIndex - 1 >= 0) {
         rhymeIndex -= 1;
-        autocompleteSpan.innerText = " " + rhymes[rhymeIndex];
+        autocompleteSpan.innerText = rhymes[rhymeIndex];
         autocompleteSpan.dataset.rhymeIndex = rhymeIndex;
     }
 
@@ -100,14 +129,10 @@ function showAutocomplete() {
     const precedingSpan = document.querySelector(".last-word[data-input-line-number=\"" + currentInputLineNumber + "\"]");
 
     autocompleteSpan = createAutocompleteSpan(previousLastWordSpan.innerText, preferredSyllables);
-    if (precedingSpan) {
-        displayElement.insertBefore(autocompleteSpan, precedingSpan.nextSibling);
-        return;
-    }
-
+    
     // text node has to start from a word boundary
     // so get end of input text (up to selection) from last word boundary, thats then before the new span and (text node - this prefix) is after
-    const textNode = previousLastWordSpan.nextSibling;
+    const textNode = precedingSpan ? precedingSpan.nextSibling : previousLastWordSpan.nextSibling;
     const selectionPoint = inputElement.selectionStart;
     const textUpToCursor = inputElement.value.substring(0, selectionPoint);
     const whiteSpaceGroups = textUpToCursor.split(/\w+/g);
@@ -125,7 +150,7 @@ function createAutocompleteSpan(rhymeRoot, preferredSyllables) {
     
     autocompleteSpan = document.createElement("span");
     autocompleteSpan.id = "autocomplete";
-    autocompleteSpan.innerText = " " + text;
+    autocompleteSpan.innerText = text;
     autocompleteSpan.dataset.rhymeRoot = rhymeRoot;
     autocompleteSpan.dataset.rhymeIndex = 0;
     autocompleteSpan.dataset.preferredSyllables = preferredSyllables;
