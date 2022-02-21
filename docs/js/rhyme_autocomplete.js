@@ -38,6 +38,11 @@ function isAutocompleteShowing() {
     return autocompleteSpan != null;
 }
 
+function hideAutocomplete() {
+    autocompleteSpan?.remove();
+    autocompleteSpan = null;
+}
+
 function nextAutocompleteSuggestion() {
     if (autocompleteSpan == null) {
         return
@@ -75,7 +80,6 @@ function previousAutocompleteSuggestion() {
 }
 
 function showAutocomplete() {
-    // delete old one
     autocompleteSpan?.remove();
     autocompleteSpan = null;
 

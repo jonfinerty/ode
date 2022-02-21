@@ -127,6 +127,24 @@ function setupInputEvents() {
   const inputElement = document.querySelector("#input");
   inputElement.onkeydown = function (event) {
 
+    //todo tab fills in autocomplete
+    if (isAutocompleteShowing()) {
+      switch (event.key) {
+        case "Down": // IE/Edge specific value
+        case "ArrowDown":
+          event.preventDefault();
+          nextAutocompleteSuggestion();
+          break;
+        case "Up": // IE/Edge specific value
+        case "ArrowUp":
+          event.preventDefault();
+          previousAutocompleteSuggestion();
+          break;
+        default:
+          hideAutocomplete();
+      }
+    }
+
     if (event.key === "Escape" || event.key === "Esc") {
       if (rhymeSuggestionsShowing()) {
         hideRhymeSuggestions();
@@ -143,21 +161,6 @@ function setupInputEvents() {
         showAutocomplete();
       } else {
         showRhymeSuggestionsAtCursor();
-      }
-    }
-
-    if (isAutocompleteShowing()) {
-      switch (event.key) {
-        case "Down": // IE/Edge specific value
-        case "ArrowDown":
-          event.preventDefault();
-          nextAutocompleteSuggestion();
-          break;
-        case "Up": // IE/Edge specific value
-        case "ArrowUp":
-          event.preventDefault();
-          previousAutocompleteSuggestion();
-          break;
       }
     }
 

@@ -110,6 +110,8 @@ function rerenderRhymeSuggestions() {
 }
 
 function showRhymeSuggestions(wordSpan) {
+    hideAutocomplete();
+    
     rhymeSuggestionWordSpanAnchor = wordSpan;
     const wordSpanPos = wordSpan.getBoundingClientRect();
     let rhymeCssClass = null;
