@@ -5,6 +5,9 @@ HttpClient client = new HttpClient();
 //sanitiseDatamuseRhymes();
 
 
+mergeRhymeGroups();
+return;
+
 var datamuseWords = LoadWords("datamuse_words_with_type.csv");
 csvsToJs(100000, datamuseWords);
 csvsToJs(150000, datamuseWords);
@@ -13,36 +16,106 @@ csvsToJs(250000, datamuseWords);
 csvsToJs(300000, datamuseWords);
 return;
 
-
-static void sanitiseDatamuseRhymes() {
-    var datamuseRhymes = new List<List<string>>();
-    foreach(string line in File.ReadLines("datamuse_rhymes.csv")) {
-        var rhymingGroup = line.Split(',').ToList();
-        datamuseRhymes.Add(rhymingGroup);
+static void mergeRhymeGroups(){
+    var datamuseRhymes = new HashSet<HashSet<string>>();
+    foreach(string line in File.ReadLines("rhymes_v2.csv")) {
+        var rhymingGroup = line.Split(',').Distinct().ToHashSet();
+        if (rhymingGroup.Count > 1) {
+            datamuseRhymes.Add(rhymingGroup);
+        }
     }
 
-    for (var i =0; i<datamuseRhymes.Count; i++) {
-        for (var j=i+1; j<datamuseRhymes.Count; j++) {
-            foreach(var word in datamuseRhymes[i]) {
-                if (datamuseRhymes[j].Contains(word)) {
-                    Console.WriteLine("Dupe word: " +word);
-                }
-                break;
+    // remove any pure subsets
+    var datamuseList = datamuseRhymes.ToList();
+    for (int i=0; i<datamuseList.Count; i++) {
+        for (int j=i+1; j<datamuseList.Count; j++) {
+            var iSubsetOfJ = datamuseList[i].IsSubsetOf(datamuseList[j]);
+            var jSubsetOfI = datamuseList[j].IsSubsetOf(datamuseList[i]);
+
+            if (iSubsetOfJ) {
+                Console.WriteLine("Subset found: " + string.Join(",",datamuseList[i]));
+            }
+            if (jSubsetOfI) {
+                Console.WriteLine("Subset found: " + string.Join(",",datamuseList[j]));
             }
         }
     }
-}
 
-static void sanitiseDatamuseData() {
-    var words = LoadWords("datamuse_words.csv");
-    var orderedWords = words.Values.OrderBy(w => w.text).Where(w => !w.text.Contains('-')).ToList();
-    using (StreamWriter output = new($"datamuse_words2.csv", append: false))
-    {
-        foreach (var word in orderedWords) {
-            output.WriteLine(word.ToCSVFormat());
+    var wiktionaryRhymes = new HashSet<HashSet<string>>();
+    foreach(string line in File.ReadLines("wiktionary_rhymes.csv")) {
+        var rhymingGroup = line.Split(',').Distinct().ToHashSet();
+        if (rhymingGroup.Count > 1) {
+            wiktionaryRhymes.Add(rhymingGroup);
         }
     }
+
+    var counter = 0;
+    // merge two rhyme groups if they share two words
+    foreach(var wikRhymeGroup in wiktionaryRhymes) {
+
+        var someMerge = false;
+
+        foreach(var datamuseRhymeGroup in datamuseRhymes) {
+            var matches = new HashSet<string>();
+            foreach(var wikWord in wikRhymeGroup) {
+                if (datamuseRhymeGroup.Contains(wikWord)) {
+                    matches.Add(wikWord);
+                    someMerge = true;
+                }
+            }
+
+            // already a subset no-op
+            if (matches.Count == wikRhymeGroup.Count) {
+                continue;
+            }
+
+            // auto add
+            if (matches.Count == datamuseRhymeGroup.Count) {
+                datamuseRhymeGroup.UnionWith(wikRhymeGroup);
+                continue;
+            }
+
+            if ((double) matches.Where(m => m.Length > 3).Count() / (double) wikRhymeGroup.Where(m => m.Length > 3).Count() >= 0.5 ) {
+                datamuseRhymeGroup.UnionWith(wikRhymeGroup);
+                continue;
+            }
+
+            // dubious cases
+            if (matches.Where(m => m.Length > 4).Count() >= 2) {
+                // Console.WriteLine(matches.Count + "" + wikRhymeGroup.Count);
+                // Console.WriteLine("Merging:");
+                // Console.WriteLine("Wik: " + string.Join(",", wikRhymeGroup));
+                // Console.WriteLine("");
+                // Console.WriteLine("Dat: " + string.Join(",", datamuseRhymeGroup));
+                // Console.WriteLine("");
+                // Console.WriteLine("Because matches: " + string.Join(",", matches));
+                // Console.WriteLine("");
+                // var wordsToBeAdded = wikRhymeGroup.Where(w => !datamuseRhymeGroup.Contains(w));
+                // Console.WriteLine(wordsToBeAdded.Count()+ " Words to be added: " + string.Join(",",wordsToBeAdded));
+                // //Console.ReadLine();
+                // counter++;
+                // // foreach(var wikWord in wikRhymeGroup) {
+                // //     datamuseRhymeGroup.Add(wikWord);
+                // // }
+            }
+        }
+
+        if (!someMerge) {
+            datamuseRhymes.Add(wikRhymeGroup);
+        }
+    }
+
+    Console.WriteLine(counter);
+    Console.WriteLine(datamuseRhymes.Where(g => g.Count > 50).Count());
+
+    var sortedRhymes = datamuseRhymes.Select(g => string.Join(",",g.OrderBy(w => w))).OrderBy(g => g);
+
+    using StreamWriter output = new("rhymes_V2.csv", append: false);
+    foreach (var group in sortedRhymes) {
+        output.WriteLine(group);
+    }
 }
+
 
 static Dictionary<string, Word> LoadWords(string filename) {
     var words = new Dictionary<string, Word>();
