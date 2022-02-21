@@ -64,6 +64,10 @@ class Word {
 
         return syllableArray;
     }
+
+    matches(string) {
+        return standardiseText(this.text) == standardiseText(string);
+    }
 }
 
 function standardiseText(text) {

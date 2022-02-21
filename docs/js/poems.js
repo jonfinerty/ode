@@ -1,158 +1,158 @@
 "use strict";
 
 const poems = [
- `Two roads diverged in a yellow wood,
- And sorry I could not travel both
- And be one traveler, long I stood
- And looked down one as far as I could
- To where it bent in the undergrowth;
- 
- Then took the other, as just as fair,
- And having perhaps the better claim,
- Because it was grassy and wanted wear;
- Though as for that the passing there
- Had worn them really about the same,
- 
- And both that morning equally lay
- In leaves no step had trodden black.
- Oh, I kept the first for another day!
- Yet knowing how way leads on to way,
- I doubted if I should ever come back.
- 
- I shall be telling this with a sigh
- Somewhere ages and ages hence:
- Two roads diverged in a wood, and I—
- I took the one less traveled by,
- And that has made all the difference.
- 
-                                                 Robert Frost`,
+`Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;
 
- `Once upon a midnight dreary, while I pondered, weak and weary,
- Over many a quaint and curious volume of forgotten lore—
-     While I nodded, nearly napping, suddenly there came a tapping,
- As of some one gently rapping, rapping at my chamber door.
- “'Tis some visitor,” I muttered, “tapping at my chamber door—
-             Only this and nothing more.”
- 
-     Ah, distinctly I remember it was in the bleak December;
- And each separate dying ember wrought its ghost upon the floor.
-     Eagerly I wished the morrow;—vainly I had sought to borrow
-     From my books surcease of sorrow—sorrow for the lost Lenore—
- For the rare and radiant maiden whom the angels name Lenore—
-             Nameless here for evermore.
- 
-     And the silken, sad, uncertain rustling of each purple curtain
- Thrilled me—filled me with fantastic terrors never felt before;
-     So that now, to still the beating of my heart, I stood repeating
-     “’Tis some visitor entreating entrance at my chamber door—
- Some late visitor entreating entrance at my chamber door;—
-             This it is and nothing more.”
- 
-     Presently my soul grew stronger; hesitating then no longer,
- “Sir,” said I, “or Madam, truly your forgiveness I implore;
-     But the fact is I was napping, and so gently you came rapping,
-     And so faintly you came tapping, tapping at my chamber door,
- That I scarce was sure I heard you”—here I opened wide the door;—
-             Darkness there and nothing more.
- 
-     Deep into that darkness peering, long I stood there wondering, fearing,
- Doubting, dreaming dreams no mortal ever dared to dream before;
-     But the silence was unbroken, and the stillness gave no token,
-     And the only word there spoken was the whispered word, “Lenore?”
- This I whispered, and an echo murmured back the word, “Lenore!”—
-             Merely this and nothing more.
- 
-     Back into the chamber turning, all my soul within me burning,
- Soon again I heard a tapping somewhat louder than before.
-     “Surely,” said I, “surely that is something at my window lattice;
-       Let me see, then, what thereat is, and this mystery explore—
- Let my heart be still a moment and this mystery explore;—
-             ’Tis the wind and nothing more!”
- 
-     Open here I flung the shutter, when, with many a flirt and flutter,
- In there stepped a stately Raven of the saintly days of yore;
-     Not the least obeisance made he; not a minute stopped or stayed he;
-     But, with mien of lord or lady, perched above my chamber door—
- Perched upon a bust of Pallas just above my chamber door—
-             Perched, and sat, and nothing more.
- 
- Then this ebony bird beguiling my sad fancy into smiling,
- By the grave and stern decorum of the countenance it wore,
- “Though thy crest be shorn and shaven, thou,” I said, “art sure no craven,
- Ghastly grim and ancient Raven wandering from the Nightly shore—
- Tell me what thy lordly name is on the Night’s Plutonian shore!”
-             Quoth the Raven “Nevermore.”
- 
-     Much I marvelled this ungainly fowl to hear discourse so plainly,
- Though its answer little meaning—little relevancy bore;
-     For we cannot help agreeing that no living human being
-     Ever yet was blessed with seeing bird above his chamber door—
- Bird or beast upon the sculptured bust above his chamber door,
-             With such name as “Nevermore.”
- 
-     But the Raven, sitting lonely on the placid bust, spoke only
- That one word, as if his soul in that one word he did outpour.
-     Nothing farther then he uttered—not a feather then he fluttered—
-     Till I scarcely more than muttered “Other friends have flown before—
- On the morrow he will leave me, as my Hopes have flown before.”
-             Then the bird said “Nevermore.”
- 
-     Startled at the stillness broken by reply so aptly spoken,
- “Doubtless,” said I, “what it utters is its only stock and store
-     Caught from some unhappy master whom unmerciful Disaster
-     Followed fast and followed faster till his songs one burden bore—
- Till the dirges of his Hope that melancholy burden bore
-             Of ‘Never—nevermore’.”
- 
-     But the Raven still beguiling all my fancy into smiling,
- Straight I wheeled a cushioned seat in front of bird, and bust and door;
-     Then, upon the velvet sinking, I betook myself to linking
-     Fancy unto fancy, thinking what this ominous bird of yore—
- What this grim, ungainly, ghastly, gaunt, and ominous bird of yore
-             Meant in croaking “Nevermore.”
- 
-     This I sat engaged in guessing, but no syllable expressing
- To the fowl whose fiery eyes now burned into my bosom’s core;
-     This and more I sat divining, with my head at ease reclining
-     On the cushion’s velvet lining that the lamp-light gloated o’er,
- But whose velvet-violet lining with the lamp-light gloating o’er,
-             She shall press, ah, nevermore!
- 
-     Then, methought, the air grew denser, perfumed from an unseen censer
- Swung by Seraphim whose foot-falls tinkled on the tufted floor.
-     “Wretch,” I cried, “thy God hath lent thee—by these angels he hath sent thee
-     Respite—respite and nepenthe from thy memories of Lenore;
- Quaff, oh quaff this kind nepenthe and forget this lost Lenore!”
-             Quoth the Raven “Nevermore.”
- 
-     “Prophet!” said I, “thing of evil!—prophet still, if bird or devil!—
- Whether Tempter sent, or whether tempest tossed thee here ashore,
-     Desolate yet all undaunted, on this desert land enchanted—
-     On this home by Horror haunted—tell me truly, I implore—
- Is there—is there balm in Gilead?—tell me—tell me, I implore!”
-             Quoth the Raven “Nevermore.”
- 
-     “Prophet!” said I, “thing of evil!—prophet still, if bird or devil!
- By that Heaven that bends above us—by that God we both adore—
-     Tell this soul with sorrow laden if, within the distant Aidenn,
-     It shall clasp a sainted maiden whom the angels name Lenore—
- Clasp a rare and radiant maiden whom the angels name Lenore.”
-             Quoth the Raven “Nevermore.”
- 
-     “Be that word our sign of parting, bird or fiend!” I shrieked, upstarting—
- “Get thee back into the tempest and the Night’s Plutonian shore!
-     Leave no black plume as a token of that lie thy soul hath spoken!
-     Leave my loneliness unbroken!—quit the bust above my door!
- Take thy beak from out my heart, and take thy form from off my door!”
-             Quoth the Raven “Nevermore.”
- 
-     And the Raven, never flitting, still is sitting, still is sitting
- On the pallid bust of Pallas just above my chamber door;
-     And his eyes have all the seeming of a demon’s that is dreaming,
-     And the lamp-light o’er him streaming throws his shadow on the floor;
- And my soul from out that shadow that lies floating on the floor
-             Shall be lifted—nevermore!
-             
+Then took the other, as just as fair,
+And having perhaps the better claim,
+Because it was grassy and wanted wear;
+Though as for that the passing there
+Had worn them really about the same,
+
+And both that morning equally lay
+In leaves no step had trodden black.
+Oh, I kept the first for another day!
+Yet knowing how way leads on to way,
+I doubted if I should ever come back.
+
+I shall be telling this with a sigh
+Somewhere ages and ages hence:
+Two roads diverged in a wood, and I—
+I took the one less traveled by,
+And that has made all the difference.
+
+                                                Robert Frost`,
+
+`Once upon a midnight dreary, while I pondered, weak and weary,
+Over many a quaint and curious volume of forgotten lore—
+   While I nodded, nearly napping, suddenly there came a tapping,
+As of some one gently rapping, rapping at my chamber door.
+“'Tis some visitor,” I muttered, “tapping at my chamber door—
+           Only this and nothing more.”
+
+   Ah, distinctly I remember it was in the bleak December;
+And each separate dying ember wrought its ghost upon the floor.
+   Eagerly I wished the morrow;—vainly I had sought to borrow
+   From my books surcease of sorrow—sorrow for the lost Lenore—
+For the rare and radiant maiden whom the angels name Lenore—
+           Nameless here for evermore.
+
+   And the silken, sad, uncertain rustling of each purple curtain
+Thrilled me—filled me with fantastic terrors never felt before;
+   So that now, to still the beating of my heart, I stood repeating
+   “’Tis some visitor entreating entrance at my chamber door—
+Some late visitor entreating entrance at my chamber door;—
+            This it is and nothing more.”
+
+    Presently my soul grew stronger; hesitating then no longer,
+“Sir,” said I, “or Madam, truly your forgiveness I implore;
+    But the fact is I was napping, and so gently you came rapping,
+    And so faintly you came tapping, tapping at my chamber door,
+That I scarce was sure I heard you”—here I opened wide the door;—
+            Darkness there and nothing more.
+
+    Deep into that darkness peering, long I stood there wondering, fearing,
+Doubting, dreaming dreams no mortal ever dared to dream before;
+    But the silence was unbroken, and the stillness gave no token,
+    And the only word there spoken was the whispered word, “Lenore?”
+This I whispered, and an echo murmured back the word, “Lenore!”—
+            Merely this and nothing more.
+
+    Back into the chamber turning, all my soul within me burning,
+Soon again I heard a tapping somewhat louder than before.
+    “Surely,” said I, “surely that is something at my window lattice;
+      Let me see, then, what thereat is, and this mystery explore—
+Let my heart be still a moment and this mystery explore;—
+            ’Tis the wind and nothing more!”
+
+    Open here I flung the shutter, when, with many a flirt and flutter,
+In there stepped a stately Raven of the saintly days of yore;
+    Not the least obeisance made he; not a minute stopped or stayed he;
+    But, with mien of lord or lady, perched above my chamber door—
+Perched upon a bust of Pallas just above my chamber door—
+            Perched, and sat, and nothing more.
+
+Then this ebony bird beguiling my sad fancy into smiling,
+By the grave and stern decorum of the countenance it wore,
+“Though thy crest be shorn and shaven, thou,” I said, “art sure no craven,
+Ghastly grim and ancient Raven wandering from the Nightly shore—
+Tell me what thy lordly name is on the Night’s Plutonian shore!”
+            Quoth the Raven “Nevermore.”
+
+    Much I marvelled this ungainly fowl to hear discourse so plainly,
+Though its answer little meaning—little relevancy bore;
+    For we cannot help agreeing that no living human being
+    Ever yet was blessed with seeing bird above his chamber door—
+Bird or beast upon the sculptured bust above his chamber door,
+            With such name as “Nevermore.”
+
+    But the Raven, sitting lonely on the placid bust, spoke only
+That one word, as if his soul in that one word he did outpour.
+    Nothing farther then he uttered—not a feather then he fluttered—
+    Till I scarcely more than muttered “Other friends have flown before—
+On the morrow he will leave me, as my Hopes have flown before.”
+            Then the bird said “Nevermore.”
+
+    Startled at the stillness broken by reply so aptly spoken,
+“Doubtless,” said I, “what it utters is its only stock and store
+    Caught from some unhappy master whom unmerciful Disaster
+    Followed fast and followed faster till his songs one burden bore—
+Till the dirges of his Hope that melancholy burden bore
+            Of ‘Never—nevermore’.”
+
+    But the Raven still beguiling all my fancy into smiling,
+Straight I wheeled a cushioned seat in front of bird, and bust and door;
+    Then, upon the velvet sinking, I betook myself to linking
+    Fancy unto fancy, thinking what this ominous bird of yore—
+What this grim, ungainly, ghastly, gaunt, and ominous bird of yore
+            Meant in croaking “Nevermore.”
+
+    This I sat engaged in guessing, but no syllable expressing
+To the fowl whose fiery eyes now burned into my bosom’s core;
+    This and more I sat divining, with my head at ease reclining
+    On the cushion’s velvet lining that the lamp-light gloated o’er,
+But whose velvet-violet lining with the lamp-light gloating o’er,
+            She shall press, ah, nevermore!
+
+    Then, methought, the air grew denser, perfumed from an unseen censer
+Swung by Seraphim whose foot-falls tinkled on the tufted floor.
+    “Wretch,” I cried, “thy God hath lent thee—by these angels he hath sent thee
+    Respite—respite and nepenthe from thy memories of Lenore;
+Quaff, oh quaff this kind nepenthe and forget this lost Lenore!”
+            Quoth the Raven “Nevermore.”
+
+    “Prophet!” said I, “thing of evil!—prophet still, if bird or devil!—
+Whether Tempter sent, or whether tempest tossed thee here ashore,
+    Desolate yet all undaunted, on this desert land enchanted—
+    On this home by Horror haunted—tell me truly, I implore—
+Is there—is there balm in Gilead?—tell me—tell me, I implore!”
+            Quoth the Raven “Nevermore.”
+
+    “Prophet!” said I, “thing of evil!—prophet still, if bird or devil!
+By that Heaven that bends above us—by that God we both adore—
+    Tell this soul with sorrow laden if, within the distant Aidenn,
+    It shall clasp a sainted maiden whom the angels name Lenore—
+Clasp a rare and radiant maiden whom the angels name Lenore.”
+            Quoth the Raven “Nevermore.”
+
+    “Be that word our sign of parting, bird or fiend!” I shrieked, upstarting—
+“Get thee back into the tempest and the Night’s Plutonian shore!
+    Leave no black plume as a token of that lie thy soul hath spoken!
+    Leave my loneliness unbroken!—quit the bust above my door!
+Take thy beak from out my heart, and take thy form from off my door!”
+            Quoth the Raven “Nevermore.”
+
+    And the Raven, never flitting, still is sitting, still is sitting
+On the pallid bust of Pallas just above my chamber door;
+    And his eyes have all the seeming of a demon’s that is dreaming,
+    And the lamp-light o’er him streaming throws his shadow on the floor;
+And my soul from out that shadow that lies floating on the floor
+            Shall be lifted—nevermore!
+            
 - Edgar Allan Poe`,
 
 `You may write me down in history
@@ -206,8 +206,8 @@ I am the dream and the hope of the slave.
 I rise
 I rise
 I rise.
-                                              
-                                              Maya Angelou`,
+                                             
+                                             Maya Angelou`,
 
 `Do not go gentle into that good night,
 Old age should burn and rave at close of day;
@@ -234,7 +234,7 @@ Curse, bless, me now with your fierce tears, I pray.
 Do not go gentle into that good night.
 Rage, rage against the dying of the light.
 
-                                                              Dylan Thomas`,
+                                                             Dylan Thomas`,
 
 `We wear the mask that grins and lies,
 It hides our cheeks and shades our eyes,—
@@ -245,16 +245,16 @@ And mouth with myriad subtleties.
 Why should the world be over-wise,
 In counting all our tears and sighs?
 Nay, let them only see us, while
-       We wear the mask.
+      We wear the mask.
 
 We smile, but, O great Christ, our cries
 To thee from tortured souls arise.
 We sing, but oh the clay is vile
 Beneath our feet, and long the mile;
 But let the world dream otherwise,
-       We wear the mask!
+      We wear the mask!
 
-                        Paul Laurence Dunbar`,
+                       Paul Laurence Dunbar`,
 
 `If you can keep your head when all about you
 Are losing theirs and blaming it on you;
@@ -292,7 +292,7 @@ With sixty seconds’ worth of distance run—
 Yours is the Earth and everything that’s in it,
 And—which is more—you’ll be a Man, my son!
 
-                                                         Rudyard Kipling`,
+                                                        Rudyard Kipling`,
 
 `Stop all the clocks, cut off the telephone, 
 Prevent the dog from barking with a juicy bone, 
@@ -314,7 +314,7 @@ Pack up the moon and dismantle the sun;
 Pour away the ocean and sweep up the wood; 
 For nothing now can ever come to any good.
 
-                                                                            W. H. Auden`,
+                                                                           W. H. Auden`,
 
 `They fuck you up, your mum and dad.   
 They may not mean to, but they do.   
@@ -331,7 +331,7 @@ It deepens like a coastal shelf.
 Get out as early as you can,
 And don’t have any kids yourself.
 
-                    - Philip Larkin`,
+                   - Philip Larkin`,
 
 `Double, double toil and trouble;
 Fire burn and caldron bubble.
@@ -349,7 +349,7 @@ Fire burn and caldron bubble.
 Cool it with a baboon's blood,
 Then the charm is firm and good.
 
-                    - William Shakespeare`,
+                   - William Shakespeare`,
 
 `Whose woods these are I think I know.   
 His house is in the village though;   
@@ -371,7 +371,7 @@ But I have promises to keep,
 And miles to go before I sleep,   
 And miles to go before I sleep.
 
-                    - Robert Frost`,
+                   - Robert Frost`,
 
 `Hold fast to dreams
 For if dreams die
@@ -382,7 +382,7 @@ For when dreams go
 Life is a barren field
 Frozen with snow.
 
-                    - Langston Hughes`,
+                   - Langston Hughes`,
 
 `Do not stand at my grave and weep
 I am not there. I do not sleep.
@@ -414,7 +414,7 @@ How charged with punishments the scroll.
 I am the master of my fate:
 I am the captain of my soul.
 
-                                      - William Ernest Henley`,
+                                     - William Ernest Henley`,
 
 `I was angry with my friend:
 I told my wrath, my wrath did end.
@@ -433,7 +433,7 @@ When the night had veiled the pole;
 In the morning glad I see
 My foe outstretched beneath the tree.
 
-                                     - William Blake`,
+                                    - William Blake`,
 
 `I wandered lonely as a cloud
 That floats on high o’er vales and hills,
@@ -460,7 +460,7 @@ Which is the bliss of solitude;
 And then my heart with pleasure fills,
 And dances with the daffodils.
 
-                            - William Wordsworth`,
+                           - William Wordsworth`,
 
 `Life gets faster every day,
 No time to think, no time to play.
@@ -472,7 +472,7 @@ Where is free time? Where is peace?
 I'm running, doing, till I drop.
 Give me buttons: Pause, Mute, STOP!
 
-                           - Joanna Fuchs
+                          - Joanna Fuchs
 `,
 
 `I come with no wrapping or pretty pink bows. 
@@ -486,7 +486,7 @@ And the times that I cry are when no one's around.
 To error is human or so that's what they say. 
 Well, tell me who's perfect anyway.
 
-                        - S Raine
+                       - S Raine
 `,
 
 `I do not like them in a box
@@ -498,7 +498,7 @@ I do not like them anywhere
 I do not like green eggs and ham
 I do not like them Sam I am
 
-                       - Dr Seuss`
+                      - Dr Seuss`
 ];
 
 let aboutPoem = `It shows you metre, helps you rhyme.

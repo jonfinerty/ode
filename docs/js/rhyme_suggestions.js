@@ -61,14 +61,10 @@ document.getElementById('grid-container').addEventListener('mousemove', function
     const x = event.clientX;
     const y = event.clientY;
 
-   
-
     const wordSpan = viewPortCoordinatesToWordSpan(x, y);
+    //wordSpan can be null, when no word is under x,y
     if (wordSpan != currentHoveredWordSpan) {
         currentHoveredWordSpan = wordSpan;
-        onHoveredWordSpanChanged(currentHoveredWordSpan);
-    } else if (currentHoveredWordSpan) {
-        currentHoveredWordSpan = null;
         onHoveredWordSpanChanged(currentHoveredWordSpan);
     }
 });
@@ -121,7 +117,7 @@ function showRhymeSuggestions(wordSpan) {
     }
     const rhymes = getStringRhymes(wordSpan.innerText);
     if (rhymes.length == 0) {
-        return;
+        rhymes.push("No rhymes found");
     }
     
     const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
@@ -148,7 +144,9 @@ function getStringRhymes(inputString) {
         const rhymeGroupStrings = rhymeIndex[rhymeGroupId] || [];
         rhymeGroupStrings.forEach(rhymingString => {
             var rhymingWord = new Word(rhymingString);
-            rhymingWords.push(rhymingWord);
+            if (!word.matches(rhymingString)){
+                rhymingWords.push(rhymingWord);
+            }
         });
     });
 
@@ -156,8 +154,6 @@ function getStringRhymes(inputString) {
 
     const sortedFiltedRhymingStrings = rhymingWords.map(word => {
         return word.text;
-    }).filter((word, index, list) => {
-        return list.indexOf(word) == index && word != inputString; // remove dups and the given word
     });
 
     return sortedFiltedRhymingStrings;
