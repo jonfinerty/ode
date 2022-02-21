@@ -18,7 +18,7 @@ return;
 
 static void mergeRhymeGroups(){
     var datamuseRhymes = new HashSet<HashSet<string>>();
-    foreach(string line in File.ReadLines("rhymes_v2.csv")) {
+    foreach(string line in File.ReadLines("rhymes.csv")) {
         var rhymingGroup = line.Split(',').Distinct().ToHashSet();
         if (rhymingGroup.Count > 1) {
             datamuseRhymes.Add(rhymingGroup);
@@ -42,12 +42,12 @@ static void mergeRhymeGroups(){
     }
 
     var wiktionaryRhymes = new HashSet<HashSet<string>>();
-    foreach(string line in File.ReadLines("wiktionary_rhymes.csv")) {
-        var rhymingGroup = line.Split(',').Distinct().ToHashSet();
-        if (rhymingGroup.Count > 1) {
-            wiktionaryRhymes.Add(rhymingGroup);
-        }
-    }
+    // foreach(string line in File.ReadLines("wiktionary_rhymes.csv")) {
+    //     var rhymingGroup = line.Split(',').Distinct().ToHashSet();
+    //     if (rhymingGroup.Count > 1) {
+    //         wiktionaryRhymes.Add(rhymingGroup);
+    //     }
+    // }
 
     var counter = 0;
     // merge two rhyme groups if they share two words
@@ -110,7 +110,7 @@ static void mergeRhymeGroups(){
 
     var sortedRhymes = datamuseRhymes.Select(g => string.Join(",",g.OrderBy(w => w))).OrderBy(g => g);
 
-    using StreamWriter output = new("rhymes_V2.csv", append: false);
+    using StreamWriter output = new("rhymes.csv", append: false);
     foreach (var group in sortedRhymes) {
         output.WriteLine(group);
     }
