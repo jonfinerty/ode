@@ -91,6 +91,10 @@ function hideRhymeSuggestions() {
 }
 
 function showRhymeSuggestionsAtCursor() {
+
+    // if cursor at end of line
+    
+
     var xy = getCursorDocumentXY();
     // nudge left and right for cursor at end or beginning of word
     var wordspan = documentCoordinatesToWordSpan(xy.x + 3, xy.y + 2) || documentCoordinatesToWordSpan(xy.x - 3, xy.y + 2);
@@ -225,7 +229,7 @@ function getCursorDocumentXY() {
 
     const inputValue = inputElement.value
     const selectionPoint = inputElement.selectionStart;
-    const textContent = inputValue.substr(0, selectionPoint);
+    const textContent = inputValue.substring(0, selectionPoint);
     preElement.innerHTML = textContent;
 
     const span = document.createElement('span')

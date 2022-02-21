@@ -1,7 +1,7 @@
 "use strict";
 
-function getSyllableCountOfLine(lineNumber) {
-    var element = document.querySelector(".syllable-count[data-line-number=\"" + lineNumber+  "\"]");
+function getSyllableCountOfPoemLine(lineNumber) {
+    var element = document.querySelector(".syllable-count[data-poem-line-number=\"" + lineNumber+  "\"]");
     return parseInt(element?.innerText) || 0;
 }
 
@@ -15,9 +15,11 @@ function updateMetre() {
     let syllablesOutput = "";
 
     let stanzaCounter = 0;
+    let lineCounter = 0;
     let previousLineSyllableCount = 0; // because of how we cope with multiple blank lines
+
     let lines = splitTextToLines(text);
-    lines.forEach((line, lineIndex) => {
+    lines.forEach(line => {
         var lineSyllableCount = 0;
         var lineMetre = "";
         const words = splitLineToWords(line);
@@ -60,7 +62,8 @@ function updateMetre() {
                 stanzaCounter++;
             }
         } else {
-            syllablesOutput += "<span class=\"syllable-count\" data-line-number=\"" + lineIndex + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
+            syllablesOutput += "<span class=\"syllable-count\" data-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
+            lineCounter++;
         }
         metre = metre + lineMetre + '<br>';
         previousLineSyllableCount = lineSyllableCount; 

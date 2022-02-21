@@ -1,61 +1,129 @@
 "use strict";
 
-// todo, blank lines don't increase the line counter
-// can only be triggered at the end of the line
-function showRhymeAutocomplete(lineNumber) {
+let autocompleteSpan = null;
 
-    if (lineNumber == 0) {
+function isCursorAtEndOfLine() {
+    const inputElement = document.querySelector("#input");
+    const selectionPoint = inputElement.selectionStart;
+    const textPastCursor = inputElement.value.substring(selectionPoint);
+
+    // if first instance of a non-whitespace char is before a newline
+    const firstNonWhitespaceCharIndex = textPastCursor.search(/\S/);
+    const firstNewLineIndex = textPastCursor.indexOf('\n');
+    if (firstNewLineIndex == -1) {
+        return firstNonWhitespaceCharIndex == -1;
+    } else {
+        return firstNonWhitespaceCharIndex > firstNewLineIndex
+    }
+}
+
+function getInputLineNumberOfCursor() {
+    const inputElement = document.querySelector("#input");
+    const selectionPoint = inputElement.selectionStart;
+    const textUpToCursor = inputElement.value.substring(0, selectionPoint);
+
+    return textUpToCursor.split(/\n/g).length - 1;
+}
+
+function getPoemLineNumberOfCursor() {
+    const inputElement = document.querySelector("#input");
+    const selectionPoint = inputElement.selectionStart;
+    const textUpToCursor = inputElement.value.substring(0, selectionPoint);
+
+    // whitespace with atleast 1 newline
+    return textUpToCursor.trimStart().split(/\s*\n+\s*/g).length - 1;
+}
+
+function isAutocompleteShowing() {
+    return autocompleteSpan != null;
+}
+
+function nextAutocompleteSuggestion() {
+    if (autocompleteSpan == null) {
+        return
+    }
+    const rhymeRootString = autocompleteSpan.dataset.rhymeRoot;
+    let rhymeIndex = parseInt(autocompleteSpan.dataset.rhymeIndex);
+    const preferredSyllables = autocompleteSpan.dataset.preferredSyllables;
+    const rhymes = getStringRhymes(rhymeRootString, preferredSyllables);
+     
+    // i.e. there's a next one to go to
+    if (rhymeIndex + 1 < rhymes.length) {
+        rhymeIndex += 1;
+        autocompleteSpan.innerText = " " + rhymes[rhymeIndex];
+        autocompleteSpan.dataset.rhymeIndex = rhymeIndex;
+    }
+
+}
+
+function previousAutocompleteSuggestion() {
+    if (autocompleteSpan == null) {
+        return
+    }
+    const rhymeRootString = autocompleteSpan.dataset.rhymeRoot;
+    let rhymeIndex = parseInt(autocompleteSpan.dataset.rhymeIndex);
+    const preferredSyllables = autocompleteSpan.dataset.preferredSyllables;
+    const rhymes = getStringRhymes(rhymeRootString, preferredSyllables);
+
+    // i.e. there's a next one to go to
+    if (rhymeIndex - 1 >= 0) {
+        rhymeIndex -= 1;
+        autocompleteSpan.innerText = " " + rhymes[rhymeIndex];
+        autocompleteSpan.dataset.rhymeIndex = rhymeIndex;
+    }
+
+}
+
+function showAutocomplete() {
+    // delete old one
+    autocompleteSpan?.remove();
+    autocompleteSpan = null;
+
+    const inputElement = document.querySelector("#input");
+    const displayElement = document.querySelector("#display");
+
+    const currentPoemLineNumber = getPoemLineNumberOfCursor();
+    const currentInputLineNumber = getInputLineNumberOfCursor();
+    const isBlankLine = document.querySelector(".word[data-input-line-number=\"" + currentInputLineNumber + "\"]") == null;
+
+    const previousLineSyllableCount = getSyllableCountOfPoemLine(currentPoemLineNumber - 1);
+    const currentLineSyllableCount = isBlankLine ? 0 : getSyllableCountOfPoemLine(currentPoemLineNumber);
+
+    const preferredSyllables = previousLineSyllableCount - currentLineSyllableCount;
+
+    const previousLastWordSpan = document.querySelector(".last-word[data-poem-line-number=\"" + (currentPoemLineNumber - 1) + "\"]");
+
+    const precedingSpan = document.querySelector(".last-word[data-input-line-number=\"" + currentInputLineNumber + "\"]");
+
+    autocompleteSpan = createAutocompleteSpan(previousLastWordSpan.innerText, preferredSyllables);
+    if (precedingSpan) {
+        displayElement.insertBefore(autocompleteSpan, precedingSpan.nextSibling);
         return;
     }
 
-    const previousLineSyllableCount = getSyllableCountOfLine(lineNumber-1);
-    const currentLineSyllableCount = getSyllableCountOfLine(lineNumber);
-
-    
-    const missingSyllables = previousLineSyllableCount - currentLineSyllableCount;
-
-    const previousLastWord = document.querySelector(".last-word[data-line-number=\""+ (lineNumber-1) +"\"]");
-
-    console.log(previousLastWord);
-    var rhymes = getStringRhymes(previousLastWord.innerText, missingSyllables);
-    console.log(rhymes);
-
-
-    // put metre information in dom
-
-    // insert special span at end of line with suggestion
-
-    // tab uses it, 
-
-    // control space triggers / cycles it
-}
-
-function addAutocompleteSpanAtCursorPosition(text) {
-    // go through text of input
-    const inputElement = document.querySelector("#input");
-    const displayElement = document.querySelector("#display");
+    // text node has to start from a word boundary
+    // so get end of input text (up to selection) from last word boundary, thats then before the new span and (text node - this prefix) is after
+    const textNode = previousLastWordSpan.nextSibling;
     const selectionPoint = inputElement.selectionStart;
-    const textUpToCursor = inputElement.value.substr(0, selectionPoint);
+    const textUpToCursor = inputElement.value.substring(0, selectionPoint);
+    const whiteSpaceGroups = textUpToCursor.split(/\w+/g);
+    const textPastLastWord = whiteSpaceGroups[whiteSpaceGroups.length-1];
 
-    // todo: only trigger at EoL
-    // will break if I number lines ignoring blanks
-    // will need to change it to be \n+ regex
-    const lineNumber = textUpToCursor.split("\n").length-1;
-
-    const previousLineSyllableCount = getSyllableCountOfLine(lineNumber-1);
-    const currentLineSyllableCount = getSyllableCountOfLine(lineNumber);
-
-    
-    const missingSyllables = previousLineSyllableCount - currentLineSyllableCount;
-
-    const previousLastWord = document.querySelector(".last-word[data-line-number=\""+ (lineNumber-1) +"\"]");
-
-    var rhymes = getStringRhymes(previousLastWord.innerText, missingSyllables);
-
-    const precedingSpan = document.querySelector(".last-word[data-line-number=\""+ lineNumber +"\"]");
-    const autocompleteSpan = document.createElement("span");
-    autocompleteSpan.classList.add("autocomplete");
-    autocompleteSpan.innerText = " " + rhymes[0];
-    displayElement.insertBefore(autocompleteSpan, precedingSpan.nextSibling)
+    displayElement.insertBefore(autocompleteSpan, textNode);
+    displayElement.insertBefore(document.createTextNode(textPastLastWord), autocompleteSpan);
+    textNode.textContent = textNode.textContent.substring(textPastLastWord.length);
 }
 
+function createAutocompleteSpan(rhymeRoot, preferredSyllables) {
+    var rhymes = getStringRhymes(rhymeRoot, preferredSyllables);
+
+    var text = rhymes.length ? rhymes[0] : "No rhymes found"
+    
+    autocompleteSpan = document.createElement("span");
+    autocompleteSpan.id = "autocomplete";
+    autocompleteSpan.innerText = " " + text;
+    autocompleteSpan.dataset.rhymeRoot = rhymeRoot;
+    autocompleteSpan.dataset.rhymeIndex = 0;
+    autocompleteSpan.dataset.preferredSyllables = preferredSyllables;
+    return autocompleteSpan;
+}

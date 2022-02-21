@@ -211,8 +211,8 @@ h1 {
   pointer-events: none;
 }
 
-.autocomplete {
-  opacity: 0.5;
+#autocomplete {
+  opacity: 0.4;
 }
 
 .rhyme-0 {

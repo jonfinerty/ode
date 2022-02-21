@@ -18,7 +18,9 @@ function applyRhymeHighlighting() {
 
 
     // mid line rhyming
+    // todo, this line count is magic
     for (let i = 0; i < lineCount; i++) {
+        // todo, within the same stanza
         const lineAndPreviousLineWordSpans = document.querySelectorAll("[data-line-number='" + (i - 1) + "'],[data-line-number='" + i + "']");
         highlightListOfWordSpansWithRhymes(lineAndPreviousLineWordSpans, false);
     }

@@ -139,8 +139,26 @@ function setupInputEvents() {
     hideRhymeSuggestions();
 
     if (event.ctrlKey && event.key === ' ') {
-      //showRhymeSuggestionsAtCursor();
-      addAutocompleteSpanAtCursorPosition();
+      if (isCursorAtEndOfLine()) {
+        showAutocomplete();
+      } else {
+        showRhymeSuggestionsAtCursor();
+      }
+    }
+
+    if (isAutocompleteShowing()) {
+      switch (event.key) {
+        case "Down": // IE/Edge specific value
+        case "ArrowDown":
+          event.preventDefault();
+          nextAutocompleteSuggestion();
+          break;
+        case "Up": // IE/Edge specific value
+        case "ArrowUp":
+          event.preventDefault();
+          previousAutocompleteSuggestion();
+          break;
+      }
     }
 
     if (event.keyCode === 9 || event.which === 9) {
@@ -217,9 +235,9 @@ function waitForFontToLoad(then) {
 function time(func, ...params) {
   timeIndent++;
   const measureName = "-".repeat(timeIndent - 1) + func.name;
-  console.time(measureName);
+  // console.time(measureName);
   func(...params);
-  console.timeEnd(measureName);
+  //console.timeEnd(measureName);
   timeIndent--;
 }
 

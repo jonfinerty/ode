@@ -8,7 +8,8 @@ function renderDisplay() {
     const text = inputElement.value;
 
     let previousLineWordCount = 0; // because of how we cope with multiple blank lines
-    let stanzaIndex = 0; 
+    let stanzaCounter = 0;
+    let lineCounter = 0; 
     let wordCounter = 0
     const lines = splitTextToLines(text);
     lineCount = lines.length;
@@ -18,7 +19,7 @@ function renderDisplay() {
 
         if (words.length == 0) {
             if (previousLineWordCount != 0) {
-                stanzaIndex++;
+                stanzaCounter++;
             }
             previousLineWordCount = words.length;
             return;
@@ -41,8 +42,10 @@ function renderDisplay() {
             cssClasses += "\"";
 
             // might be too much?
-            const dataAttributes = "data-line-number=\"" + lineIndex + "\"" +
-            " data-stanza-number=\"" + stanzaIndex +"\"" +
+            const dataAttributes = 
+            "data-input-line-number=\"" + lineIndex + "\"" +
+            " data-poem-line-number=\"" + lineCounter + "\"" +
+            " data-stanza-number=\"" + stanzaCounter +"\"" +
             " data-word-number=\"" + wordCounter + "\"" +
             " data-line-word-number=\"" + wordIndex +"\"";
 
@@ -53,6 +56,7 @@ function renderDisplay() {
         });
 
         lines[lineIndex] = processedLine + escapeHtml(remainingUnprocessedLine);
+        lineCounter++;
     });
     displayElement.innerHTML = lines.join("\n");
 }
