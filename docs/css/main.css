@@ -211,6 +211,9 @@ h1 {
   pointer-events: none;
 }
 
+.autocomplete {
+  opacity: 0.5;
+}
 
 .rhyme-0 {
   color:#2D4FA2;

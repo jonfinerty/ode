@@ -7,7 +7,8 @@ function renderDisplay() {
     const displayElement = document.querySelector("#display")
     const text = inputElement.value;
 
-    let stanzaIndex = 0;
+    let previousLineWordCount = 0; // because of how we cope with multiple blank lines
+    let stanzaIndex = 0; 
     let wordCounter = 0
     const lines = splitTextToLines(text);
     lineCount = lines.length;
@@ -16,10 +17,15 @@ function renderDisplay() {
         const words = splitLineToWords(line);
 
         if (words.length == 0) {
-            stanzaIndex++;
+            if (previousLineWordCount != 0) {
+                stanzaIndex++;
+            }
+            previousLineWordCount = words.length;
             return;
         }
 
+        previousLineWordCount = words.length;
+        
         let processedLine = "";
         let remainingUnprocessedLine = line;
         words.forEach((word, wordIndex) => {

@@ -340,15 +340,15 @@ public class Word {
     public string IPA;
     public int syllableCount;
     public double freqScore; // number of times out a 1 million it appears in google book corpus
-    public List<string> types = new List<string>(); 
+    public HashSet<string> types = new HashSet<string>(); 
     public int primaryStressSyllableIndex;
     public int secondaryStressSyllableIndex;
-    public List<int> rhymeGroups = new List<int>();
+    public HashSet<int> rhymeGroups = new HashSet<int>();
     const char primaryStressSymbol = 'ˈ';
     const char secondaryStressSymbol = 'ˌ';
     const char typesDelimiter = '|';
 
-    public Word(string text, string IPA, int syllableCount, double freqScore, List<string> types) {
+    public Word(string text, string IPA, int syllableCount, double freqScore, HashSet<string> types) {
         this.text = text;
         this.IPA = IPA;
         this.syllableCount = syllableCount;
@@ -380,7 +380,7 @@ public class Word {
         freqScore = double.Parse(sections[2]);
         IPA = sections[3];
         if (sections.Length > 4) {
-            types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToList();
+            types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToHashSet();
         }
         var ipa = new IPA(IPA);
         var stresses = ipa.GetSyllableIndexesOfStresses();
@@ -467,8 +467,8 @@ public class DatamuseWord {
         return ipaTag.Substring(ipaTagIdentifier.Length);
     }
 
-    public List<string> GetTypes() {
-        return tags.Where(t => wordTypes.Contains(t)).ToList();
+    public HashSet<string> GetTypes() {
+        return tags.Where(t => wordTypes.Contains(t)).ToHashSet();
     }
 
     public Word ToWord() {

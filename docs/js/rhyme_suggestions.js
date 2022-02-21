@@ -19,7 +19,7 @@ function buildRhymeIndex() {
     }
 }
 
-document.getElementById('rhyme-suggestions-container').addEventListener('mouseenter', function(e) {
+document.getElementById('rhyme-suggestions-container').addEventListener('mouseenter', function (e) {
     clearTimeout(hoverTimeout);
 });
 
@@ -33,10 +33,10 @@ function viewPortCoordinatesToWordSpan(x, y) {
     // if (insideMenuX && insideMenuY) {
     //     return;
     // }
-    
+
     // maybe don't look this up every move?
     const wordSpans = document.querySelectorAll(".word");
-    for (let i=0; i<wordSpans.length; i++) {
+    for (let i = 0; i < wordSpans.length; i++) {
         const wordSpan = wordSpans[i];
         const boundaries = wordSpan.getBoundingClientRect();
         const insideX = x >= boundaries.left && x <= boundaries.right;
@@ -46,18 +46,18 @@ function viewPortCoordinatesToWordSpan(x, y) {
         const insideY = y >= boundaries.top && y <= boundaries.bottom;
         if (insideY) {
             return wordSpan;
-        } 
+        }
     }
 
     return null;
 }
 
-function documentCoordinatesToWordSpan(x ,y) {
-   return viewPortCoordinatesToWordSpan(x- window.scrollX, y- window.scrollY);
+function documentCoordinatesToWordSpan(x, y) {
+    return viewPortCoordinatesToWordSpan(x - window.scrollX, y - window.scrollY);
 }
 
 // oh no. make more efficient?
-document.getElementById('grid-container').addEventListener('mousemove', function(event) {
+document.getElementById('grid-container').addEventListener('mousemove', function (event) {
     const x = event.clientX;
     const y = event.clientY;
 
@@ -76,7 +76,7 @@ function onHoveredWordSpanChanged(wordSpan) {
         return;
     }
     hoverTimeout = setTimeout((scopedWordSpan) => {
-        showRhymeSuggestions(scopedWordSpan);    
+        showRhymeSuggestions(scopedWordSpan);
     }, 1000, wordSpan);
 }
 
@@ -93,10 +93,10 @@ function hideRhymeSuggestions() {
 function showRhymeSuggestionsAtCursor() {
     var xy = getCursorDocumentXY();
     // nudge left and right for cursor at end or beginning of word
-    var wordspan = documentCoordinatesToWordSpan(xy.x+3, xy.y+2) || documentCoordinatesToWordSpan(xy.x-3, xy.y+2);
+    var wordspan = documentCoordinatesToWordSpan(xy.x + 3, xy.y + 2) || documentCoordinatesToWordSpan(xy.x - 3, xy.y + 2);
     if (wordspan != null) {
         showRhymeSuggestions(wordspan);
-    }     
+    }
 }
 
 function rerenderRhymeSuggestions() {
@@ -109,7 +109,7 @@ function showRhymeSuggestions(wordSpan) {
     rhymeSuggestionWordSpanAnchor = wordSpan;
     const wordSpanPos = wordSpan.getBoundingClientRect();
     let rhymeCssClass = null;
-    for (let i = 0; i<wordSpan.classList.length; i++) {
+    for (let i = 0; i < wordSpan.classList.length; i++) {
         const className = wordSpan.classList[i];
         if (className.startsWith('rhyme-')) {
             rhymeCssClass = className;
@@ -119,11 +119,11 @@ function showRhymeSuggestions(wordSpan) {
     if (rhymes.length == 0) {
         rhymes.push("No rhymes found");
     }
-    
+
     const suggestionsContainer = document.querySelector('#rhyme-suggestions-container');
-    
-    suggestionsContainer.style.left = window.scrollX + wordSpanPos.right + 20 +'px';
-    suggestionsContainer.style.top = window.scrollY + wordSpanPos.y -20 +'px';
+
+    suggestionsContainer.style.left = window.scrollX + wordSpanPos.right + 20 + 'px';
+    suggestionsContainer.style.top = window.scrollY + wordSpanPos.y - 20 + 'px';
     suggestionsContainer.classList.remove("hidden");
 
     const suggestions = document.querySelector("#rhyme-suggestions");
@@ -131,11 +131,11 @@ function showRhymeSuggestions(wordSpan) {
     if (rhymeCssClass) {
         suggestions.classList.add(rhymeCssClass);
     }
-    suggestions.innerHTML = rhymes.map(r => {return "<span>" + r + "</span>"}).join("<br>");
+    suggestions.innerHTML = rhymes.map(r => { return "<span>" + r + "</span>" }).join("<br>");
     suggestions.scrollTop = 0;
 }
 
-function getStringRhymes(inputString) {
+function getStringRhymes(inputString, preferredSyllableCount) {
     const word = new Word(inputString);
     const rhymingWords = [];
 
@@ -144,13 +144,13 @@ function getStringRhymes(inputString) {
         const rhymeGroupStrings = rhymeIndex[rhymeGroupId] || [];
         rhymeGroupStrings.forEach(rhymingString => {
             var rhymingWord = new Word(rhymingString);
-            if (!word.matches(rhymingString)){
+            if (!word.matches(rhymingString)) {
                 rhymingWords.push(rhymingWord);
             }
         });
     });
 
-    rhymingWords.sort(rhymeSort);
+    rhymingWords.sort(getRhymeSortComparator(preferredSyllableCount, word));
 
     const sortedFiltedRhymingStrings = rhymingWords.map(word => {
         return word.text;
@@ -159,49 +159,68 @@ function getStringRhymes(inputString) {
     return sortedFiltedRhymingStrings;
 }
 
-function rhymeSort(word1, word2) {
-    // if + then word2 goes first
-    // if - then word1 goes first
+function getRhymeSortComparator(preferredSyllableCount, inputWord) {
+    return function (word1, word2) {
+        // if + then word2 goes first
+        // if - then word1 goes first
 
-    // proper nouns last
-    // then particles
-    // then freq
-    if (word1.isJustProperNoun() && !word2.isJustProperNoun()) {
-        return 1;
-    }
-    if (!word1.isJustProperNoun() && word2.isJustProperNoun()) {
-        return -1;
-    }
+        // proper nouns last
+        // then particles
+        // then freq
+        if (preferredSyllableCount) {
+            if (word1.syllableCount == preferredSyllableCount && word2.syllableCount != preferredSyllableCount) {
+                return -1;
+            }
+            if (word1.syllableCount != preferredSyllableCount && word2.syllableCount == preferredSyllableCount) {
+                return 1;
+            }
+        }
 
-    if (word1.isParticle() && !word2.isParticle()) {
-        return 1;
-    }
-    if (!word1.isParticle() && word2.isParticle()) {
-        return -1;
-    }
+        if (word1.isJustProperNoun() && !word2.isJustProperNoun()) {
+            return 1;
+        }
+        if (!word1.isJustProperNoun() && word2.isJustProperNoun()) {
+            return -1;
+        }
 
-    return word2.frequency - word1.frequency;
+        if (word1.isParticle() && !word2.isParticle()) {
+            return 1;
+        }
+        if (!word1.isParticle() && word2.isParticle()) {
+            return -1;
+        }
+
+        // prefer words which don't just end with the same suffix e.g. "time" and "wartime"
+        if (word1.sharesEnding(inputWord) && !word2.sharesEnding(inputWord)) {
+            return 1;
+        }
+        if (!word1.sharesEnding(inputWord) && word2.sharesEnding(inputWord)) {
+            return -1;
+        }
+
+        return word2.frequency - word1.frequency;
+    }
 }
 
 function removeClassesByPrefix(element, prefix) {
-    for(let i = element.classList.length - 1; i >= 0; i--) {
-        if(element.classList[i].startsWith(prefix)) {
+    for (let i = element.classList.length - 1; i >= 0; i--) {
+        if (element.classList[i].startsWith(prefix)) {
             element.classList.remove(element.classList[i]);
         }
     }
 }
 
 function getCursorDocumentXY() {
-    let inputElement = document.querySelector("#input");
-    let displayElement = document.querySelector("#display");
+    const inputElement = document.querySelector("#input");
+    const displayElement = document.querySelector("#display");
     const {
-      offsetLeft: inputX,
-      offsetTop: inputY,
+        offsetLeft: inputX,
+        offsetTop: inputY,
     } = inputElement
     const preElement = document.createElement('pre')
     const copyStyle = getComputedStyle(displayElement)
     for (const prop of copyStyle) {
-      preElement.style[prop] = copyStyle[prop]
+        preElement.style[prop] = copyStyle[prop]
     }
 
     const inputValue = inputElement.value
@@ -220,7 +239,7 @@ function getCursorDocumentXY() {
 
     document.body.removeChild(preElement)
     return {
-      x: inputX + spanX - mirrorDivX,
-      y: inputY + spanY - mirrorDivY
+        x: inputX + spanX - mirrorDivX,
+        y: inputY + spanY - mirrorDivY
     }
-  }
+}

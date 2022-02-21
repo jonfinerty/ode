@@ -1,5 +1,10 @@
 "use strict";
 
+function getSyllableCountOfLine(lineNumber) {
+    var element = document.querySelector(".syllable-count[data-line-number=\"" + lineNumber+  "\"]");
+    return parseInt(element?.innerText) || 0;
+}
+
 function updateMetre() {
     const metreFontSize = getCanvasFont(document.querySelector("#metre"));
     const displayFontSize = getCanvasFont(document.querySelector("#display"));
@@ -9,8 +14,10 @@ function updateMetre() {
     let metre = "";
     let syllablesOutput = "";
 
+    let stanzaCounter = 0;
+    let previousLineSyllableCount = 0; // because of how we cope with multiple blank lines
     let lines = splitTextToLines(text);
-    lines.forEach(line => {
+    lines.forEach((line, lineIndex) => {
         var lineSyllableCount = 0;
         var lineMetre = "";
         const words = splitLineToWords(line);
@@ -49,10 +56,14 @@ function updateMetre() {
 
         if (lineSyllableCount == 0) {
             syllablesOutput += '<br>';
+            if (previousLineSyllableCount != 0) {
+                stanzaCounter++;
+            }
         } else {
-            syllablesOutput += lineSyllableCount + '<br>';
+            syllablesOutput += "<span class=\"syllable-count\" data-line-number=\"" + lineIndex + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
         }
         metre = metre + lineMetre + '<br>';
+        previousLineSyllableCount = lineSyllableCount; 
     })
 
     const metreElement = document.querySelector("#metre");

@@ -139,7 +139,8 @@ function setupInputEvents() {
     hideRhymeSuggestions();
 
     if (event.ctrlKey && event.key === ' ') {
-      showRhymeSuggestionsAtCursor();
+      //showRhymeSuggestionsAtCursor();
+      addAutocompleteSpanAtCursorPosition();
     }
 
     if (event.keyCode === 9 || event.which === 9) {

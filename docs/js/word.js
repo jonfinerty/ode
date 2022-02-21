@@ -68,6 +68,10 @@ class Word {
     matches(string) {
         return standardiseText(this.text) == standardiseText(string);
     }
+
+    sharesEnding(otherWord, endingLength=4) {
+        return standardiseText(this.text).slice(-endingLength) == standardiseText(otherWord.text).slice(-endingLength);
+    }
 }
 
 function standardiseText(text) {
