@@ -91,9 +91,13 @@ h1 {
   margin-left: 12px;
 }
 
+a {
+  font-size: 20px;
+}
+
 button {
   font-family: 'Libre Baskerville', serif;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   user-select: none;
   color: inherit;
