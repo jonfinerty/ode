@@ -472,8 +472,7 @@ Where is free time? Where is peace?
 I'm running, doing, till I drop.
 Give me buttons: Pause, Mute, STOP!
 
-                          - Joanna Fuchs
-`,
+                          - Joanna Fuchs`,
 
 `I come with no wrapping or pretty pink bows. 
 I am who I am, from my head to my toes. 
@@ -486,8 +485,7 @@ And the times that I cry are when no one's around.
 To error is human or so that's what they say. 
 Well, tell me who's perfect anyway.
 
-                       - S Raine
-`,
+                       - S Raine`,
 
 `I do not like them in a box
 I do not like them with a fox

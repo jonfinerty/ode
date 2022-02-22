@@ -37,7 +37,7 @@ function shareClicked(event) {
       text: poemText
     }
   
-    if (supportsNativeShare(shareData)) {
+    if (false && supportsNativeShare(shareData)) {
       navigator.share(shareData);
     } else {
       if (navigator.clipboard) {

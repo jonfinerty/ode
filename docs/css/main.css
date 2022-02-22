@@ -4,11 +4,16 @@ html {
 
 body {
   padding-left: calc(100vw - 100%);
+  text-align: center;  
 }
 
 #poem {
-  margin-top: 32px;
-  margin-bottom: 32px
+  padding-top: 32px;
+  padding-bottom: 48px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: inline-block;
+  margin: 0 auto;
 }
 
 h1 {
@@ -59,7 +64,7 @@ h1 {
 
 #content {
   text-align: center;
-  margin-bottom: 64px;
+  content: inline-block;
 }
 
 #menu {
@@ -123,7 +128,7 @@ h1 {
   grid-column: 2;
   grid-row: 1;
   margin: 0 auto;
-  min-width: 50vw;
+  min-width: 40vw;
   background: transparent;
   white-space: nowrap;
   resize: none;
