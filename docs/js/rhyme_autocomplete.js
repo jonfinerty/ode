@@ -7,7 +7,13 @@ function isCursorAtEndOfLine() {
     const selectionPoint = inputElement.selectionStart;
 
     // cursor needs to either be starting a new line or have a gap after a word
-    //TODO.
+    const textBeforeCursor = inputElement.value.substring(0, selectionPoint);
+    if (selectionPoint != 0 && !/\s/.test(textBeforeCursor.charAt(textBeforeCursor.length - 1))) {
+        console.log(selectionPoint);
+        console.log(textBeforeCursor);
+        console.log(textBeforeCursor.charAt(textBeforeCursor.length - 1));
+        return false;
+    }
 
     // if first instance of a non-whitespace char is before a newline
     const textPastCursor = inputElement.value.substring(selectionPoint);
@@ -68,7 +74,7 @@ function fillInAutoComplete() {
     console.log(textBeyondCursor);
 
     inputElement.value = textUpToCursor + currentSuggestion + textBeyondCursor;
-    inputElement.selectionEnd = selectionPoint + currentSuggestion.length + 1;
+    inputElement.selectionEnd = selectionPoint + currentSuggestion.length;
     onInputUpdated();
 }
 
@@ -111,6 +117,10 @@ function previousAutocompleteSuggestion() {
 function showAutocomplete() {
     autocompleteSpan?.remove();
     autocompleteSpan = null;
+
+    if (getPoemLineNumberOfCursor() == 1) {
+        return;
+    }
 
     const inputElement = document.querySelector("#input");
     const displayElement = document.querySelector("#display");
