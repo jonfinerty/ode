@@ -8,10 +8,8 @@ function isCursorAtEndOfLine() {
 
     // cursor needs to either be starting a new line or have a gap after a word
     const textBeforeCursor = inputElement.value.substring(0, selectionPoint);
-    if (selectionPoint != 0 && !/\s/.test(textBeforeCursor.charAt(textBeforeCursor.length - 1))) {
-        console.log(selectionPoint);
-        console.log(textBeforeCursor);
-        console.log(textBeforeCursor.charAt(textBeforeCursor.length - 1));
+    const isPrecedingCharWhitespace = /\s/.test(textBeforeCursor.charAt(textBeforeCursor.length - 1))
+    if (selectionPoint == 0 || !isPrecedingCharWhitespace) {
         return false;
     }
 
@@ -118,7 +116,7 @@ function showAutocomplete() {
     autocompleteSpan?.remove();
     autocompleteSpan = null;
 
-    if (getPoemLineNumberOfCursor() == 1) {
+    if (getPoemLineNumberOfCursor() == 0) {
         return;
     }
 

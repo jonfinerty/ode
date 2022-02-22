@@ -144,6 +144,8 @@ function removePlaceholderText(stringToReplaceWith) {
   }
 }
 
+let autocompleteTimeout = false;
+
 function setupInputEvents() {
   const inputElement = document.querySelector("#input");
   inputElement.onkeydown = function (event) {
@@ -173,6 +175,8 @@ function setupInputEvents() {
     if (event.key === "Escape" || event.key === "Esc") {
       if (rhymeSuggestionsShowing()) {
         hideRhymeSuggestions();
+      } else if (isAutocompleteShowing()) {
+        hideAutocomplete();
       } else if (mode == "about") {
         backClicked();
       }
@@ -198,6 +202,13 @@ function setupInputEvents() {
       element.selectionEnd = tabStartPos + 1;
       onInputUpdated();
     }
+     
+    clearTimeout(autocompleteTimeout);
+    autocompleteTimeout = setTimeout(() => {
+      if (isCursorAtEndOfLine()) {
+        showAutocomplete();  
+      }
+    },2000);
   }
 }
 
