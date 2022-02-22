@@ -91,7 +91,7 @@ function onHoveredWordSpanChanged(wordSpan) {
     }
     rhymeSuggestionTimeout = setTimeout((scopedWordSpan) => {
         showRhymeSuggestions(scopedWordSpan);
-    }, 1500, wordSpan);
+    }, 1200, wordSpan);
 }
 
 function rhymeSuggestionsShowing() {
