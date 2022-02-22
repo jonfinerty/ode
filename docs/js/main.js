@@ -205,7 +205,7 @@ function setupInputEvents() {
      
     clearTimeout(autocompleteTimeout);
     autocompleteTimeout = setTimeout(() => {
-      if (isCursorAtEndOfLine()) {
+      if (isCursorAtEndOfLine() && !currentLineRhymes()) {
         showAutocomplete();  
       }
     },2000);
