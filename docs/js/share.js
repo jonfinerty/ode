@@ -4,6 +4,11 @@ function shareClicked(event) {
     mixpanel.track('About clicked');
     event?.stopPropagation();
 
+    //trim trailing space
+    const inputElement = document.querySelector("#input");
+    inputElement.value = inputElement.value.trimEnd();
+    render();
+
     const title = document.querySelector("#title"); 
     let elementToScreenshot = null;
     if (title.classList.contains('placeholder')) {

@@ -274,11 +274,12 @@ function time(func, ...params) {
 }
 
 function updateHeights() {
+  console.log("updating height");
   const input_element = document.querySelector("#input")
   const display_element = document.querySelector("#display");
   const metre_element = document.querySelector("#metre");
 
-  input_element.style.height = "";
+  input_element.style.height = "1px";
   const newHeight = input_element.scrollHeight + "px";
   input_element.style.height = newHeight;
   display_element.height = newHeight;
