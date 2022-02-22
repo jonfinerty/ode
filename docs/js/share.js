@@ -3,8 +3,7 @@
 function shareClicked(event) {
     mixpanel.track('About clicked');
     event?.stopPropagation();
-    hideRhymeSuggestions();
-
+    
     html2canvas(document.querySelector("#poem"))
       .then(canvas => {
         const img = canvas.toDataURL("image/png");

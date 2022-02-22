@@ -28,7 +28,6 @@ waitForFontToLoad(() => {
     aboutClicked();
   } else {
     loadState();
-    setupPlaceholderText();
   }
   render();
   updateMenuPosition();
@@ -111,19 +110,18 @@ function focusInput() {
   inputElement.focus();
 }
 
-function setupPlaceholderText() {
+function showPlaceholderText() {
+  setMode("placeholder");
   const inputElement = document.querySelector("#input");
-  if (inputElement.value.trim().length == 0) {
-    setMode("placeholder");
-    inputElement.value = placeholderPoem;
-    inputElement.selectionEnd = 0;
 
-    const displayElement = document.querySelector('#display');
-    displayElement.classList.add('placeholder');
+  inputElement.value = placeholderPoem;
+  inputElement.selectionEnd = 0;
 
-    const metreElement = document.querySelector('#metre');
-    metreElement.classList.add('placeholder');
-  }
+  const displayElement = document.querySelector('#display');
+  displayElement.classList.add('placeholder');
+
+  const metreElement = document.querySelector('#metre');
+  metreElement.classList.add('placeholder');
 }
 
 function removePlaceholderText(stringToReplaceWith) {
@@ -211,12 +209,15 @@ function loadState() {
 
   const content = storage.getItem('content');
   const inputElement = document.querySelector("#input");
+  console.log("LOADING STATE: " + content);
   if (content) {
     inputElement.value = content;
     if (title == "Ode") {
       const titleElement = document.querySelector("#title");
       titleElement.classList.add("placeholder");
     }
+  } else {
+    showPlaceholderText();
   }
 }
 
@@ -346,6 +347,8 @@ function backClicked(event) {
   mixpanel.track('Back clicked');
   event?.stopPropagation();
   hideRhymeSuggestions();
+  location.hash = "";
+  
   setMode("input");
   const inputElement = document.querySelector("#input");
   const titleElement = document.querySelector("#title");

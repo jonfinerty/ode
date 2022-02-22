@@ -101,8 +101,8 @@ function showRhymeSuggestionsAtCursor() {
 
     const wordSpan = getWordSpanAtCursor();
    
-    if (wordspan != null) {
-        showRhymeSuggestions(wordspan);
+    if (wordSpan != null) {
+        showRhymeSuggestions(wordSpan);
     }
 }
 
