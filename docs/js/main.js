@@ -78,6 +78,14 @@ function onInputClicked(event) {
     if (inputElement.selectionEnd == inputElement.selectionStart) {
       inputElement.selectionEnd = 0;
     }
+  } else if (mode == "about" && event) {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    const wordSpan = viewPortCoordinatesToWordSpan(x, y);
+    if (wordSpan?.innerText?.toLowerCase() == "tweet") {
+      window.open("https://twitter.com/intent/tweet?text=%40jonfinerty%20%23ode%20", '_blank').focus();
+    }
   }
 
   inputElement.focus();

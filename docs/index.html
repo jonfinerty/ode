@@ -42,7 +42,7 @@
     <div id="content">
       <div id="grid-container">
         <pre id="syllables"></pre>
-        <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);"
+        <textarea autofocus id="input" class="overlaid" spellcheck="false" maxlength="7500" onpaste="time(onInputPasted, event);"
           oninput="time(onInputUpdated, event);" onclick="onInputClicked(event);"></textarea>
         <pre id="display" class="overlaid" aria-hidden="true"></pre>
         <pre id="metre" class="overlaid" aria-hidden="true"></pre>

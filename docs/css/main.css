@@ -257,3 +257,27 @@ h1 {
 .rhyme-9 {
   color: #2da281;
 }
+
+a.tweet {
+  color: #2D4FA2;
+}
+
+a.tweet:link {
+  color: #2D4FA2;
+}
+
+a.tweet:visited {
+  color: #2D4FA2;
+}
+
+a.tweet:focus {
+  color: #2D4FA2;
+}
+
+a.tweet:hover {
+  color: #2D4FA2;
+}
+
+a.tweet:active {
+  color: #2D4FA2;
+}

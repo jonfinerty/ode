@@ -49,7 +49,12 @@ function renderDisplay() {
             " data-word-number=\"" + wordCounter + "\"" +
             " data-line-word-number=\"" + wordIndex +"\"";
 
-            const wordSpan = "<span " + dataAttributes + " " + cssClasses+ ">" + escapeHtml(word.text) + "</span>"
+            let wordSpan = "<span " + dataAttributes + " " + cssClasses+ ">" + escapeHtml(word.text) + "</span>"
+
+            if (mode == "about" && word.text.toLowerCase() == "tweet") {
+                wordSpan = "<a class=\"tweet\" href=\"#\">" + wordSpan + "</a>";
+            }
+
             processedLine = processedLine + escapeHtml(remainingUnprocessedLine.substring(0, wordStringPos)) + wordSpan;
             remainingUnprocessedLine = remainingUnprocessedLine.substring(wordStringPos + word.text.length);
             wordCounter++;

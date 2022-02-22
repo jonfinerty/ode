@@ -90,14 +90,17 @@ function hideRhymeSuggestions() {
     suggestionsContainer.classList.add("hidden");
 }
 
-function showRhymeSuggestionsAtCursor() {
-
+function getWordSpanAtCursor() {
     // if cursor at end of line
-    
-
     var xy = getCursorDocumentXY();
     // nudge left and right for cursor at end or beginning of word
-    var wordspan = documentCoordinatesToWordSpan(xy.x + 3, xy.y + 2) || documentCoordinatesToWordSpan(xy.x - 3, xy.y + 2);
+    return documentCoordinatesToWordSpan(xy.x + 3, xy.y + 2) || documentCoordinatesToWordSpan(xy.x - 3, xy.y + 2);
+}
+
+function showRhymeSuggestionsAtCursor() {
+
+    const wordSpan = getWordSpanAtCursor();
+   
     if (wordspan != null) {
         showRhymeSuggestions(wordspan);
     }
