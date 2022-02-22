@@ -36,12 +36,12 @@
 
 <body>
   <div id="poem">
-    <h1 contenteditable="true" id="title" oninput="time(onTitleUpdated);"></h1>
+    <h1 contenteditable="true" id="title" oninput="time(onTitleUpdated);" onclick="onTitleClicked(event);"></h1>
     <div id="content">
       <div id="grid-container">
         <pre id="syllables"></pre>
         <textarea autofocus id="input" class="overlaid" spellcheck="false" onpaste="time(onInputPasted, event);"
-          oninput="time(onInputUpdated, event);" onclick="onInputClicked();"></textarea>
+          oninput="time(onInputUpdated, event);" onclick="onInputClicked(event);"></textarea>
         <pre id="display" class="overlaid" aria-hidden="true"></pre>
         <pre id="metre" class="overlaid" aria-hidden="true"></pre>
       </div>
@@ -51,7 +51,7 @@
   <div id="menu"><a href="#share" id="menu-item-share" class="menu-item" onclick="shareClicked(event);">share</a><a
       href="#about" id="menu-item-about" class="menu-item" onclick="aboutClicked(event);">about</a><a href="#"
       id="menu-item-back" class="menu-item hidden" onclick="backClicked(event);">back</a></div>
-  <div id="rhyme-suggestions-container" class="hidden">
+  <div id="rhyme-suggestions-container" onclick="onRhymeSuggestionsClicked(event);" class="hidden">
     <div id="rhyme-suggestions"></div>
   </div>
 

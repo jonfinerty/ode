@@ -59,13 +59,28 @@ function onInputUpdated(event) {
   saveState();
 }
 
-function onInputClicked() {
+function onTitleClicked(event) {
+  event.stopPropagation();
+}
+
+function onRhymeSuggestionsClicked(event) {
+  event.stopPropagation();
+}
+
+function onInputClicked(event) {
+  event?.stopPropagation();
+  
   hideRhymeSuggestions();
 
+  const inputElement = document.querySelector("#input");
+
   if (mode == "placeholder") {
-    const inputElement = document.querySelector("#input");
-    inputElement.selectionEnd = 0;
+    if (inputElement.selectionEnd == inputElement.selectionStart) {
+      inputElement.selectionEnd = 0;
+    }
   }
+
+  inputElement.focus();
 }
 
 function onTitleUpdated() {
@@ -365,3 +380,6 @@ function updateMenuPosition() {
 
 window.visualViewport.addEventListener('scroll', updateMenuPosition);
 window.visualViewport.addEventListener('resize', updateMenuPosition);
+window.addEventListener('click', () => {
+  onInputClicked();
+});
