@@ -3,7 +3,7 @@
 let rhymeIndex = {};
 let currentHoveredWordSpan = null;
 let rhymeSuggestionWordSpanAnchor = null;
-let hoverTimeout = null;
+let rhymeSuggestionTimeout = null;
 
 function buildRhymeIndex() {
     for (var key in wordDict) {
@@ -20,7 +20,7 @@ function buildRhymeIndex() {
 }
 
 document.getElementById('rhyme-suggestions-container').addEventListener('mouseenter', function (e) {
-    clearTimeout(hoverTimeout);
+    clearTimeout(rhymeSuggestionTimeout);
 });
 
 function onRhymeSuggestionsKeydown(event) {
@@ -72,6 +72,7 @@ function documentCoordinatesToWordSpan(x, y) {
 
 // oh no. make more efficient?
 document.getElementById('grid-container').addEventListener('mousemove', function (event) {
+    console.log("triggered");
     const x = event.clientX;
     const y = event.clientY;
 
@@ -85,11 +86,11 @@ document.getElementById('grid-container').addEventListener('mousemove', function
 
 // can be null
 function onHoveredWordSpanChanged(wordSpan) {
-    clearTimeout(hoverTimeout);
+    clearTimeout(rhymeSuggestionTimeout);
     if (!wordSpan) {
         return;
     }
-    hoverTimeout = setTimeout((scopedWordSpan) => {
+    rhymeSuggestionTimeout = setTimeout((scopedWordSpan) => {
         showRhymeSuggestions(scopedWordSpan);
     }, 1000, wordSpan);
 }

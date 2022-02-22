@@ -155,60 +155,6 @@ And my soul from out that shadow that lies floating on the floor
             
 - Edgar Allan Poe`,
 
-`You may write me down in history
-With your bitter, twisted lies,
-You may trod me in the very dirt
-But still, like dust, I'll rise.
-
-Does my sassiness upset you?
-Why are you beset with gloom?
-’Cause I walk like I've got oil wells
-Pumping in my living room.
-
-Just like moons and like suns,
-With the certainty of tides,
-Just like hopes springing high,
-Still I'll rise.
-
-Did you want to see me broken?
-Bowed head and lowered eyes?
-Shoulders falling down like teardrops,
-Weakened by my soulful cries?
-
-Does my haughtiness offend you?
-Don't you take it awful hard
-’Cause I laugh like I've got gold mines
-Diggin’ in my own backyard.
-
-You may shoot me with your words,
-You may cut me with your eyes,
-You may kill me with your hatefulness,
-But still, like air, I’ll rise.
-
-Does my sexiness upset you?
-Does it come as a surprise
-That I dance like I've got diamonds
-At the meeting of my thighs?
-
-Out of the huts of history’s shame
-I rise
-Up from a past that’s rooted in pain
-I rise
-I'm a black ocean, leaping and wide,
-Welling and swelling I bear in the tide.
-
-Leaving behind nights of terror and fear
-I rise
-Into a daybreak that’s wondrously clear
-I rise
-Bringing the gifts that my ancestors gave,
-I am the dream and the hope of the slave.
-I rise
-I rise
-I rise.
-                                             
-                                             Maya Angelou`,
-
 `Do not go gentle into that good night,
 Old age should burn and rave at close of day;
 Rage, rage against the dying of the light.
@@ -487,16 +433,54 @@ Well, tell me who's perfect anyway.
 
                        - S Raine`,
 
-`I do not like them in a box
-I do not like them with a fox
-I do not like them in a house
-I do not like them with a mouse
-I do not like them here or there
-I do not like them anywhere
-I do not like green eggs and ham
-I do not like them Sam I am
+`Seventeen years ago you said
+Something that sounded like Good-bye;
+And everybody thinks that you are dead,
+But I.
 
-                      - Dr Seuss`
+So I, as I grow stiff and cold
+To this and that say Good-bye too;
+And everybody sees that I am old
+But you.
+
+And one fine morning in a sunny lane
+Some boy and girl will meet and kiss and swear
+That nobody can love their way again
+While over there
+You will have smiled, I shall have tossed your hair.
+
+                                    Charlotte Mew`,
+
+`What would I give for a heart of flesh to warm me through,
+Instead of this heart of stone ice-cold whatever I do!
+Hard and cold and small, of all hearts the worst of all.
+
+What would I give for words, if only words would come!
+But now in its misery my spirit has fallen dumb.
+O merry friends, go your own way, I have never a word to say.
+
+What would I give for tears! Not smiles but scalding tears,
+To wash the black mark clean, and to thaw the frost of years,
+To wash the stain ingrain, and to make me clean again.
+
+Christina Rossetti`,
+
+`Remember me when I am gone away,
+         Gone far away into the silent land;
+         When you can no more hold me by the hand,
+Nor I half turn to go yet turning stay.
+Remember me when no more day by day
+         You tell me of our future that you planned:
+         Only remember me; you understand
+It will be late to counsel then or pray.
+Yet if you should forget me for a while
+         And afterwards remember, do not grieve:
+         For if the darkness and corruption leave
+         A vestige of the thoughts that once I had,
+Better by far you should forget and smile
+         Than that you should remember and be sad.
+
+Christina Rossetti`
 ];
 
 let aboutPoem = `It shows you metre, helps you rhyme.
@@ -523,6 +507,11 @@ One more thing which is quite vital-
 Give your handiwork a title!
 So edit "Ode" right at the top,
 with something snazzy, make it pop!
+
+Once you're finished with a fanfare, 
+look to the bottom and click share-
+Add an image to your clipboard;
+you can post it and be adored.
 
 I do not claim this tool's correct,
 It's likely wrong in some respect.

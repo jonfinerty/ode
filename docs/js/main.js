@@ -150,6 +150,8 @@ function setupInputEvents() {
   const inputElement = document.querySelector("#input");
   inputElement.onkeydown = function (event) {
 
+    clearTimeout(rhymeSuggestionTimeout);
+
     //todo tab fills in autocomplete
     if (isAutocompleteShowing()) {
       switch (event.key) {
@@ -157,16 +159,17 @@ function setupInputEvents() {
         case "ArrowDown":
           event.preventDefault();
           nextAutocompleteSuggestion();
-          break;
+          return;
         case "Up": // IE/Edge specific value
         case "ArrowUp":
           event.preventDefault();
           previousAutocompleteSuggestion();
-          break;
+          return;
         case "Tab":
         case "Enter":
           event.preventDefault();
           fillInAutoComplete();
+          return;
         default:
           hideAutocomplete();
       }
@@ -206,7 +209,7 @@ function setupInputEvents() {
     clearTimeout(autocompleteTimeout);
     autocompleteTimeout = setTimeout(() => {
       if (isCursorAtEndOfLine() && !currentLineRhymes()) {
-        showAutocomplete();  
+        showAutocomplete(false);  
       }
     },2000);
   }

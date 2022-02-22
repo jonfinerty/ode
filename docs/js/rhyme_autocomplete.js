@@ -111,7 +111,7 @@ function previousAutocompleteSuggestion() {
 
 }
 
-function showAutocomplete() {
+function showAutocomplete(showIfEmpty = true) {
     autocompleteSpan?.remove();
     autocompleteSpan = null;
 
@@ -130,7 +130,9 @@ function showAutocomplete() {
 
     const rhymeTarget = getRhymeTarget(currentPoemLineNumber, currentInputLineNumber);
     autocompleteSpan = createAutocompleteSpan(rhymeTarget);
-    
+    if (!showIfEmpty && autocompleteSpan.innerText == "No rhymes found") {
+        return;
+    }
     // text node has to start from a word boundary
     // so get end of input text (up to selection) from last word boundary, thats then before the new span and (text node - this prefix) is after
     const textNode = precedingSpan ? precedingSpan.nextSibling : previousLastWordSpan.nextSibling;
@@ -151,8 +153,8 @@ function getRhymeTarget(currentPoemLineNumber, currentInputLineNumber) {
     // first previous non rhymed word, up to 4 lines back, if all rhymed, then just the previous one
     const rhymeWindow = 4;
     let targetPoemLine = currentPoemLineNumber - 1;
-    for (let poemLineIndex = currentPoemLineNumber-1; poemLineIndex > Math.max(0,(currentPoemLineNumber-rhymeWindow)); poemLineIndex--) {
-        // check if last word is a rhyme
+    for (let poemLineIndex = currentPoemLineNumber-1; poemLineIndex >= Math.max(0,(currentPoemLineNumber-rhymeWindow)); poemLineIndex--) {
+        // check if last word is not a rhyme
         if (document.querySelector(".rhyme.last-word[data-poem-line-number=\""+poemLineIndex+"\"]") == null) {
             targetPoemLine = poemLineIndex;
             break;
