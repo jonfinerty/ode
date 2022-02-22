@@ -157,7 +157,10 @@ function showRhymeSuggestions(wordSpan) {
     suggestions.innerHTML = rhymes.map(r => { return "<span>" + r + "</span>" }).join("<br>");
     suggestions.scrollTop = 0;
 
-    suggestions.focus();
+    const isMobileBrowser = navigator.userAgent.indexOf("Mobi") != -1;
+    if (!isMobileBrowser) {
+        suggestions.focus();
+    }
 }
 
 function getStringRhymes(inputString, preferredSyllableCount, syllableStressIndexes) {
