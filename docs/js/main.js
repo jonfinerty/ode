@@ -92,7 +92,7 @@ function onInputClicked(event) {
 
 function onTitleUpdated() {
   const titleElement = document.querySelector('#title');
-  titleElement.classList.remove(".placeholder");
+  titleElement.classList.remove("placeholder");
   console.log("here");
   saveState();
 }
