@@ -160,7 +160,7 @@ function showRhymeSuggestions(wordSpan) {
     suggestions.focus();
 }
 
-function getStringRhymes(inputString, preferredSyllableCount) {
+function getStringRhymes(inputString, preferredSyllableCount, syllableStressIndexes) {
     const word = new Word(inputString);
     const rhymingWords = [];
 
@@ -175,7 +175,7 @@ function getStringRhymes(inputString, preferredSyllableCount) {
         });
     });
 
-    rhymingWords.sort(getRhymeSortComparator(preferredSyllableCount, word));
+    rhymingWords.sort(getRhymeSortComparator(preferredSyllableCount, word, syllableStressIndexes));
 
     const sortedFiltedRhymingStrings = rhymingWords.map(word => {
         return word.text;
@@ -184,7 +184,7 @@ function getStringRhymes(inputString, preferredSyllableCount) {
     return sortedFiltedRhymingStrings;
 }
 
-function getRhymeSortComparator(preferredSyllableCount, inputWord) {
+function getRhymeSortComparator(preferredSyllableCount, inputWord, syllableStressIndexes) {
     return function (word1, word2) {
         // if + then word2 goes first
         // if - then word1 goes first
@@ -192,6 +192,12 @@ function getRhymeSortComparator(preferredSyllableCount, inputWord) {
         // proper nouns last
         // then particles
         // then freq
+        if (syllableStressIndexes != []) {
+            syllableStressIndexes.forEach(stressedIndex => {
+
+            })
+        }
+
         if (preferredSyllableCount) {
             if (word1.syllableCount == preferredSyllableCount && word2.syllableCount != preferredSyllableCount) {
                 return -1;
@@ -225,6 +231,17 @@ function getRhymeSortComparator(preferredSyllableCount, inputWord) {
 
         return word2.frequency - word1.frequency;
     }
+}
+
+function doesWordMatchStresses(word, stressedIndexes) {
+    let matches = true;
+    syllableStressIndexes.forEach(stressedIndex => {
+        if (word.firstStressedSyllableIndex != stressedIndex && word.secondStressedSyllableIndex != stressedIndex) {
+            matches = false;
+        }
+    });
+
+    return matches;
 }
 
 function removeClassesByPrefix(element, prefix) {
