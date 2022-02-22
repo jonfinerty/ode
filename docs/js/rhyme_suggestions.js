@@ -71,7 +71,7 @@ function documentCoordinatesToWordSpan(x, y) {
 }
 
 // oh no. make more efficient?
-document.getElementById('grid-container').addEventListener('mousemove', function (event) {
+document.addEventListener('mousemove', function (event) {
     const x = event.clientX;
     const y = event.clientY;
 
@@ -91,7 +91,7 @@ function onHoveredWordSpanChanged(wordSpan) {
     }
     rhymeSuggestionTimeout = setTimeout((scopedWordSpan) => {
         showRhymeSuggestions(scopedWordSpan);
-    }, 1000, wordSpan);
+    }, 1500, wordSpan);
 }
 
 function rhymeSuggestionsShowing() {

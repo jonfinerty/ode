@@ -403,5 +403,11 @@ function updateMenuPosition() {
 window.visualViewport.addEventListener('scroll', updateMenuPosition);
 window.visualViewport.addEventListener('resize', updateMenuPosition);
 window.addEventListener('click', () => {
-  onInputClicked();
+  if (rhymeSuggestionsShowing()) {
+    hideRhymeSuggestions();
+  } else if (isAutocompleteShowing()) {
+    hideAutocomplete();
+  } else {
+    onInputClicked();
+  }
 });
