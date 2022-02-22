@@ -186,6 +186,7 @@ button {
 }
 
 #rhyme-suggestions-container {
+  text-align: left;
   position: absolute;
   font-size: clamp(16px, 2.5vw, 32px);
   font-family: 'Libre Baskerville', serif;
