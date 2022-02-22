@@ -161,6 +161,7 @@ function showRhymeSuggestions(wordSpan) {
 }
 
 function getStringRhymes(inputString, preferredSyllableCount, syllableStressIndexes) {
+    console.log(inputString, preferredSyllableCount, syllableStressIndexes);
     const word = new Word(inputString);
     const rhymingWords = [];
 
@@ -186,16 +187,23 @@ function getStringRhymes(inputString, preferredSyllableCount, syllableStressInde
 
 function getRhymeSortComparator(preferredSyllableCount, inputWord, syllableStressIndexes) {
     return function (word1, word2) {
-        // if + then word2 goes first
         // if - then word1 goes first
+        // if + then word2 goes first
 
         // proper nouns last
         // then particles
         // then freq
-        if (syllableStressIndexes != []) {
-            syllableStressIndexes.forEach(stressedIndex => {
-
-            })
+        if (syllableStressIndexes != null) {
+            const word1MatchesStress = doesWordMatchStresses(word1, syllableStressIndexes);
+            const word2MatchesStress = doesWordMatchStresses(word2, syllableStressIndexes);
+            if (word1MatchesStress && !word2MatchesStress) {
+                console.log(word1 + " matches better than " + word2);
+                return -1;
+            }
+            if (!word1MatchesStress && word2MatchesStress) {
+                console.log(word2 + " matches better than " + word1);
+                return 1;
+            }    
         }
 
         if (preferredSyllableCount) {
@@ -229,13 +237,21 @@ function getRhymeSortComparator(preferredSyllableCount, inputWord, syllableStres
             return -1;
         }
 
+        // bias towards words longer than 2 letters
+        if (word1.text.length > 2 && word2.text.length <= 2) {
+            return -1;
+        }
+        if (word1.text.length <= 2 && word2.text.length > 2) {
+            return 1;
+        }
+
         return word2.frequency - word1.frequency;
     }
 }
 
 function doesWordMatchStresses(word, stressedIndexes) {
     let matches = true;
-    syllableStressIndexes.forEach(stressedIndex => {
+    stressedIndexes.forEach(stressedIndex => {
         if (word.firstStressedSyllableIndex != stressedIndex && word.secondStressedSyllableIndex != stressedIndex) {
             matches = false;
         }

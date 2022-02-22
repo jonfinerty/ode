@@ -64,13 +64,9 @@ function fillInAutoComplete() {
     const currentSuggestion = rhymes[rhymeIndex];
 
     const inputElement = document.querySelector("#input");
-    console.log(inputElement.value);
     const selectionPoint = inputElement.selectionStart;
     const textUpToCursor = inputElement.value.substring(0, selectionPoint);
-    console.log(selectionPoint);
-    console.log(textUpToCursor);
     const textBeyondCursor = inputElement.value.substring(selectionPoint);
-    console.log(textBeyondCursor);
 
     inputElement.value = textUpToCursor + currentSuggestion + textBeyondCursor;
     inputElement.selectionEnd = selectionPoint + currentSuggestion.length;
