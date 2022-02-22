@@ -1,9 +1,10 @@
 "use strict";
 
-let rhymeCounter = 1;
+let rhymeCounter = 0;
+let colourCount = 10;
 
 function applyRhymeHighlighting() {
-    rhymeCounter = 1;
+    rhymeCounter = 0;
 
     // last word rhyming
     const lastWordSpans = document.querySelectorAll(".last-word");
@@ -63,14 +64,14 @@ function highlightWordSpansAsRhyming(span1, span2) {
     const span1RhymeScheme = getRhymeSchemeOfSpan(span1);
     const span2RhymeScheme = getRhymeSchemeOfSpan(span2)
 
-    if (span1RhymeScheme) {
+    if (span1RhymeScheme != null) {
         span2.classList.add("rhyme-" + span1RhymeScheme);
-    } else if (span2RhymeScheme) {
+    } else if (span2RhymeScheme != null) {
         span1.classList.add("rhyme-" + span2RhymeScheme);
     } else {
         //todo increase from 16 colours
-        span1.classList.add("rhyme-" + (rhymeCounter % 16));
-        span2.classList.add("rhyme-" + (rhymeCounter % 16));
+        span1.classList.add("rhyme-" + (rhymeCounter % colourCount));
+        span2.classList.add("rhyme-" + (rhymeCounter % colourCount));
         rhymeCounter++;
     }
 }
@@ -82,4 +83,6 @@ function getRhymeSchemeOfSpan(span) {
             return parseInt(className.substring('rhyme-'.length));
         }
     }
+
+    return null;
 }

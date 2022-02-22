@@ -1,11 +1,6 @@
 html {
   font-family: 'Libre Baskerville', serif;
-  overflow: initial !important;
 }
-
-/* html,body {
-  height: 100%;
-} */
 
 body {
   padding-left: calc(100vw - 100%);
@@ -30,11 +25,11 @@ h1 {
   background-color: white;
   opacity: 1;
   transition: opacity 0.4s;
-  position:absolute;
-  top:0px;
-  right:0px;
-  bottom:0px;
-  left:0px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
   pointer-events: none;
 }
 
@@ -53,9 +48,11 @@ h1 {
 #title.placeholder {
   opacity: 0.4;
 }
+
 #metre.placeholder {
   opacity: 0.6;
 }
+
 #display.placeholder {
   opacity: 0.4;
 }
@@ -76,13 +73,14 @@ h1 {
   background: #ffffff;
   box-shadow: 0px 0px 10px 10px #ffffff;
   border-top-left-radius: 10px;
-  z-index: 4; /* needs to be ontop of the content */
+  z-index: 4;
+  /* needs to be ontop of the content */
 }
 
 .menu-item {
   transition: opacity 0.4s;
   opacity: 0.4;
-  color: inherit; 
+  color: inherit;
   text-decoration: inherit;
   margin-left: 12px;
 }
@@ -112,8 +110,8 @@ h1 {
   grid-column: 1;
   text-align: right;
   color: #D3D3D3;
-  font-size: clamp(10px,1.5vw,12px);
-  line-height: clamp(32px,5vw,64px);
+  font-size: clamp(10px, 1.5vw, 12px);
+  line-height: clamp(32px, 5vw, 64px);
   margin: 0;
 }
 
@@ -127,16 +125,16 @@ h1 {
   margin: 0 auto;
   min-width: 50vw;
   background: transparent;
-  white-space: nowrap; 
+  white-space: nowrap;
   resize: none;
 }
 
 #input, #display {
-  font-size: clamp(16px,2.5vw,32px);
+  font-size: clamp(16px, 2.5vw, 32px);
   font-family: 'Libre Baskerville', serif;
-  line-height: clamp(32px,5vw,64px);
+  line-height: clamp(32px, 5vw, 64px);
   /* to increase need to work out metre bug */
-  tab-size: 1; 
+  tab-size: 1;
 }
 
 /* Move the textarea in front of the result */
@@ -158,21 +156,22 @@ h1 {
 
 #input {
   color: transparent;
-  caret-color: black; 
-  overflow:hidden; /* prevent occasional scrollbars popping in */
+  caret-color: black;
+  overflow: hidden;
+  /* prevent occasional scrollbars popping in */
 }
 
 #metre {
   color: #D3D3D3;
   font-size: clamp(10px, 1.5vw, 16px);
-  line-height: clamp(32px,5vw,64px);
+  line-height: clamp(32px, 5vw, 64px);
 }
 
 #rhyme-suggestions-container {
   position: absolute;
-  font-size: clamp(16px,2.5vw,32px);
+  font-size: clamp(16px, 2.5vw, 32px);
   font-family: 'Libre Baskerville', serif;
-  line-height: clamp(16px,2.5vw,32px);
+  line-height: clamp(16px, 2.5vw, 32px);
   z-index: 3;
   background: #ffffff;
   box-shadow: 0px 0px 10px 10px #ffffff
@@ -180,8 +179,10 @@ h1 {
 
 #rhyme-suggestions {
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
   max-height: 50vh;
   padding-top: 23px;
   padding-bottom: 20px;
@@ -197,17 +198,14 @@ h1 {
   content: "";
   position: absolute;
   height: 100%;
-  width: calc(100% - 17px); /* scrollbar nonsense */
-  background: linear-gradient(
-      to bottom, 
-      rgba(255,255,255,1) 0, 
-      rgba(255,255,255,0) 50px
-  ),
-  linear-gradient(
-      to top, 
-      rgba(255,255,255,1) 0, 
-      rgba(255,255,255,0) 50px
-  ); 
+  width: calc(100% - 17px);
+  /* scrollbar nonsense */
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 1) 0,
+      rgba(255, 255, 255, 0) 50px),
+    linear-gradient(to top,
+      rgba(255, 255, 255, 1) 0,
+      rgba(255, 255, 255, 0) 50px);
   pointer-events: none;
 }
 
@@ -216,65 +214,41 @@ h1 {
 }
 
 .rhyme-0 {
-  color:#2D4FA2;
+  color: #2D4FA2;
 }
 
 .rhyme-1 {
-  color:purple;
+  color: #800080;
 }
 
 .rhyme-2 {
-  color:#B92D65;
+  color: #B92D65;
 }
 
 .rhyme-3 {
-  color:#D87E37;
+  color: #D87E37;
 }
 
 .rhyme-4 {
-  color:#E8BD50;
+  color: #E8BD50;
 }
 
 .rhyme-5 {
-  color:#00BFB2;
+  color: #00BFB2;
 }
 
 .rhyme-6 {
-  color:#F25D5A;
+  color: #F25D5A;
 }
 
 .rhyme-7 {
-  color:#79C362;
+  color: #79C362;
 }
 
 .rhyme-8 {
-  color:#DF3075;
+  color: #DF3075;
 }
 
 .rhyme-9 {
-  color:#542056;
-}
-
-.rhyme-10 {
-  color:#B92D65;
-}
-
-.rhyme-11 {
-  color:#D87E37;
-}
-
-.rhyme-12 {
-  color:#E8BD50;
-}
-
-.rhyme-13 {
-  color:#00BFB2;
-}
-
-.rhyme-14 {
-  color:#F25D5A;
-}
-
-.rhyme-15 {
-  color:#79C362;
+  color: #2da281;
 }
