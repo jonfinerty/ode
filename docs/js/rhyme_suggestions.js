@@ -23,6 +23,20 @@ document.getElementById('rhyme-suggestions-container').addEventListener('mouseen
     clearTimeout(hoverTimeout);
 });
 
+function onRhymeSuggestionsKeydown(event) {
+    switch (event.key) {
+        case "Down": // IE/Edge specific value
+        case "ArrowDown":
+          break;
+        case "Up": // IE/Edge specific value
+        case "ArrowUp":
+          break;
+        default:
+          hideRhymeSuggestions();
+          document.querySelector("#input").focus();
+      }
+}
+
 // make more efficient
 function viewPortCoordinatesToWordSpan(x, y) {
 
@@ -142,6 +156,8 @@ function showRhymeSuggestions(wordSpan) {
     }
     suggestions.innerHTML = rhymes.map(r => { return "<span>" + r + "</span>" }).join("<br>");
     suggestions.scrollTop = 0;
+
+    suggestions.focus();
 }
 
 function getStringRhymes(inputString, preferredSyllableCount) {

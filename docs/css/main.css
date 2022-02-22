@@ -209,6 +209,10 @@ button {
   padding-right: 20px;
 }
 
+:focus {
+  outline: none;
+}
+
 #rhyme-suggestions::-webkit-scrollbar {
   width: 0;
   height: 0;

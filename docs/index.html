@@ -60,7 +60,7 @@
       href="#about" id="menu-item-about" class="menu-item" onclick="aboutClicked(event);">about</a><button
       id="menu-item-back" class="menu-item hidden" onclick="backClicked(event);">back</back></div>
   <div id="rhyme-suggestions-container" onclick="onRhymeSuggestionsClicked(event);" class="hidden">
-    <div id="rhyme-suggestions"></div>
+    <div id="rhyme-suggestions" tabindex="-1" onkeydown="onRhymeSuggestionsKeydown(event);"></div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
