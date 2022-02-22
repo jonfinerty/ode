@@ -96,6 +96,13 @@ function onTitleUpdated() {
   saveState();
 }
 
+function onTitleKeydown(event) {
+  if (event.key == 'Enter') {
+    event.preventDefault();
+    document.querySelector("#input").focus();
+  }
+}
+
 function render() {
   time(updateHeights);
   time(renderDisplay);
@@ -267,12 +274,14 @@ function revealContent() {
 
 function waitForFontToLoad(then) {
   if (document.fonts) {
-    document.fonts.load('64px "Libre Baskerville"').then(() => {
+    document.fonts.ready.then(() => {
       then();
     })
   } else {
-    console.log("font wait api not available");
-    then();
+    console.log("font wait api not available, waiting a cool second");
+    setTimeout(() => {
+      then();
+    }, 1000);
   }
 }
 

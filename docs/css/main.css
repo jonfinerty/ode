@@ -124,16 +124,6 @@ button {
   margin-right: 24px;
 }
 
-#syllables {
-  user-select: none;
-  grid-column: 1;
-  text-align: right;
-  color: #D3D3D3;
-  font-size: clamp(10px, 1.5vw, 12px);
-  line-height: clamp(32px, 5vw, 64px);
-  margin: 0;
-}
-
 .overlaid {
   box-sizing: border-box;
   border: none;
@@ -181,9 +171,21 @@ button {
 }
 
 #metre {
+  font-family: 'Azeret Mono', monospace;
   color: #D3D3D3;
-  font-size: clamp(10px, 1.5vw, 16px);
+  font-size: clamp(8px, 1.5vw, 16px);
   line-height: clamp(32px, 5vw, 64px);
+}
+
+#syllables {
+  font-family: 'Azeret Mono', monospace;
+  user-select: none;
+  grid-column: 1;
+  text-align: right;
+  color: #D3D3D3;
+  font-size: clamp(10px, 1.5vw, 12px);
+  line-height: clamp(32px, 5vw, 64px);
+  margin: 0;
 }
 
 #rhyme-suggestions-container {

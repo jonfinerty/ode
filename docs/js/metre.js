@@ -8,7 +8,7 @@ function getSyllableCountOfPoemLine(lineNumber) {
 function updateMetre() {
     const metreFontSize = getCanvasFont(document.querySelector("#metre"));
     const displayFontSize = getCanvasFont(document.querySelector("#display"));
-    const metreCharacterSize = getTextWidth("●", metreFontSize);
+    const metreSpaceSize = getTextWidth(" ", metreFontSize);
     const input_element = document.querySelector("#input")
     const text = input_element.value;
     let metre = "";
@@ -24,34 +24,36 @@ function updateMetre() {
         var lineMetre = "";
         const words = splitLineToWords(line);
 
+        let remainingLine = line;
         let runningTextLength = 0;
-        let runningMetreLength = 0;
+
         words.forEach(word => {
-            const wordIndex = line.indexOf(word.text);
-            const precedingWhitespaceAndPunctuation = line.substring(0, wordIndex);
+            const wordIndex = remainingLine.indexOf(word.text);
+            const precedingWhitespaceAndPunctuation = remainingLine.substring(0, wordIndex);
             const precedingSize = getTextWidth(precedingWhitespaceAndPunctuation, displayFontSize);
 
             runningTextLength += precedingSize;
 
             //how many spaces to get up to runningTextLength from runningMetreLength
-            const spacesNeeded = Math.floor((Math.max(0, runningTextLength - runningMetreLength) / metreCharacterSize) + 0.4); //favour an extra space
-            lineMetre += "&nbsp;".repeat(spacesNeeded);
-            runningMetreLength += spacesNeeded * metreCharacterSize;
+            let currentMetreLength = getTextWidth(lineMetre, metreFontSize);
+            const spacesNeeded = Math.floor((Math.max(0, runningTextLength - currentMetreLength) / metreSpaceSize) + 0.4); //favour an extra space
+            lineMetre += " ".repeat(spacesNeeded);
 
             const wordSize = getTextWidth(word.text, displayFontSize);
             runningTextLength += wordSize;
-            const metreCharactersNeeded = Math.floor(wordSize / metreCharacterSize);
+            const metreCharactersNeeded = Math.floor(wordSize / metreSpaceSize);
 
-            const wordMetre = distributeEvenly(word.getDisplaySyllables(), metreCharactersNeeded);
+            const wordSyllables = word.getDisplaySyllables();
+            const wordMetre = distributeEvenly(wordSyllables, metreCharactersNeeded);
             lineMetre += wordMetre
-            runningMetreLength += (metreCharactersNeeded * metreCharacterSize);
 
-            while ((runningTextLength - runningMetreLength) > 0) {
-                lineMetre += "&nbsp;"
-                runningMetreLength += metreCharacterSize;
+            currentMetreLength = getTextWidth(lineMetre, metreFontSize);
+            while ((runningTextLength - currentMetreLength) > 0) {
+                lineMetre += " ";
+                currentMetreLength = getTextWidth(lineMetre, metreFontSize);
             }
 
-            line = line.substring(wordIndex + word.text.length);
+            remainingLine = remainingLine.substring(wordIndex + word.text.length);
 
             lineSyllableCount += word.syllableCount;
         });
@@ -65,7 +67,7 @@ function updateMetre() {
             syllablesOutput += "<span class=\"syllable-count\" data-poem-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter + "\">" + lineSyllableCount + '</span><br>';
             lineCounter++;
         }
-        metre = metre + lineMetre + '<br>';
+        metre = metre + lineMetre.replace(/ /g, "&nbsp;") + '<br>';
         previousLineSyllableCount = lineSyllableCount;
     })
 
@@ -108,14 +110,14 @@ function distributeEvenly(syllables, characterCount) { // syllables = ['●','�
                 output += syllables[syllableIndex];
                 syllableIndex++;
             } else {
-                output += "&nbsp;";
+                output += " ";
             }
         }
     } else {
         const leap = Math.floor(characterCount / (characterCount - syllables.length))
         for (let i = 0; i < characterCount; i++) {
             if (i % leap == Math.floor(leap / 2) || syllableIndex >= syllables.length) {
-                output += "&nbsp;";
+                output += " ";
             } else {
                 output += syllables[syllableIndex];
                 syllableIndex++;

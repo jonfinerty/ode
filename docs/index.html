@@ -24,7 +24,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300&family=Libre+Baskerville&display=swap" rel="stylesheet">
 
   <script type="text/javascript">
     (function (f, b) {
@@ -44,14 +44,14 @@
 
 <body>
   <div id="poem">
-    <h1 contenteditable="true" id="title" spellcheck="false" oninput="time(onTitleUpdated);" onclick="onTitleClicked(event);"></h1>
+    <h1 contenteditable="true" id="title" spellcheck="false" oninput="time(onTitleUpdated);" onkeydown="onTitleKeydown(event);" onclick="onTitleClicked(event);"></h1>
     <div id="content">
       <div id="grid-container">
         <pre id="syllables"></pre>
         <textarea autofocus id="input" class="overlaid" spellcheck="false" maxlength="7500" onpaste="time(onInputPasted, event);"
           oninput="time(onInputUpdated, event);" onclick="onInputClicked(event);"></textarea>
         <pre id="display" class="overlaid" aria-hidden="true"></pre>
-        <pre id="metre" class="overlaid" aria-hidden="true"></pre>
+        <pre id="metre" class="overlaid" aria-hidden="true">default text to cause font load</pre>
       </div>
     </div>
   </div>
