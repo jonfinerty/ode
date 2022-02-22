@@ -172,6 +172,7 @@ button {
 
 #metre {
   font-family: 'Azeret Mono', monospace;
+  font-weight: 300;
   color: #D3D3D3;
   font-size: clamp(8px, 1.5vw, 16px);
   line-height: clamp(32px, 5vw, 64px);
@@ -179,6 +180,7 @@ button {
 
 #syllables {
   font-family: 'Azeret Mono', monospace;
+  font-weight: 300;
   user-select: none;
   grid-column: 1;
   text-align: right;
