@@ -27,14 +27,14 @@ function onRhymeSuggestionsKeydown(event) {
     switch (event.key) {
         case "Down": // IE/Edge specific value
         case "ArrowDown":
-          break;
+            break;
         case "Up": // IE/Edge specific value
         case "ArrowUp":
-          break;
+            break;
         default:
-          hideRhymeSuggestions();
-          document.querySelector("#input").focus();
-      }
+            hideRhymeSuggestions();
+            document.querySelector("#input").focus();
+    }
 }
 
 // make more efficient
@@ -72,7 +72,6 @@ function documentCoordinatesToWordSpan(x, y) {
 
 // oh no. make more efficient?
 document.getElementById('grid-container').addEventListener('mousemove', function (event) {
-    console.log("triggered");
     const x = event.clientX;
     const y = event.clientY;
 
@@ -115,7 +114,7 @@ function getWordSpanAtCursor() {
 function showRhymeSuggestionsAtCursor() {
 
     const wordSpan = getWordSpanAtCursor();
-   
+
     if (wordSpan != null) {
         showRhymeSuggestions(wordSpan);
     }
@@ -129,7 +128,7 @@ function rerenderRhymeSuggestions() {
 
 function showRhymeSuggestions(wordSpan) {
     hideAutocomplete();
-    
+
     rhymeSuggestionWordSpanAnchor = wordSpan;
     const wordSpanPos = wordSpan.getBoundingClientRect();
     let rhymeCssClass = null;
@@ -162,7 +161,6 @@ function showRhymeSuggestions(wordSpan) {
 }
 
 function getStringRhymes(inputString, preferredSyllableCount, syllableStressIndexes) {
-    console.log(inputString, preferredSyllableCount, syllableStressIndexes);
     const word = new Word(inputString);
     const rhymingWords = [];
 
@@ -198,13 +196,11 @@ function getRhymeSortComparator(preferredSyllableCount, inputWord, syllableStres
             const word1MatchesStress = doesWordMatchStresses(word1, syllableStressIndexes);
             const word2MatchesStress = doesWordMatchStresses(word2, syllableStressIndexes);
             if (word1MatchesStress && !word2MatchesStress) {
-                console.log(word1 + " matches better than " + word2);
                 return -1;
             }
             if (!word1MatchesStress && word2MatchesStress) {
-                console.log(word2 + " matches better than " + word1);
                 return 1;
-            }    
+            }
         }
 
         if (preferredSyllableCount) {

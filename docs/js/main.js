@@ -68,7 +68,7 @@ function onRhymeSuggestionsClicked(event) {
 
 function onInputClicked(event) {
   event?.stopPropagation();
-  
+
   hideRhymeSuggestions();
 
   const inputElement = document.querySelector("#input");
@@ -93,7 +93,6 @@ function onInputClicked(event) {
 function onTitleUpdated() {
   const titleElement = document.querySelector('#title');
   titleElement.classList.remove("placeholder");
-  console.log("here");
   saveState();
 }
 
@@ -205,25 +204,29 @@ function setupInputEvents() {
       element.selectionEnd = tabStartPos + 1;
       onInputUpdated();
     }
-     
+
     clearTimeout(autocompleteTimeout);
     autocompleteTimeout = setTimeout(() => {
       if (isCursorAtEndOfLine() && !currentLineRhymes()) {
-        showAutocomplete(false);  
+        showAutocomplete(false);
       }
-    },2000);
+    }, 2000);
   }
 }
 
 function loadState() {
   const storage = window.localStorage;
-  const title = storage.getItem('title') || "Ode";
-
-  setTitle(title);
+  const titleElement = document.querySelector("#title");
+  const title = storage.getItem('title');
+  if (title) {
+    titleElement.innerText = title;
+  } else {
+    titleElement.innerText = "Ode";
+    titleElement.classList.add("placeholder");
+  }
 
   const content = storage.getItem('content');
   const inputElement = document.querySelector("#input");
-  console.log("LOADING STATE: " + content);
   if (content) {
     inputElement.value = content;
     if (title == "Ode") {
@@ -238,11 +241,6 @@ function loadState() {
 function getTitle() {
   const titleElement = document.querySelector("#title");
   return titleElement.innerText;
-}
-
-function setTitle(text) {
-  const titleElement = document.querySelector("#title");
-  titleElement.innerText = text;
 }
 
 function saveState() {
@@ -288,7 +286,6 @@ function time(func, ...params) {
 }
 
 function updateHeights() {
-  console.log("updating height");
   const input_element = document.querySelector("#input")
   const display_element = document.querySelector("#display");
   const metre_element = document.querySelector("#metre");
@@ -349,6 +346,7 @@ function aboutClicked(event) {
 
   setTimeout(() => {
     titleElement.innerText = 'About Ode';
+    titleElement.classList.remove("placeholder");
     removePlaceholderText();
     setMode("about");
     inputElement.value = aboutPoem;
@@ -363,7 +361,7 @@ function backClicked(event) {
   event?.stopPropagation();
   hideRhymeSuggestions();
   location.hash = "";
-  
+
   setMode("input");
   const inputElement = document.querySelector("#input");
   const titleElement = document.querySelector("#title");
@@ -389,7 +387,6 @@ function backClicked(event) {
 
 
 function setMode(newMode) {
-  //console.log("setting mode to "+mode);
   mode = newMode;
 }
 
@@ -399,7 +396,6 @@ function updateMenuPosition() {
   // bottom and right count from bottom right corner (i.e. bottom right corner of page is 0,0)
   const bottom = (window.innerHeight - (viewport.offsetTop + viewport.height));
   const right = (window.innerWidth - (viewport.offsetLeft + viewport.width));
-  // console.log(bottom, right);
   menu.style.bottom = bottom + "px";
   menu.style.right = right + "px";
 }

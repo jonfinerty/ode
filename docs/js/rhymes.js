@@ -89,5 +89,5 @@ function getRhymeSchemeOfSpan(span) {
 
 function currentLineRhymes() {
     const lineNumber = getInputLineNumberOfCursor();
-    return document.querySelector(".rhyme.last-word[data-input-line-number=\""+lineNumber+"\"]") != null;
+    return document.querySelector(".rhyme.last-word[data-input-line-number=\"" + lineNumber + "\"]") != null;
 }

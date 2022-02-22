@@ -69,13 +69,13 @@ class Word {
         return standardiseText(this.text) == standardiseText(string);
     }
 
-    sharesEnding(otherWord, endingLength=4) {
+    sharesEnding(otherWord, endingLength = 4) {
         return standardiseText(this.text).slice(-endingLength) == standardiseText(otherWord.text).slice(-endingLength);
     }
 }
 
 function standardiseText(text) {
-    return text.replace(/’/g, "'").toLowerCase(); 
+    return text.replace(/’/g, "'").toLowerCase();
 }
 
 // to: think about rhyme groups and the 'x'less variants
@@ -96,17 +96,17 @@ function getBestFitWordProperties(string) {
         return wordDict[aposLessWord];
     }
 
-    const llLessWord =  standardisedText.replace(/(\'ll)$/g, "");
+    const llLessWord = standardisedText.replace(/(\'ll)$/g, "");
     if (llLessWord in wordDict) {
         return wordDict[llLessWord];
     }
 
-    const dLessWord =  standardisedText.replace(/(\'d)$/g, "");
+    const dLessWord = standardisedText.replace(/(\'d)$/g, "");
     if (dLessWord in wordDict) {
         return wordDict[dLessWord];
     }
 
-    const veLessWord =  standardisedText.replace(/(\'ve)$/g, "");
+    const veLessWord = standardisedText.replace(/(\'ve)$/g, "");
     if (veLessWord in wordDict) {
         return wordDict[veLessWord];
     }

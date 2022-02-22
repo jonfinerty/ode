@@ -9,7 +9,7 @@ function renderDisplay() {
 
     let previousLineWordCount = 0; // because of how we cope with multiple blank lines
     let stanzaCounter = 0;
-    let lineCounter = 0; 
+    let lineCounter = 0;
     let wordCounter = 0
     const lines = splitTextToLines(text);
     lineCount = lines.length;
@@ -26,7 +26,7 @@ function renderDisplay() {
         }
 
         previousLineWordCount = words.length;
-        
+
         let processedLine = "";
         let remainingUnprocessedLine = line;
         words.forEach((word, wordIndex) => {
@@ -35,21 +35,21 @@ function renderDisplay() {
             if (wordIndex == 0) {
                 cssClasses += " first-word";
             }
-            if (wordIndex == words.length-1) {
+            if (wordIndex == words.length - 1) {
                 cssClasses += " last-word";
             }
 
             cssClasses += "\"";
 
             // might be too much?
-            const dataAttributes = 
-            "data-input-line-number=\"" + lineIndex + "\"" +
-            " data-poem-line-number=\"" + lineCounter + "\"" +
-            " data-stanza-number=\"" + stanzaCounter +"\"" +
-            " data-word-number=\"" + wordCounter + "\"" +
-            " data-line-word-number=\"" + wordIndex +"\"";
+            const dataAttributes =
+                "data-input-line-number=\"" + lineIndex + "\"" +
+                " data-poem-line-number=\"" + lineCounter + "\"" +
+                " data-stanza-number=\"" + stanzaCounter + "\"" +
+                " data-word-number=\"" + wordCounter + "\"" +
+                " data-line-word-number=\"" + wordIndex + "\"";
 
-            let wordSpan = "<span " + dataAttributes + " " + cssClasses+ ">" + escapeHtml(word.text) + "</span>"
+            let wordSpan = "<span " + dataAttributes + " " + cssClasses + ">" + escapeHtml(word.text) + "</span>"
 
             if (mode == "about" && word.text.toLowerCase() == "tweet") {
                 wordSpan = "<a class=\"tweet\" href=\"#\">" + wordSpan + "</a>";

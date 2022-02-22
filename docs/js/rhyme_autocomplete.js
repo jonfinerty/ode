@@ -82,7 +82,7 @@ function nextAutocompleteSuggestion() {
     const preferredSyllables = autocompleteSpan.dataset.preferredSyllables;
     const stressIndexes = getSyllableStressIndexes();
     const rhymes = getStringRhymes(rhymeRootString, preferredSyllables, stressIndexes);
-     
+
     // i.e. there's a next one to go to
     if (rhymeIndex + 1 < rhymes.length) {
         rhymeIndex += 1;
@@ -100,7 +100,7 @@ function previousAutocompleteSuggestion() {
     let rhymeIndex = parseInt(autocompleteSpan.dataset.rhymeIndex);
     const preferredSyllables = autocompleteSpan.dataset.preferredSyllables;
     const stressIndexes = getSyllableStressIndexes();
-    const rhymes = getStringRhymes(rhymeRootString, preferredSyllables,stressIndexes);
+    const rhymes = getStringRhymes(rhymeRootString, preferredSyllables, stressIndexes);
 
     // i.e. there's a next one to go to
     if (rhymeIndex - 1 >= 0) {
@@ -139,7 +139,7 @@ function showAutocomplete(showIfEmpty = true) {
     const selectionPoint = inputElement.selectionStart;
     const textUpToCursor = inputElement.value.substring(0, selectionPoint);
     const whiteSpaceGroups = textUpToCursor.split(/\w+/g);
-    const textPastLastWord = whiteSpaceGroups[whiteSpaceGroups.length-1];
+    const textPastLastWord = whiteSpaceGroups[whiteSpaceGroups.length - 1];
 
     displayElement.insertBefore(autocompleteSpan, textNode);
     displayElement.insertBefore(document.createTextNode(textPastLastWord), autocompleteSpan);
@@ -153,9 +153,9 @@ function getRhymeTarget(currentPoemLineNumber, currentInputLineNumber) {
     // first previous non rhymed word, up to 4 lines back, if all rhymed, then just the previous one
     const rhymeWindow = 4;
     let targetPoemLine = currentPoemLineNumber - 1;
-    for (let poemLineIndex = currentPoemLineNumber-1; poemLineIndex >= Math.max(0,(currentPoemLineNumber-rhymeWindow)); poemLineIndex--) {
+    for (let poemLineIndex = currentPoemLineNumber - 1; poemLineIndex >= Math.max(0, (currentPoemLineNumber - rhymeWindow)); poemLineIndex--) {
         // check if last word is not a rhyme
-        if (document.querySelector(".rhyme.last-word[data-poem-line-number=\""+poemLineIndex+"\"]") == null) {
+        if (document.querySelector(".rhyme.last-word[data-poem-line-number=\"" + poemLineIndex + "\"]") == null) {
             targetPoemLine = poemLineIndex;
             break;
         }
@@ -179,7 +179,7 @@ function getRhymeTarget(currentPoemLineNumber, currentInputLineNumber) {
 }
 
 function getSyllableStressIndexesOfLine(poemLine) {
-    const lineWords = document.querySelectorAll(".word[data-poem-line-number=\""+poemLine+"\"]");
+    const lineWords = document.querySelectorAll(".word[data-poem-line-number=\"" + poemLine + "\"]");
     const syllableStresses = [];
     let syllableCount = 0;
     for (let i = 0; i < lineWords.length; i++) {
@@ -198,11 +198,11 @@ function getSyllableStressIndexesOfLine(poemLine) {
 }
 
 function createAutocompleteSpan(rhymeTarget) {
-    const {rhymeRoot, syllableCount, syllableStressIndexes} = rhymeTarget;
+    const { rhymeRoot, syllableCount, syllableStressIndexes } = rhymeTarget;
     var rhymes = getStringRhymes(rhymeRoot, syllableCount, syllableStressIndexes);
 
     var text = rhymes.length ? rhymes[0] : "No rhymes found"
-    
+
     autocompleteSpan = document.createElement("span");
     autocompleteSpan.id = "autocomplete";
     autocompleteSpan.innerText = text;

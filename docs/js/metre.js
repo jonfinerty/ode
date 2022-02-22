@@ -1,7 +1,7 @@
 "use strict";
 
 function getSyllableCountOfPoemLine(lineNumber) {
-    var element = document.querySelector(".syllable-count[data-poem-line-number=\"" + lineNumber+  "\"]");
+    var element = document.querySelector(".syllable-count[data-poem-line-number=\"" + lineNumber + "\"]");
     return parseInt(element?.innerText) || 0;
 }
 
@@ -62,11 +62,11 @@ function updateMetre() {
                 stanzaCounter++;
             }
         } else {
-            syllablesOutput += "<span class=\"syllable-count\" data-poem-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter +"\">" +lineSyllableCount + '</span><br>';
+            syllablesOutput += "<span class=\"syllable-count\" data-poem-line-number=\"" + lineCounter + "\" data-stanza-number=\"" + stanzaCounter + "\">" + lineSyllableCount + '</span><br>';
             lineCounter++;
         }
         metre = metre + lineMetre + '<br>';
-        previousLineSyllableCount = lineSyllableCount; 
+        previousLineSyllableCount = lineSyllableCount;
     })
 
     const metreElement = document.querySelector("#metre");
