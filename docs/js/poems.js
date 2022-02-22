@@ -534,10 +534,7 @@ More features might be on their way!
 This site and rhyme was made by Jon;
 developer, aged thirty-one.`;
 
-/*
-
-share your work
-
-change the title
-lexicon
-*/
+let introPoem = `Over the last few weeks,
+I've been writing some code.
+And after tweaks and tweaks and tweaks,
+It's a poem editor—called 'Ode'.`;

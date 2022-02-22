@@ -3,8 +3,16 @@
 function shareClicked(event) {
     mixpanel.track('About clicked');
     event?.stopPropagation();
+
+    const title = document.querySelector("#title"); 
+    let elementToScreenshot = null;
+    if (title.classList.contains('placeholder')) {
+        elementToScreenshot = document.querySelector("#content");
+    } else {
+        elementToScreenshot = document.querySelector("#poem");
+    }
     
-    html2canvas(document.querySelector("#poem"))
+    html2canvas(elementToScreenshot)
       .then(canvas => {
         const img = canvas.toDataURL("image/png");
         const imageFile = dataURLToImageFile(getTitle() + ".png", img);
