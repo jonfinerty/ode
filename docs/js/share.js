@@ -2,6 +2,7 @@
 
 
 function shareClicked(event) {
+    mixpanel.track('About clicked');
     event?.stopPropagation();
     hideRhymeSuggestions();
   

@@ -290,6 +290,7 @@ function splitLineToWords(line) {
 }
 
 function aboutClicked(event) {
+  mixpanel.track('About clicked');
   event?.stopPropagation();
   hideRhymeSuggestions();
   saveState();
@@ -319,6 +320,7 @@ function aboutClicked(event) {
 }
 
 function backClicked(event) {
+  mixpanel.track('Back clicked');
   event?.stopPropagation();
   hideRhymeSuggestions();
   setMode("input");
