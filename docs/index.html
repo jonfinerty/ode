@@ -36,7 +36,7 @@
           MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g)
       }
     })(document, window.mixpanel || []);
-    mixpanel.init('a92c3441d8e845762a5a6c62c2f8521a', { debug: true });
+    mixpanel.init('a92c3441d8e845762a5a6c62c2f8521a', { debug: false });
     mixpanel.track('Page load');
   </script>
 
