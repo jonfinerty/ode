@@ -1,7 +1,7 @@
 "use strict";
 
 function shareClicked(event) {
-  mixpanel.track('About clicked');
+  mixpanel.track('Share clicked');
   event?.stopPropagation();
 
   //trim trailing space
