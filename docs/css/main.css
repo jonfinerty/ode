@@ -208,7 +208,7 @@ button {
   /* Firefox */
   -ms-overflow-style: none;
   /* Internet Explorer 10+ */
-  max-height: 50vh;
+  max-height: 30vh;
   padding-top: 23px;
   padding-bottom: 20px;
   padding-right: 20px;
