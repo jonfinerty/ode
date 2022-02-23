@@ -2,6 +2,7 @@
 
 jonathanfinerty.com/ode
 
+```
 It shows you metre, helps you rhyme.
 It lets you poem at your prime.
 It's not a substitute for craft;
@@ -41,3 +42,4 @@ So here we are, what's left to say?
 More features might be on their way!
 This site and rhyme was made by Jon;
 developer, aged thirty-one.
+```
