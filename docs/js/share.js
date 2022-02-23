@@ -56,7 +56,7 @@ function shareImage(imageFile) {
       const data = [new ClipboardItem({ [imageFile.type]: imageFile })]
       navigator.clipboard.write(data).then(function () {
         // image copied to clipboard
-        setShareMessage("poem copied");
+        setShareMessage("poem image copied");
       }, function (err) {
         copyTextToClipboard(poemText);
       })
@@ -88,7 +88,7 @@ function fallbackCopyTextToClipboard(text) {
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
     if (successful) {
-      setShareMessage("poem copied to clipboard");
+      setShareMessage("poem text copied");
     }
   } catch (err) {
     console.error('Fallback: Oops, unable to copy', err);
@@ -104,7 +104,7 @@ function copyTextToClipboard(text) {
   }
 
   navigator.clipboard.writeText(text).then(function () {
-    setShareMessage("poem copied to clipboard");
+    setShareMessage("poem text copied");
   }, function (err) {
     console.error('Async: Could not copy text: ', err);
   });
