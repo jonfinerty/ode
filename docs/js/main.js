@@ -288,9 +288,9 @@ function waitForFontToLoad(then) {
 function time(func, ...params) {
   timeIndent++;
   const measureName = "-".repeat(timeIndent - 1) + func.name;
-  // console.time(measureName);
+  console.time(measureName);
   func(...params);
-  //console.timeEnd(measureName);
+  console.timeEnd(measureName);
   timeIndent--;
 }
 
