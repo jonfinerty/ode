@@ -37,7 +37,8 @@ function highlightListOfWordSpansWithRhymes(spans, includeParticlesAndUnknown, m
     spansAndWords.forEach((spanAndWord, index) => {
         const span1 = spanAndWord[0];
         const word1 = spanAndWord[1];
-        if (!includeParticlesAndUnknown && (word1.isParticle() || word1.isUnknownType())) {
+        const word1IsEndOfLine = span1.classList.contains("last-word");
+        if (!word1IsEndOfLine && (!includeParticlesAndUnknown && (word1.isParticle() || word1.isUnknownType()))) {
             return;
         }
 
@@ -45,7 +46,8 @@ function highlightListOfWordSpansWithRhymes(spans, includeParticlesAndUnknown, m
             const span2 = spans[i];
             const word2 = spansAndWords[i][1];
 
-            if (!includeParticlesAndUnknown && (word2.isParticle() || word2.isUnknownType())) {
+            const word2IsEndOfLine = span2.classList.contains("last-word");
+            if (!word2IsEndOfLine && (!includeParticlesAndUnknown && (word2.isParticle() || word2.isUnknownType()))) {
                 continue;
             }
 
