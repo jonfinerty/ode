@@ -66,7 +66,17 @@ function highlightWordSpansAsRhyming(span1, span2) {
     const span1RhymeScheme = getRhymeSchemeOfSpan(span1);
     const span2RhymeScheme = getRhymeSchemeOfSpan(span2)
 
-    if (span1RhymeScheme != null) {
+    if (span1RhymeScheme != null && span2RhymeScheme != null) {
+        //need to merge two rhyme groups
+        const resultingRhymeScheme = Math.min(span1RhymeScheme, span2RhymeScheme);
+        const rhymeSchemeToBeOverridden = Math.max(span1RhymeScheme, span2RhymeScheme);
+        const elementsWithRhymeToBeUpdated = document.querySelectorAll(".rhyme-" + rhymeSchemeToBeOverridden);
+        for (let i = 0; i < elementsWithRhymeToBeUpdated.length; i++) {
+            const element = elementsWithRhymeToBeUpdated[i];
+            element.classList.remove("rhyme-" + rhymeSchemeToBeOverridden);
+            element.classList.add("rhyme-" + resultingRhymeScheme);
+        }
+    } else if (span1RhymeScheme != null) {
         span2.classList.add("rhyme-" + span1RhymeScheme);
     } else if (span2RhymeScheme != null) {
         span1.classList.add("rhyme-" + span2RhymeScheme);
