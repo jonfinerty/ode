@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 HttpClient client = new HttpClient();
 
 sanitiseRhymes();
+// sanitiseWords();
 var datamuseWords = LoadWords("words.csv");
 csvsToJs(100000, datamuseWords);
 csvsToJs(150000, datamuseWords);
@@ -11,6 +12,16 @@ csvsToJs(200000, datamuseWords);
 csvsToJs(250000, datamuseWords);
 csvsToJs(300000, datamuseWords);
 return;
+
+static void sanitiseWords() {
+    var words = LoadWords("words.csv");
+    var sortedWords = words.OrderBy(kv => kv.Key).Select(kv => kv.Value);
+
+    using StreamWriter output = new("words.csv", append: false);
+    foreach (var word in sortedWords) {
+        output.WriteLine(word.ToCSVFormat());
+    }
+}
 
 static void sanitiseRhymes(){
     var rhymeGroups = new HashSet<HashSet<string>>();
@@ -373,6 +384,7 @@ public class Word {
     }
 
     public Word(string fileLine) {
+        bool recomputeStresses = false;
         var sections = fileLine.Split(',');
         text = sections[0].ToLower();
         syllableCount = int.Parse(sections[1]);
@@ -382,21 +394,26 @@ public class Word {
         if (sections.Length > 4) {
             types = sections[4].Split(typesDelimiter).Where(t => !String.IsNullOrWhiteSpace(t)).ToHashSet();
         }
-        var ipa = new IPA(IPA);
-        var stresses = ipa.GetSyllableIndexesOfStresses();
-        if (stresses.Count > 0) {
-            primaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[0]);
-        } else {
-            primaryStressSyllableIndex = -1;
-        }
+        if (recomputeStresses) {
+            var ipa = new IPA(IPA);
+            var stresses = ipa.GetSyllableIndexesOfStresses();
+            if (stresses.Count > 0) {
+                primaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[0]);
+            } else {
+                primaryStressSyllableIndex = -1;
+            }
 
-        if (stresses.Count > 1 && syllableCount > 1) {
-            secondaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[1]);
-            if (primaryStressSyllableIndex == secondaryStressSyllableIndex) {
+            if (stresses.Count > 1 && syllableCount > 1) {
+                secondaryStressSyllableIndex = Math.Min(syllableCount-1, stresses[1]);
+                if (primaryStressSyllableIndex == secondaryStressSyllableIndex) {
+                    secondaryStressSyllableIndex = -1;
+                }
+            } else {
                 secondaryStressSyllableIndex = -1;
             }
         } else {
-            secondaryStressSyllableIndex = -1;
+            primaryStressSyllableIndex = int.Parse(sections[5]);
+            secondaryStressSyllableIndex = int.Parse(sections[6]);
         }
         return;
     }
@@ -419,7 +436,7 @@ public class Word {
     public string ToCSVFormat()
     {
         // stresses are recomputed each time
-        return $"{text},{syllableCount},{freqScore},{IPA},{String.Join('|',types)}";
+        return $"{text},{syllableCount},{freqScore},{IPA},{String.Join('|',types)},{primaryStressSyllableIndex},{secondaryStressSyllableIndex}";
     }
 
     public string ToJSFormat() {
