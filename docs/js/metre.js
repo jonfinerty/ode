@@ -6,9 +6,7 @@ function getSyllableCountOfPoemLine(lineNumber) {
 }
 
 function updateMetre() {
-    const metreFontSize = getCanvasFont(document.querySelector("#metre"));
-    const displayFontSize = getCanvasFont(document.querySelector("#display"));
-    const metreSpaceSize = getTextWidth(" ", metreFontSize);
+    const metreSpaceSize = getTextMetreWidth(" ");
     const input_element = document.querySelector("#input")
     const text = input_element.value;
     let metre = "";
@@ -25,33 +23,25 @@ function updateMetre() {
         const words = splitLineToWords(line);
 
         let remainingLine = line;
-        let runningTextLength = 0;
+        let processedLine = "";
 
         words.forEach(word => {
             const wordIndex = remainingLine.indexOf(word.text);
             const precedingWhitespaceAndPunctuation = remainingLine.substring(0, wordIndex);
-            const precedingSize = getTextWidth(precedingWhitespaceAndPunctuation, displayFontSize);
-
-            runningTextLength += precedingSize;
-
-            //how many spaces to get up to runningTextLength from runningMetreLength
-            let currentMetreLength = getTextWidth(lineMetre, metreFontSize);
-            const spacesNeeded = Math.floor((Math.max(0, runningTextLength - currentMetreLength) / metreSpaceSize) + 0.4); //favour an extra space
+            processedLine += precedingWhitespaceAndPunctuation;
+            let runningTextLength = getTextDisplayWidth(processedLine);
+            let currentMetreLength = getTextMetreWidth(lineMetre);
+            const spacesNeeded = Math.floor((Math.max(0, runningTextLength - currentMetreLength) / metreSpaceSize) + 0.3); //err towards a space
             lineMetre += " ".repeat(spacesNeeded);
+            currentMetreLength = getTextMetreWidth(lineMetre);
 
-            const wordSize = getTextWidth(word.text, displayFontSize);
-            runningTextLength += wordSize;
-            const metreCharactersNeeded = Math.floor(wordSize / metreSpaceSize);
+            processedLine += word.text;
+            runningTextLength = getTextDisplayWidth(processedLine);
+            const metreCharactersNeeded = Math.floor((runningTextLength - currentMetreLength) / metreSpaceSize);
 
             const wordSyllables = word.getDisplaySyllables();
             const wordMetre = distributeEvenly(wordSyllables, metreCharactersNeeded);
-            lineMetre += wordMetre
-
-            currentMetreLength = getTextWidth(lineMetre, metreFontSize);
-            while ((runningTextLength - currentMetreLength) > 0) {
-                lineMetre += " ";
-                currentMetreLength = getTextWidth(lineMetre, metreFontSize);
-            }
+            lineMetre += wordMetre;
 
             remainingLine = remainingLine.substring(wordIndex + word.text.length);
 
@@ -77,26 +67,17 @@ function updateMetre() {
     syllablesElement.innerHTML = syllablesOutput;
 }
 
-function getTextWidth(text, font) {
-    // re-use for better performance
-    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    const context = canvas.getContext("2d");
-    context.font = font;
-    const metrics = context.measureText(text);
-    return metrics.width;
+function getTextDisplayWidth(text) {
+    const measurer = document.querySelector("#display-text-measurer");
+    measurer.innerText = text;
+    return measurer.getBoundingClientRect().width;
 }
 
-function getCssStyle(element, prop) {
-    return window.getComputedStyle(element, null).getPropertyValue(prop);
+function getTextMetreWidth(text) {
+    const measurer = document.querySelector("#metre-text-measurer");
+    measurer.innerText = text;
+    return measurer.getBoundingClientRect().width;
 }
-
-function getCanvasFont(el = document.body) {
-    const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
-    const fontSize = getCssStyle(el, 'font-size') || '16px';
-    const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
-    return `${fontWeight} ${fontSize} ${fontFamily}`;
-}
-
 
 function distributeEvenly(syllables, characterCount) { // syllables = ['●','○'] or ['?']
     let syllableIndex = 0;

@@ -139,12 +139,18 @@ button {
   resize: none;
 }
 
-#input, #display {
+#input, #display, #display-text-measurer {
   font-size: clamp(16px, 2.5vw, 32px);
   font-family: 'Libre Baskerville', serif;
   line-height: clamp(32px, 5vw, 64px);
   /* to increase need to work out metre bug */
   tab-size: 1;
+}
+
+#display-text-measurer, #metre-text-measurer {
+  visibility: hidden;
+  position: absolute;
+  white-space: pre;
 }
 
 /* Move the textarea in front of the result */
@@ -171,7 +177,7 @@ button {
   /* prevent occasional scrollbars popping in */
 }
 
-#metre {
+#metre, #metre-text-measurer {
   font-family: 'Azeret Mono', monospace;
   font-weight: 300;
   color: #D3D3D3;
