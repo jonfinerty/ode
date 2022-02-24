@@ -5,10 +5,18 @@ function getSyllableCountOfPoemLine(lineNumber) {
     return parseInt(element?.innerText) || 0;
 }
 
-function updateMetre() {
-    const metreSpaceSize = getTextMetreWidth(" ");
-    const input_element = document.querySelector("#input")
-    const text = input_element.value;
+// cache lines to their metre display
+// only need to recompute metre on changed, unique lines
+// <linetext> -> <metretext>
+let metreCache = {}
+
+function updateMetre(bustCache = false) {
+    if (bustCache) {
+        metreCache = {};
+    }
+
+    const inputElement = document.querySelector("#input")
+    const text = inputElement.value;
     let metre = "";
     let syllablesOutput = "";
 
@@ -18,35 +26,16 @@ function updateMetre() {
 
     let lines = splitTextToLines(text);
     lines.forEach(line => {
+
         var lineSyllableCount = 0;
         var lineMetre = "";
-        const words = splitLineToWords(line);
 
-        let remainingLine = line;
-        let processedLine = "";
-
-        words.forEach(word => {
-            const wordIndex = remainingLine.indexOf(word.text);
-            const precedingWhitespaceAndPunctuation = remainingLine.substring(0, wordIndex);
-            processedLine += precedingWhitespaceAndPunctuation;
-            let runningTextLength = getTextDisplayWidth(processedLine);
-            let currentMetreLength = getTextMetreWidth(lineMetre);
-            const spacesNeeded = Math.floor((Math.max(0, runningTextLength - currentMetreLength) / metreSpaceSize) + 0.3); //err towards a space
-            lineMetre += " ".repeat(spacesNeeded);
-            currentMetreLength = getTextMetreWidth(lineMetre);
-
-            processedLine += word.text;
-            runningTextLength = getTextDisplayWidth(processedLine);
-            const metreCharactersNeeded = Math.floor((runningTextLength - currentMetreLength) / metreSpaceSize);
-
-            const wordSyllables = word.getDisplaySyllables();
-            const wordMetre = distributeEvenly(wordSyllables, metreCharactersNeeded);
-            lineMetre += wordMetre;
-
-            remainingLine = remainingLine.substring(wordIndex + word.text.length);
-
-            lineSyllableCount += word.syllableCount;
-        });
+        if (metreCache.hasOwnProperty(line)) {
+            ({ lineSyllableCount, lineMetre } = metreCache[line]);
+        } else {
+            ({ lineSyllableCount, lineMetre } = lineToMetre(line));
+            metreCache[line] = { lineSyllableCount, lineMetre };
+        }
 
         if (lineSyllableCount == 0) {
             syllablesOutput += '<br>';
@@ -65,6 +54,42 @@ function updateMetre() {
     metreElement.innerHTML = metre;
     const syllablesElement = document.querySelector("#syllables");
     syllablesElement.innerHTML = syllablesOutput;
+}
+
+function lineToMetre(line) {
+    var lineSyllableCount = 0;
+    var lineMetre = "";
+    const metreSpaceSize = getTextMetreWidth(" ");
+
+    const words = splitLineToWords(line);
+
+    let remainingLine = line;
+    let processedLine = "";
+
+    words.forEach(word => {
+        const wordIndex = remainingLine.indexOf(word.text);
+        const precedingWhitespaceAndPunctuation = remainingLine.substring(0, wordIndex);
+        processedLine += precedingWhitespaceAndPunctuation;
+        let runningTextLength = getTextDisplayWidth(processedLine);
+        let currentMetreLength = getTextMetreWidth(lineMetre);
+        const spacesNeeded = Math.floor((Math.max(0, runningTextLength - currentMetreLength) / metreSpaceSize) + 0.3); //err towards a space
+        lineMetre += " ".repeat(spacesNeeded);
+        currentMetreLength = getTextMetreWidth(lineMetre);
+
+        processedLine += word.text;
+        runningTextLength = getTextDisplayWidth(processedLine);
+        const metreCharactersNeeded = Math.floor((runningTextLength - currentMetreLength) / metreSpaceSize);
+
+        const wordSyllables = word.getDisplaySyllables();
+        const wordMetre = distributeEvenly(wordSyllables, metreCharactersNeeded);
+        lineMetre += wordMetre;
+
+        remainingLine = remainingLine.substring(wordIndex + word.text.length);
+
+        lineSyllableCount += word.syllableCount;
+    });
+
+    return { lineSyllableCount, lineMetre };
 }
 
 function getTextDisplayWidth(text) {

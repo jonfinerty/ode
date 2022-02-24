@@ -8,7 +8,7 @@ window.addEventListener('resize', () => {
   //explicit dont rerender display as we need the same spans to anchor suggestions to
   time(updateHeights);
   time(updateWidth);
-  time(updateMetre);
+  time(updateMetre, true); // bust cache on resize
   time(rerenderRhymeSuggestions);
 });
 
