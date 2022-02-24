@@ -135,7 +135,7 @@ button {
   margin: 0 auto;
   min-width: 40vw;
   background: transparent;
-  white-space: nowrap;
+  white-space: pre;
   resize: none;
 }
 
