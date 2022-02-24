@@ -9,9 +9,9 @@ function shareClicked(event) {
   inputElement.value = inputElement.value.trimEnd();
   render();
 
-  const title = document.querySelector("#title");
+  const titleElement = document.querySelector("#title");
   let elementToScreenshot = null;
-  if (title.classList.contains('placeholder')) {
+  if (titleElement.classList.contains('placeholder') || (titleElement.innerText.length == 0 || titleElement.innerText.trim() == "")) {
     elementToScreenshot = document.querySelector("#content");
   } else {
     elementToScreenshot = document.querySelector("#poem");
@@ -20,7 +20,8 @@ function shareClicked(event) {
   html2canvas(elementToScreenshot)
     .then(canvas => {
       const img = canvas.toDataURL("image/png");
-      const imageFile = dataURLToImageFile(getTitle() + ".png", img);
+      const title = getTitle() || "ode";
+      const imageFile = dataURLToImageFile(title + ".png", img);
       shareImage(imageFile);
     });
 }
@@ -45,7 +46,7 @@ function shareImage(imageFile) {
 
   const shareData = {
     files: [imageFile],
-    title: getTitle(),
+    title: getTitle() || "Ode",
     text: poemText
   }
 
